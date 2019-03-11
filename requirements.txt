@@ -1,5 +1,4 @@
 requests
-bs4
+beautifulsoup4
 itchat
 apscheduler
-yaml

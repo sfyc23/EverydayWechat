@@ -1,4 +1,4 @@
-# 用 Python itchat 写一个爬虫脚本每天定时给女朋友发微信暖心话
+# 用 Python + itchat 写一个爬虫脚本每天定时给女朋友发微信暖心话
 
 ##项目介绍：
 
@@ -21,23 +21,23 @@ Github: [https://github.com/sfyc23/EverydayWechat](https://github.com/sfyc23/Eve
 定时给女朋友发送每日天气、提醒、每日一句。
 
 ### 数据来源
-- 每日一句和上面的大佬一样也是来自 [ONE*一个][6]
-- 天气信息来自 [SO.JSON][7] 
+- 每日一句和上面的大佬一样也是来自 [ONE·一个][6]
+- 天气信息来自 [SOJSON][7] 
 
 
 ### 实现效果
-![命令行信息](http://vlog.sfyc23.xyz/wechat_everyday/20190312010620.png)
+![命令行信息](http://vlog.sfyc23.xyz/wechat_everyday/20190312010620.png)  
 ![微信截图](http://vlog.sfyc23.xyz/wechat_everyday/20190312010621.png)
 
 ## 代码说明
 
 ### 目录结构
-![](http://vlog.sfyc23.xyz/wechat_everyday/20190312011740.png)
-city_dict.py ：城市对应编码字典
-config.yaml ：设置定时时间，女友微信名称等参数
-GFWeather.py：核心代码
-requirements.txt：需要安装的库
-run.py：项目运行类
+![](http://vlog.sfyc23.xyz/wechat_everyday/20190312011740.png)  
+- city_dict.py ：城市对应编码字典
+- config.yaml ：设置定时时间，女友微信名称等参数
+- GFWeather.py：核心代码
+- requirements.txt：需要安装的库
+- run.py：项目运行类
 
 ### 核心代码
 GFWeather.py
@@ -195,9 +195,10 @@ class gfweather:
 ```
 
 ## 项目运行
----
-### 安装库
-安装 requirements.txt 所需 Python 库。
+
+### 安装依赖
+
+使用 pip install -r requirements.txt 安装所有依赖
 
 ### 参数配置
 config.yaml
@@ -218,13 +219,8 @@ python run.py
 ```
 
 ## 最后
-项目地址：[https://github.com/sfyc23/EverydayWechat](https://github.com/sfyc23/EverydayWechat)
-
-
-写这个只是好玩，而自己没有女朋友。
-
-参考文章：[用Node+wechaty写一个爬虫脚本每天定时给女(男)朋友发微信暖心话](https://juejin.im/post/5c77c6bef265da2de6611cff)。
-
+项目地址：[https://github.com/sfyc23/EverydayWechat](https://github.com/sfyc23/EverydayWechat)  
+写完后才发现，我并没有女朋友啊！
 
 
   [1]: https://juejin.im/post/5c77c6bef265da2de6611cff
