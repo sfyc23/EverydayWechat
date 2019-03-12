@@ -1,8 +1,25 @@
-#每天定时发送的时间点，如：8：30
+# 配置文件请严格遵循yaml语法格式，yaml学习地址:
+#  https://ansible-tran.readthedocs.io/en/latest/docs/YAMLSyntax.html
+#  http://einverne.github.io/post/2015/08/yaml.html
+
 alarm_timed: '9:30'
-# 女友所在城市名称
-city_name: '桂林'
-# 你女朋友的微信名称
-wechat_name: '古典'
-# 从那天开始勾搭的
-start_date: '2017-11-11'
+girlfriend_infos:
+  -
+    #女友微信昵称
+    wechat_name: '古典'
+    #女友所在桂林
+    city_name: '桂林'
+    # 从那天开始勾搭的
+    start_date: '2017-11-11'
+    # 短句的最后留言
+    sweet_words: '来自最爱你的我。'
+
+  #如果有你多个人需要发送，则参照这个样式，复制即可
+  -
+    wechat_name: '陈老师'
+    city_name: '朝阳区'
+    start_date: '2018-11-11'
+    sweet_words: '来自你俊美的老公。'
+
+
+
