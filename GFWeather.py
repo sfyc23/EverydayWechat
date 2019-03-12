@@ -9,7 +9,7 @@ import time
 import city_dict
 import yaml
 
-from test import girlfriend_infos
+
 
 
 class gfweather:
@@ -26,7 +26,7 @@ class gfweather:
         初始化基础数据
         :return:
         '''
-        with open('config.yaml', 'r', encoding='utf-8') as f:
+        with open('_config.yaml', 'r', encoding='utf-8') as f:
             config = yaml.load(f)
 
         alarm_timed = config.get('alarm_timed').strip()
