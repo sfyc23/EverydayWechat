@@ -19,6 +19,7 @@ class gfweather:
 
     def __init__(self):
         self.girlfriend_list, self.alarm_hour, self.alarm_minute = self.get_init_data()
+        locale.setlocale(locale.LC_CTYPE, 'chinese')
 
 
     def get_init_data(self):
@@ -172,14 +173,10 @@ class gfweather:
             weatherJson = resp.json()
             # 今日天气
             today_weather = weatherJson.get('data').get('forecast')[1]
-
             # 今日日期
-            locale.setlocale(locale.LC_CTYPE, 'chinese')
             today_time = datetime.now().strftime('%Y年%m月%d日 %H:%M:%S')
-
             # 今日天气注意事项
             notice = today_weather.get('notice')
-
             # 温度
             high = today_weather.get('high')
             high_c = high[high.find(' ') + 1:]
@@ -209,5 +206,6 @@ if __name__ == '__main__':
     # gfweather().start_today_info()
 
     gfweather().run()
+
     # gfweather()
 
