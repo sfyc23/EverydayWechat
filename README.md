@@ -54,7 +54,7 @@ scheduler.start()
 *start_today_info* 是方法处理类。
 
 #### 2.获取每日一句。
-数据来源： [ONE●一个][6]
+数据来源 1： [ONE●一个][6]
 ```
 def get_dictum_info(self):
     '''
@@ -68,6 +68,32 @@ def get_dictum_info(self):
     # 『one -个』 中的每日一句
     every_msg = soup_texts.find_all('div', class_='fp-one-cita')[0].find('a').text
     return every_msg
+```
+数据来源 2： [金山词霸 ● 每日一句](http://open.iciba.com/?c=api)  
+
+有英文和中文翻译，例如：
+> When you finally get your own happiness, you will understand the
+> previous sadness is a kind of treasure, which makes you better to hold
+> and cherish the people you love.
+> 等你获得真正属于你的幸福之后，你就会明白一起的伤痛其实是一种财富，它让你学会更好地去把握和珍惜你爱的人。
+
+代码实现 ：
+```
+ def get_ciba_info(self):
+    '''
+    从词霸中获取每日一句，带英文。
+    :return:
+    '''
+    resp = requests.get('http://open.iciba.com/dsapi')
+    if resp.status_code == 200 and self.isJson(resp):
+        conentJson = resp.json()
+        content = conentJson.get('content')
+        note = conentJson.get('note')
+        # print(f"{content}\n{note}")
+        return f"{content}\n{note}\n"
+    else:
+        print("没有获取到数据")
+        return None
 ```
 #### 3. 获取今日天气 。
 天气数据来源：[SOJSON][7]
@@ -100,20 +126,26 @@ itchat.send(today_msg, toUserName=name_uuid)
 ### 参数配置
 config.yaml
 ```
-#每天的几点开始发送信息
+# 定时时间
 alarm_timed: '9:30'
+
+# 格言渠道
+# 1 : ONE●一个
+# 2 : 词霸（每日英语）
+dictum_channel: 2
+
 girlfriend_infos:
   -
     #女友微信昵称
     wechat_name: '古典'
     #女友所在桂林
     city_name: '桂林'
-    # 从那天开始勾搭的
+    # 从那天开始勾搭的（可空）
     start_date: '2017-11-11'
-    # 谁给你发送的
+    # 短句的最后留言（可空）
     sweet_words: '来自最爱你的我。'
 
-  #如果你有多个女友需要发送，则参照这个样式，复制即可
+  #如果有你多个人需要发送，则参照这个样式，复制即可
   -
     wechat_name: '陈老师'
     city_name: '朝阳区'
