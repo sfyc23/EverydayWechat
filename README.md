@@ -1,6 +1,9 @@
+![python_vesion](https://img.shields.io/badge/python-%3E3-green.svg)  
 # 用 Python + itchat 写一个爬虫脚本每天定时给多个女友发给微信暖心话
 
 ## 项目介绍：
+
+开发环境：Python > 3.5
 
 ### 灵感来源
 

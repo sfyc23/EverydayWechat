@@ -23,13 +23,13 @@ class gfweather:
         :return:
         '''
         with open('_config.yaml', 'r', encoding='utf-8') as f:
-            config = yaml.load(f)
+            config = yaml.load(f, Loader=yaml.FullLoader)
 
         alarm_timed = config.get('alarm_timed').strip()
         init_msg = f"每天定时发送时间：{alarm_timed}\n"
 
         dictum_channel = config.get('dictum_channel', -1)
-        init_msg += f"格言获取渠道：{self.dictum_channel_name.get(dictum_channel,'无')}\n"
+        init_msg += f"格言获取渠道：{self.dictum_channel_name.get(dictum_channel, '无')}\n"
 
         girlfriend_list = []
         girlfriend_infos = config.get('girlfriend_infos')
@@ -117,6 +117,7 @@ class gfweather:
         scheduler.start()
 
     def start_today_info(self, is_test=False):
+
         '''
         每日定时开始处理。
         :param is_test: 测试标志，当为True时，不发送微信信息，仅仅获取数据。
@@ -241,10 +242,21 @@ class gfweather:
 
 if __name__ == '__main__':
 
-    # 只查看获取数据，
-    gfweather().start_today_info(True)
-
     # 直接运行
     # gfweather().run()
 
-    # gfweather()
+    # 只查看获取数据，
+    # gfweather().start_today_info(True)
+
+    # 测试获取词霸信息
+    # ciba = gfweather().get_ciba_info()
+    # print(ciba)
+
+    # 测试获取每日一句信息
+    # dictum = gfweather().get_dictum_info()
+    # print(dictum)
+
+    # 测试获取天气信息
+    # wi = gfweather().get_weather_info('丽华\n')
+    # print(wi)
+    pass
