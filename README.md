@@ -121,8 +121,17 @@ itchat.send(today_msg, toUserName=name_uuid)
 
 
 ## 项目运行
+### 使用Docker  
 
-### 安装依赖
+```
+sudo docker build -t everydaywechat .
+sudo docker run --name girlfriend_01 everydaywechat
+# 扫码登陆
+Ctrl+P+Q 退出容器  
+```  
+### 使用Screen
+
+#### 安装依赖
 
 使用 pip install -r requirements.txt 安装所有依赖
 
@@ -158,7 +167,9 @@ girlfriend_infos:
 
 ### 开始运行
 ```
+screen -S girlfriend
 python run.py
+Ctrl+A+D 退出Screen窗口
 ```
 
 ## 最后
