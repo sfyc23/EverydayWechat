@@ -1,14 +1,17 @@
-import requests
-from datetime import datetime
-from bs4 import BeautifulSoup
-import itchat
-from apscheduler.schedulers.blocking import BlockingScheduler
+import os
 import time
-import city_dict
+from datetime import datetime
+
+import itchat
+import requests
 import yaml
+from apscheduler.schedulers.blocking import BlockingScheduler
+from bs4 import BeautifulSoup
+
+import city_dict
 
 
-class gfweather:
+class GFWeather:
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36",
     }
@@ -23,7 +26,7 @@ class gfweather:
         :return:
         '''
         with open('_config.yaml', 'r', encoding='utf-8') as f:
-            config = yaml.load(f, Loader=yaml.FullLoader)
+            config = yaml.load(f, Loader=yaml.Loader)
 
         alarm_timed = config.get('alarm_timed').strip()
         init_msg = f"每天定时发送时间：{alarm_timed}\n"
@@ -83,7 +86,10 @@ class gfweather:
         for _ in range(5):
             # 命令行显示登录二维码
             # itchat.auto_login(enableCmdQR=True)
-            itchat.auto_login()
+            if os.environ.get('MODE') == 'server':
+                itchat.auto_login(enableCmdQR=2)
+            else:
+                itchat.auto_login()
             if online():
                 print('登录成功')
                 return True
@@ -192,7 +198,7 @@ class gfweather:
         every_msg = soup_texts.find_all('div', class_='fp-one-cita')[0].find('a').text
         return every_msg + "\n"
 
-    def get_weather_info(self, dictum_msg='', city_code='101030100', start_date='2018-01-01', sweet_words='来自最爱你的我'):
+    def get_weather_info(self, dictum_msg='', city_code='101030100', start_date='2018-01-01', sweet_words='From your Valentine'):
         '''
         获取天气信息。网址：https://www.sojson.com/blog/305.html
         :param dictum_msg: 发送给朋友的信息
