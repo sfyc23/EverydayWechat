@@ -1,18 +1,21 @@
 ![python_vesion](https://img.shields.io/badge/Python%20-%3E%3D%203.6-green.svg)  
 # 用 Python + itchat 写一个爬虫脚本每天定时给多个女友发给微信暖心话
-
+> 原repo的README写的太乱了，重写一个
+> Fork自 [https://github.com/sfyc23/EverydayWechat](https://github.com/sfyc23/EverydayWechat)
+![实际效果](./img/my_sweet_heart.png)  
 ## 项目介绍：
 
 开发环境：Python >= 3.6
+        Docker
 
 ### 灵感来源
 
-在掘金看到了一篇《[用Node+wechaty写一个爬虫脚本每天定时给女(男)朋友发微信暖心话][1]》后，我就想为什么不用 Python 去实现这个功能呢。 JUST DO IT，说做就做。  
-这文章的结构也是参考上面这位朋友的。  
-本来只是写单人的，不过有些优（作）秀（死）的人表示女朋友不止一个。现已支持添加多人信息。
+在即刻上看到有程序员男朋友给女票做了早安机器人，女票当即表示给我也整一个！  
+那咱就开始了  
+Fork了那位程序员的代码，做了些宝贝儿更喜欢的适配和修改  
 
 ### 项目地址：
-Github: [https://github.com/sfyc23/EverydayWechat](https://github.com/sfyc23/EverydayWechat)。
+Github: [https://github.com/Gengxin-Zhang/EverydayWechat](https://github.com/Gengxin-Zhang/EverydayWechat)。
 
 ### 使用库
 - [itchat][2] - 微信个人号接口
@@ -21,37 +24,37 @@ Github: [https://github.com/sfyc23/EverydayWechat](https://github.com/sfyc23/Eve
 - [APScheduler][5] - 定时任务
 
 ### 功能
-定时给女朋友发送每日天气、提醒、每日一句。
+定时给女朋友发送每日天气、提醒、每日一句。  
+
 
 ### 数据来源
 - 每日一句和上面的大佬一样也是来自 [ONE●一个][6]
 - 天气信息来自 [SOJSON][7] 
 
-
 ### 实现效果
-![命令行信息](http://vlog.sfyc23.xyz/wechat_everyday/20190312010620.png)  
-![微信截图](http://vlog.sfyc23.xyz/wechat_everyday/20190312010621.png)
+![命令行信息](./img/run.png)  
+![实际效果](./img/my_sweet_heart.png)  
 
 ## 代码说明
 
 ### 目录结构
-![](http://vlog.sfyc23.xyz/wechat_everyday/20190312011740.png)  
+![目录结构](./img/tree.png)  
 
-- city_dict.py ：城市对应编码字典
-- config.yaml ：设置定时时间，女友微信名称等参数
-- GFWeather.py：核心代码
-- requirements.txt：需要安装的库
-- run.py：项目运行类
+- city_dict.py ：城市对应编码字典  
+- config.yaml ：设置定时时间，女友微信名称等参数  
+- GFWeather.py：核心代码  
+- requirements.txt：需要安装的库  
+- run.py：项目运行类  
+- Dockerfile: Docker配置文件
 
 ### 核心代码
 
 #### 1.定时任务。
-每天 9：30 给女朋友们开始给女朋友发送内容。
+每天 5:21 给女朋友们开始给女朋友发送内容。
 ```
 # 定时任务
 scheduler = BlockingScheduler()
-# 每天9：30给女朋友发送每日一句
-# scheduler.add_job(start_today_info, 'cron', hour=9, minute=30)
+scheduler.add_job(start_today_info, 'cron', hour=5, minute=21, second=0)
 scheduler.start()
 ```
 *start_today_info* 是方法处理类。
@@ -121,21 +124,12 @@ itchat.send(today_msg, toUserName=name_uuid)
 
 
 ## 项目运行
-### 使用Docker  
 
-```
-sudo docker build -t everydaywechat .
-sudo docker run --name girlfriend_01 everydaywechat
-# 扫码登陆
-Ctrl+P+Q 退出容器  
-```  
-### 使用Screen
-
-#### 安装依赖
+### 安装依赖
 
 使用 pip install -r requirements.txt 安装所有依赖
 
-#### 参数配置
+### 参数配置
 config.yaml
 ```
 # 定时时间
@@ -165,16 +159,18 @@ girlfriend_infos:
     sweet_words: '来自你俊美的老公。'
 ```
 
-#### 开始运行
+### 开始运行
 ```
-screen -S girlfriend
-python run.py
-Ctrl+A+D 退出Screen窗口
+sudo docker build -t everydaywechat .
+sudo docker run --name girlfriend everydaywechat 
+# 扫码登陆
+Ctrl+P+Q 退出Docker环境
 ```
 
 ## 最后
-项目地址：[https://github.com/sfyc23/EverydayWechat](https://github.com/sfyc23/EverydayWechat)  
-写完后才发现，我并没有女朋友啊！
+Github: [https://github.com/Gengxin-Zhang/EverydayWechat](https://github.com/Gengxin-Zhang/EverydayWechat)。
+> Fork自： [https://github.com/sfyc23/EverydayWechat](https://github.com/sfyc23/EverydayWechat)
+
 
 
   [1]: https://juejin.im/post/5c77c6bef265da2de6611cff

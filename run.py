@@ -1,4 +1,4 @@
-from GFWeather import GFWeather
+from GFWeather import gfweather
 
 
 def run():
@@ -6,7 +6,7 @@ def run():
     主程序入口
     :return:
     '''
-    GFWeather().run()
+    gfweather().run()
 
 
 def test_run():
@@ -14,10 +14,10 @@ def test_run():
     运行前的测试
     :return:
     '''
-    GFWeather().start_today_info(is_test=True)
+    gfweather().start_today_info(is_test=True)
 
 if __name__ == '__main__':
-    # test_run()
+#test_run()
     run()
 
 
