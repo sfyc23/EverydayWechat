@@ -135,7 +135,7 @@ Ctrl+P+Q 退出容器
 
 使用 pip install -r requirements.txt 安装所有依赖
 
-### 参数配置
+#### 参数配置
 config.yaml
 ```
 # 定时时间
@@ -165,7 +165,7 @@ girlfriend_infos:
     sweet_words: '来自你俊美的老公。'
 ```
 
-### 开始运行
+#### 开始运行
 ```
 screen -S girlfriend
 python run.py
