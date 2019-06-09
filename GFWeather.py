@@ -23,7 +23,7 @@ class GFWeather:
     def get_init_data(self):
         '''
         初始化基础数据
-        :return:
+        :return: None
         '''
         with open('_config.yaml', 'r', encoding='utf-8') as f:
             config = yaml.load(f, Loader=yaml.Loader)
@@ -60,14 +60,14 @@ class GFWeather:
     def is_online(self, auto_login=False):
         '''
         判断是否还在线,
-        :param auto_login:True,如果掉线了则自动登录。
-        :return: True ，还在线，False 不在线了
+        :param auto_login: bool,如果掉线了则自动登录(默认为 False)。
+        :return: bool,当返回为 True 时，在线；False 已断开连接。
         '''
 
         def online():
             '''
             通过获取好友信息，判断用户是否还在线
-            :return: True ，还在线，False 不在线了
+            :return: bool,当返回为 True 时，在线；False 已断开连接。
             '''
             try:
                 if itchat.search_friends():
@@ -109,7 +109,7 @@ class GFWeather:
             wechat_name = girlfriend.get('wechat_name')
             friends = itchat.search_friends(name=wechat_name)
             if not friends:
-                print('昵称错误')
+                print('昵称有误')
                 return
             name_uuid = friends[0].get('UserName')
             girlfriend['name_uuid'] = name_uuid
@@ -118,16 +118,15 @@ class GFWeather:
         scheduler = BlockingScheduler()
         # 每天9：30左右给女朋友发送每日一句
         scheduler.add_job(self.start_today_info, 'cron', hour=self.alarm_hour, minute=self.alarm_minute)
-        # 每隔2分钟发送一条数据用于测试。
-        # scheduler.add_job(self.start_today_info, 'interval', seconds=30)
+        # 每隔 2 分钟发送一条数据用于测试。
+        # scheduler.add_job(self.start_today_info, 'interval', seconds=120)
         scheduler.start()
 
     def start_today_info(self, is_test=False):
-
         '''
         每日定时开始处理。
-        :param is_test: 测试标志，当为True时，不发送微信信息，仅仅获取数据。
-        :return:
+        :param is_test:bool, 测试标志，当为True时，不发送微信信息，仅仅获取数据。
+        :return: None。
         '''
         print("*" * 50)
         print('获取相关信息...')
@@ -143,7 +142,7 @@ class GFWeather:
 
         for girlfriend in self.girlfriend_list:
             city_code = girlfriend.get('city_code')
-            start_date = girlfriend.get('start_date')
+            start_date = girlfriend.get('start_date').strip()
             sweet_words = girlfriend.get('sweet_words')
             today_msg = self.get_weather_info(dictum_msg, city_code=city_code, start_date=start_date,
                                               sweet_words=sweet_words)
@@ -162,8 +161,8 @@ class GFWeather:
     def isJson(self, resp):
         '''
         判断数据是否能被 Json 化。 True 能，False 否。
-        :param resp:
-        :return:
+        :param resp: request
+        :return: bool, True 数据可 Json 化；False 不能 JOSN 化。
         '''
         try:
             resp.json()
@@ -174,8 +173,9 @@ class GFWeather:
     def get_ciba_info(self):
         '''
         从词霸中获取每日一句，带英文。
-        :return:
+        :return:str ,返回每日一句（双语）
         '''
+        print('获取格言信息（双语）...')
         resp = requests.get('http://open.iciba.com/dsapi')
         if resp.status_code == 200 and self.isJson(resp):
             conentJson = resp.json()
@@ -190,36 +190,43 @@ class GFWeather:
     def get_dictum_info(self):
         '''
         获取格言信息（从『一个。one』获取信息 http://wufazhuce.com/）
-        :return: str 一句格言或者短语
+        :return: str， 一句格言或者短语
         '''
-        print('获取格言信息..')
+        print('获取格言信息...')
         user_url = 'http://wufazhuce.com/'
         resp = requests.get(user_url, headers=self.headers)
-        soup_texts = BeautifulSoup(resp.text, 'lxml')
-        # 『one -个』 中的每日一句
-        every_msg = soup_texts.find_all('div', class_='fp-one-cita')[0].find('a').text
-        return every_msg + "\n"
-
+        if resp.status_code == 200:
+            soup_texts = BeautifulSoup(resp.text, 'lxml')
+            # 『one -个』 中的每日一句
+            every_msg = soup_texts.find_all('div', class_='fp-one-cita')[0].find('a').text
+            return every_msg + "\n"
+        print('每日一句获取失败')
+        return ''
 
     def get_lovelive_info(self):
         '''
         从土味情话中获取每日一句。
+        :return: str,土味情话
         '''
+        print('获取土味情话...')
         resp = requests.get("https://api.lovelive.tools/api/SweetNothings")
-        return resp.text + "\n"
+        if resp.status_code == 200:
+            return resp.text + "\n"
+        else:
+            print('每日一句获取失败')
+            return None
 
-   
-    def get_weather_info(self, dictum_msg='', city_code='101030100', start_date='2018-01-01', sweet_words='From your Valentine'):
-
+    def get_weather_info(self, dictum_msg='', city_code='101030100', start_date='2018-01-01',
+                         sweet_words='From your Valentine'):
         '''
         获取天气信息。网址：https://www.sojson.com/blog/305.html
-        :param dictum_msg: 发送给朋友的信息
-        :param city_code: 城市对应编码
-        :param start_date: 恋爱第一天日期
-        :param sweet_words: 来自谁的留言
-        :return: 需要发送的话。
+        :param dictum_msg: str,发送给朋友的信息
+        :param city_code: str,城市对应编码
+        :param start_date: str,恋爱第一天日期
+        :param sweet_words: str,来自谁的留言
+        :return: str,需要发送的话。
         '''
-        print('获取天气信息..')
+        print('获取天气信息...')
         weather_url = f'http://t.weather.sojson.com/api/weather/city/{city_code}'
         resp = requests.get(url=weather_url)
         if resp.status_code == 200 and self.isJson(resp) and resp.json().get('status') == 200:
@@ -248,9 +255,12 @@ class GFWeather:
 
             # 在一起，一共多少天了，如果没有设置初始日期，则不用处理
             if start_date:
-                start_datetime = datetime.strptime(start_date, "%Y-%m-%d")
-                day_delta = (datetime.now() - start_datetime).days
-                delta_msg = f'宝贝这是我们在一起的第 {day_delta} 天。\n'
+                try:
+                    start_datetime = datetime.strptime(start_date, "%Y-%m-%d")
+                    day_delta = (datetime.now() - start_datetime).days
+                    delta_msg = f'宝贝这是我们在一起的第 {day_delta} 天。\n'
+                except:
+                    delta_msg = ''
             else:
                 delta_msg = ''
 
@@ -259,22 +269,21 @@ class GFWeather:
 
 
 if __name__ == '__main__':
-
     # 直接运行
-    # gfweather().run()
+    # GFWeather().run()
 
     # 只查看获取数据，
-    # gfweather().start_today_info(True)
+    # GFWeather().start_today_info(True)
 
     # 测试获取词霸信息
-    # ciba = gfweather().get_ciba_info()
+    # ciba = GFWeather().get_ciba_info()
     # print(ciba)
 
     # 测试获取每日一句信息
-    # dictum = gfweather().get_dictum_info()
+    # dictum = GFWeather().get_dictum_info()
     # print(dictum)
 
     # 测试获取天气信息
-    # wi = gfweather().get_weather_info('丽华\n')
+    # wi = GFWeather().get_weather_info('sorry \n')
     # print(wi)
     pass

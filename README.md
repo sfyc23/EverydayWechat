@@ -11,6 +11,7 @@
 这文章的结构也是参考上面这位朋友的。  
 本来只是写单人的，不过有些优（作）秀（死）的人表示女朋友不止一个。现已支持添加多人信息。
 
+
 ### 项目地址：
 Github: [https://github.com/sfyc23/EverydayWechat](https://github.com/sfyc23/EverydayWechat)。
 
@@ -24,8 +25,9 @@ Github: [https://github.com/sfyc23/EverydayWechat](https://github.com/sfyc23/Eve
 定时给女朋友发送每日天气、提醒、每日一句。
 
 ### 数据来源
-- 每日一句和上面的大佬一样也是来自 [ONE●一个][6]
-- 天气信息来自 [SOJSON][7] 
+- 每日一句和上面的大佬一样也是来自：[ONE●一个][6]。
+- 天气信息来自： [SOJSON][7] 。
+- 土味情话： [api](http://open.iciba.com/?c=api)。
 
 
 ### 实现效果
@@ -45,7 +47,7 @@ Github: [https://github.com/sfyc23/EverydayWechat](https://github.com/sfyc23/Eve
 
 ### 核心代码
 
-#### 1.定时任务。
+#### 1. 定时任务。
 每天 9：30 给女朋友们开始给女朋友发送内容。
 ```
 # 定时任务
@@ -56,7 +58,7 @@ scheduler.start()
 ```
 *start_today_info* 是方法处理类。
 
-#### 2.获取每日一句。
+#### 2. 获取每日一句。
 数据来源 1： [ONE●一个][6]
 ```
 def get_dictum_info(self):
@@ -77,7 +79,7 @@ def get_dictum_info(self):
 有英文和中文翻译，例如：
 > When you finally get your own happiness, you will understand the
 > previous sadness is a kind of treasure, which makes you better to hold
-> and cherish the people you love.
+> and cherish the people you love.  
 > 等你获得真正属于你的幸福之后，你就会明白一起的伤痛其实是一种财富，它让你学会更好地去把握和珍惜你爱的人。
 
 代码实现 ：
@@ -98,6 +100,21 @@ def get_dictum_info(self):
         print("没有获取到数据")
         return None
 ```
+
+数据来源 3： [土味情话](http://open.iciba.com/?c=api)（感谢 [tomatoF](https://github.com/tomatoF)、[QSCTech-Sange](https://github.com/QSCTech-Sange))
+```
+def get_lovelive_info(self):
+    '''
+    从土味情话中获取每日一句。
+    '''
+    resp = requests.get("https://api.lovelive.tools/api/SweetNothings")
+    if resp.status_code == 200:
+        return resp.text + "\n"
+    else:
+        print('每日一句获取失败')
+        return None
+```  
+
 #### 3. 获取今日天气 。
 天气数据来源：[SOJSON][7]
 
@@ -119,23 +136,13 @@ itchat.auto_login()
 itchat.send(today_msg, toUserName=name_uuid)
 ```
 
+## 项目配置 
 
-## 项目运行
-### 使用Docker  
-
-```
-sudo docker build -t everydaywechat .
-sudo docker run --name girlfriend_01 everydaywechat
-# 扫码登陆
-Ctrl+P+Q 退出容器  
-```  
-### 使用Screen
-
-#### 安装依赖
+### 安装依赖
 
 使用 pip install -r requirements.txt 安装所有依赖
 
-#### 参数配置
+### 参数配置
 config.yaml
 ```
 # 定时时间
@@ -143,7 +150,8 @@ alarm_timed: '9:30'
 
 # 格言渠道
 # 1 : ONE●一个
-# 2 : 词霸（每日英语）
+# 2 : 词霸（每日英语,双语）
+# 3 : 土味情话
 dictum_channel: 2
 
 girlfriend_infos:
@@ -165,12 +173,27 @@ girlfriend_infos:
     sweet_words: '来自你俊美的老公。'
 ```
 
-#### 开始运行
+## 项目运行
+
+### 1.直接运行
 ```
-screen -S girlfriend
 python run.py
-Ctrl+A+D 退出Screen窗口
 ```
+
+### 2.使用 Screen 开始运行
+```
+screen -S '项目所在地址'
+python run.py
+#Ctrl+A+D 退出 Screen 窗口
+```
+
+### 3.使用 Docker  
+```
+sudo docker build -t everydaywechat .
+sudo docker run --name '项目所在地址'
+# 扫码登陆
+#Ctrl+P+Q 退出容器  
+```  
 
 ## 最后
 项目地址：[https://github.com/sfyc23/EverydayWechat](https://github.com/sfyc23/EverydayWechat)  
