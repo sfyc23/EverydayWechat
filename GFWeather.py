@@ -12,7 +12,7 @@ class gfweather:
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36",
     }
-    dictum_channel_name = {1: 'ONE●一个', 2: '词霸（每日英语）'}
+    dictum_channel_name = {1: 'ONE●一个', 2: '词霸(每日英语)', 3: '土味情话'}
 
     def __init__(self):
         self.girlfriend_list, self.alarm_hour, self.alarm_minute, self.dictum_channel = self.get_init_data()
@@ -130,6 +130,8 @@ class gfweather:
             dictum_msg = self.get_dictum_info()
         elif self.dictum_channel == 2:
             dictum_msg = self.get_ciba_info()
+        elif self.dictum_channel == 3:
+            dictum_msg = self.get_lovelive_info()
         else:
             dictum_msg = ''
 
@@ -191,6 +193,13 @@ class gfweather:
         # 『one -个』 中的每日一句
         every_msg = soup_texts.find_all('div', class_='fp-one-cita')[0].find('a').text
         return every_msg + "\n"
+
+    def get_lovelive_info(self):
+        '''
+        从土味情话中获取每日一句。
+        '''
+        resp = requests.get("https://api.lovelive.tools/api/SweetNothings")
+        return resp.text + "\n"
 
     def get_weather_info(self, dictum_msg='', city_code='101030100', start_date='2018-01-01', sweet_words='来自最爱你的我'):
         '''
