@@ -13,9 +13,11 @@ import city_dict
 # fire the job again if it was missed within GRACE_PERIOD
 GRACE_PERIOD = 15 * 60
 
+
 class GFWeather:
     headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) "
+                      "Chrome/67.0.3396.87 Safari/537.36", 
     }
     dictum_channel_name = {1: 'ONE●一个', 2: '词霸(每日英语)', 3: '土味情话'}
 
@@ -23,10 +25,10 @@ class GFWeather:
         self.girlfriend_list, self.alarm_hour, self.alarm_minute, self.dictum_channel = self.get_init_data()
 
     def get_init_data(self):
-        '''
+        """
         初始化基础数据
         :return: None
-        '''
+        """
         with open('_config.yaml', 'r', encoding='utf-8') as f:
             config = yaml.load(f, Loader=yaml.Loader)
 
@@ -60,17 +62,17 @@ class GFWeather:
         return girlfriend_list, hour, minute, dictum_channel
 
     def is_online(self, auto_login=False):
-        '''
+        """
         判断是否还在线,
         :param auto_login: bool,如果掉线了则自动登录(默认为 False)。
         :return: bool,当返回为 True 时，在线；False 已断开连接。
-        '''
+        """
 
         def online():
-            '''
+            """
             通过获取好友信息，判断用户是否还在线
             :return: bool,当返回为 True 时，在线；False 已断开连接。
-            '''
+            """
             try:
                 if itchat.search_friends():
                     return True
@@ -100,10 +102,10 @@ class GFWeather:
             return False
 
     def run(self):
-        '''
+        """
         主运行入口
         :return:None
-        '''
+        """
         # 自动登录
         if not self.is_online(auto_login=True):
             return
@@ -122,16 +124,16 @@ class GFWeather:
         scheduler.add_job(self.start_today_info, 'cron', hour=self.alarm_hour,
                           minute=self.alarm_minute, misfire_grace_time=GRACE_PERIOD)
         # 每隔 2 分钟发送一条数据用于测试。
-#         if DEBUG:
-#             scheduler.add_job(self.start_today_info, 'interval', seconds=120)
+        #         if DEBUG:
+        #             scheduler.add_job(self.start_today_info, 'interval', seconds=120)
         scheduler.start()
 
     def start_today_info(self, is_test=False):
-        '''
+        """
         每日定时开始处理。
         :param is_test:bool, 测试标志，当为True时，不发送微信信息，仅仅获取数据。
         :return: None。
-        '''
+        """
         print("*" * 50)
         print('获取相关信息...')
 
@@ -169,11 +171,11 @@ class GFWeather:
         print('发送成功..\n')
 
     def isJson(self, resp):
-        '''
+        """
         判断数据是否能被 Json 化。 True 能，False 否。
         :param resp: request
         :return: bool, True 数据可 Json 化；False 不能 JOSN 化。
-        '''
+        """
         try:
             resp.json()
             return True
@@ -181,10 +183,10 @@ class GFWeather:
             return False
 
     def get_ciba_info(self):
-        '''
+        """
         从词霸中获取每日一句，带英文。
         :return:str ,返回每日一句（双语）
-        '''
+        """
         print('获取格言信息（双语）...')
         resp = requests.get('http://open.iciba.com/dsapi')
         if resp.status_code == 200 and self.isJson(resp):
@@ -197,10 +199,10 @@ class GFWeather:
             return None
 
     def get_dictum_info(self):
-        '''
+        """
         获取格言信息（从『一个。one』获取信息 http://wufazhuce.com/）
         :return: str， 一句格言或者短语
-        '''
+        """
         print('获取格言信息...')
         user_url = 'http://wufazhuce.com/'
         resp = requests.get(user_url, headers=self.headers)
@@ -213,10 +215,10 @@ class GFWeather:
         return ''
 
     def get_lovelive_info(self):
-        '''
+        """
         从土味情话中获取每日一句。
         :return: str,土味情话
-        '''
+        """
         print('获取土味情话...')
         resp = requests.get("https://api.lovelive.tools/api/SweetNothings")
         if resp.status_code == 200:
@@ -227,14 +229,14 @@ class GFWeather:
 
     def get_weather_info(self, dictum_msg='', city_code='101030100', start_date='2018-01-01',
                          sweet_words='From your Valentine'):
-        '''
+        """
         获取天气信息。网址：https://www.sojson.com/blog/305.html
         :param dictum_msg: str,发送给朋友的信息
         :param city_code: str,城市对应编码
         :param start_date: str,恋爱第一天日期
         :param sweet_words: str,来自谁的留言
         :return: str,需要发送的话。
-        '''
+        """
         print('获取天气信息...')
         weather_url = f'http://t.weather.sojson.com/api/weather/city/{city_code}'
         resp = requests.get(url=weather_url)
