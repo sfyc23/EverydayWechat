@@ -3,7 +3,7 @@
 #  http://einverne.github.io/post/2015/08/yaml.html
 
 # 定时时间
-alarm_timed: '9:30'
+alarm_timed: '1:48'
 
 # 格言渠道
 # 1 : ONE●一个
@@ -18,7 +18,7 @@ girlfriend_infos:
     #女友所在桂林
     city_name: '桂林'
     # 从那天开始勾搭的（可空）
-    start_date: '  '
+    start_date: '2017-10-10'
     # 短句的最后留言（可空）
     sweet_words: '来自最爱你的我。'
 

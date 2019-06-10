@@ -202,7 +202,7 @@ sudo docker run --name '项目所在地址'
 
 ## 类似项目
 
-[wechatBot](https://github.com/gengchen528/wechatBot) —— 微信每日说，每日自动发送微信消息。（Node + Wechaty）
+[wechatBot](https://github.com/gengchen528/wechatBot) —— 微信每日说，每日自动发送微信消息。（Node + Wechaty）  
 [NodeMail](https://github.com/Vincedream/NodeMail) —— 用 Node 写一个爬虫脚本每天定时给女朋友发一封暖心邮件。
 
 
