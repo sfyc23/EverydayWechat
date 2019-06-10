@@ -1,16 +1,15 @@
-![python_vesion](https://img.shields.io/badge/Python%20-%3E%3D%203.6-green.svg)  
+![python_vesion](https://img.shields.io/badge/Python%20-%3E%3D%203.5-green.svg)  
 # 用 Python + itchat 写一个爬虫脚本每天定时给多个女友发给微信暖心话
 
 ## 项目介绍：
 
-开发环境：Python >= 3.6
+开发环境：Python >= 3.5
 
 ### 灵感来源
 
 在掘金看到了一篇《[用Node+wechaty写一个爬虫脚本每天定时给女(男)朋友发微信暖心话][1]》后，我就想为什么不用 Python 去实现这个功能呢。 JUST DO IT，说做就做。  
 这文章的结构也是参考上面这位朋友的。  
 本来只是写单人的，不过有些优（作）秀（死）的人表示女朋友不止一个。现已支持添加多人信息。
-
 
 ### 项目地址：
 Github: [https://github.com/sfyc23/EverydayWechat](https://github.com/sfyc23/EverydayWechat)。
@@ -25,10 +24,10 @@ Github: [https://github.com/sfyc23/EverydayWechat](https://github.com/sfyc23/Eve
 定时给女朋友发送每日天气、提醒、每日一句。
 
 ### 数据来源
-- 每日一句和上面的大佬一样也是来自：[ONE●一个][6]。
-- 天气信息来自： [SOJSON][7] 。
-- 土味情话： [api](http://open.iciba.com/?c=api)。
-
+- 每日一句和上面的大佬一样也是来自 [ONE●一个][6]
+- 金山词霸 ● 每日一句（英文加中文）：[iciba](http://open.iciba.com/?c=api)
+- 土味情话： [api](http://open.iciba.com/?c=api)
+- 天气信息来自 [SOJSON][7] 
 
 ### 实现效果
 ![命令行信息](http://vlog.sfyc23.xyz/wechat_everyday/20190312010620.png)  
@@ -79,7 +78,7 @@ def get_dictum_info(self):
 有英文和中文翻译，例如：
 > When you finally get your own happiness, you will understand the
 > previous sadness is a kind of treasure, which makes you better to hold
-> and cherish the people you love.
+> and cherish the people you love.  
 > 等你获得真正属于你的幸福之后，你就会明白一起的伤痛其实是一种财富，它让你学会更好地去把握和珍惜你爱的人。
 
 代码实现 ：
@@ -175,6 +174,8 @@ girlfriend_infos:
 
 ## 项目运行
 
+建议使用微信小号。
+
 ### 1.直接运行
 ```
 python run.py
@@ -198,6 +199,11 @@ sudo docker run --name '项目所在地址'
 ## 最后
 项目地址：[https://github.com/sfyc23/EverydayWechat](https://github.com/sfyc23/EverydayWechat)  
 写完后才发现，我并没有女朋友啊！
+
+## 类似项目
+
+[wechatBot](https://github.com/gengchen528/wechatBot) —— 微信每日说，每日自动发送微信消息。（Node + Wechaty）
+[NodeMail](https://github.com/Vincedream/NodeMail) —— 用 Node 写一个爬虫脚本每天定时给女朋友发一封暖心邮件。
 
 
   [1]: https://juejin.im/post/5c77c6bef265da2de6611cff
