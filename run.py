@@ -4,7 +4,7 @@ from GFWeather import GFWeather
 def run():
     '''
     主程序入口
-    :return:
+    :return: None
     '''
     GFWeather().run()
 
@@ -12,7 +12,7 @@ def run():
 def test_run():
     '''
     运行前的测试
-    :return:
+    :return: None
     '''
     GFWeather().start_today_info(is_test=True)
 

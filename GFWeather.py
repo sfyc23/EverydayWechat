@@ -13,9 +13,10 @@ import city_dict
 # fire the job again if it was missed within GRACE_PERIOD
 GRACE_PERIOD = 15 * 60
 
+
 class GFWeather:
     headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36",
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36',
     }
     dictum_channel_name = {1: 'ONE●一个', 2: '词霸(每日英语)', 3: '土味情话'}
 
@@ -31,10 +32,10 @@ class GFWeather:
             config = yaml.load(f, Loader=yaml.Loader)
 
         alarm_timed = config.get('alarm_timed').strip()
-        init_msg = f"每天定时发送时间：{alarm_timed}\n"
+        init_msg = '每天定时发送时间：{}\n'.format(alarm_timed)
 
         dictum_channel = config.get('dictum_channel', -1)
-        init_msg += f"格言获取渠道：{self.dictum_channel_name.get(dictum_channel, '无')}\n"
+        init_msg += '格言获取渠道：{}\n'.format(self.dictum_channel_name.get(dictum_channel, '无'))
 
         girlfriend_list = []
         girlfriend_infos = config.get('girlfriend_infos')
@@ -48,12 +49,11 @@ class GFWeather:
                 break
             girlfriend['city_code'] = city_code
             girlfriend_list.append(girlfriend)
-
-            print_msg = f"女朋友的微信昵称：{girlfriend.get('wechat_name')}\n\t女友所在城市名称：{girlfriend.get('city_name')}\n\t" \
-                f"在一起的第一天日期：{girlfriend.get('start_date')}\n\t最后一句为：{girlfriend.get('sweet_words')}\n"
+            print_msg = '女朋友的微信昵称：{wechat_name}\n\t女友所在城市名称：{city_name}\n\t在一起的第一天日期：{start_date}\n\t最后一句为：{sweet_words}\n'.format(
+                **girlfriend)
             init_msg += print_msg
 
-        print(u"*" * 50)
+        print('*' * 50)
         print(init_msg)
 
         hour, minute = [int(x) for x in alarm_timed.split(':')]
@@ -87,7 +87,6 @@ class GFWeather:
         # 登陆，尝试 5 次
         for _ in range(5):
             # 命令行显示登录二维码
-            # itchat.auto_login(enableCmdQR=True)
             if os.environ.get('MODE') == 'server':
                 itchat.auto_login(enableCmdQR=2)
             else:
@@ -122,8 +121,7 @@ class GFWeather:
         scheduler.add_job(self.start_today_info, 'cron', hour=self.alarm_hour,
                           minute=self.alarm_minute, misfire_grace_time=GRACE_PERIOD)
         # 每隔 2 分钟发送一条数据用于测试。
-#         if DEBUG:
-#             scheduler.add_job(self.start_today_info, 'interval', seconds=120)
+        # scheduler.add_job(self.start_today_info, 'interval', seconds=120)
         scheduler.start()
 
     def start_today_info(self, is_test=False):
@@ -132,7 +130,7 @@ class GFWeather:
         :param is_test:bool, 测试标志，当为True时，不发送微信信息，仅仅获取数据。
         :return: None。
         '''
-        print("*" * 50)
+        print('*' * 50)
         print('获取相关信息...')
 
         if self.dictum_channel == 1:
@@ -152,7 +150,7 @@ class GFWeather:
                                               sweet_words=sweet_words)
             name_uuid = girlfriend.get('name_uuid')
             wechat_name = girlfriend.get('wechat_name')
-            print(f'给『{wechat_name}』发送的内容是:\n{today_msg}')
+            print('给『{wechat_name}』发送的内容是:\n{today_msg}'.format(wechat_name=wechat_name, today_msg=today_msg))
 
             if not is_test:
                 if self.is_online(auto_login=True):
@@ -160,7 +158,7 @@ class GFWeather:
                 # 防止信息发送过快。
                 time.sleep(5)
 
-        print('发送成功..\n')
+        print('发送成功...\n')
 
     def isJson(self, resp):
         '''
@@ -185,9 +183,9 @@ class GFWeather:
             conentJson = resp.json()
             content = conentJson.get('content')
             note = conentJson.get('note')
-            return f"{content}\n{note}\n"
+            return '{}\n{}\n'.format(content, note)
         else:
-            print("没有获取到数据")
+            print('没有获取到数据')
             return None
 
     def get_dictum_info(self):
@@ -202,7 +200,7 @@ class GFWeather:
             soup_texts = BeautifulSoup(resp.text, 'lxml')
             # 『one -个』 中的每日一句
             every_msg = soup_texts.find_all('div', class_='fp-one-cita')[0].find('a').text
-            return every_msg + "\n"
+            return every_msg + '\n'
         print('每日一句获取失败')
         return ''
 
@@ -212,15 +210,15 @@ class GFWeather:
         :return: str,土味情话
         '''
         print('获取土味情话...')
-        resp = requests.get("https://api.lovelive.tools/api/SweetNothings")
+        resp = requests.get('https://api.lovelive.tools/api/SweetNothings')
         if resp.status_code == 200:
-            return resp.text + "\n"
+            return resp.text + '\n'
         else:
             print('每日一句获取失败')
             return None
 
     def get_weather_info(self, dictum_msg='', city_code='101030100', start_date='2018-01-01',
-                         sweet_words='From your Valentine'):
+                         sweet_words='来自你的朋友'):
         '''
         获取天气信息。网址：https://www.sojson.com/blog/305.html
         :param dictum_msg: str,发送给朋友的信息
@@ -230,7 +228,7 @@ class GFWeather:
         :return: str,需要发送的话。
         '''
         print('获取天气信息...')
-        weather_url = f'http://t.weather.sojson.com/api/weather/city/{city_code}'
+        weather_url = 'http://t.weather.sojson.com/api/weather/city/{}'.format(city_code)
         resp = requests.get(url=weather_url)
         if resp.status_code == 200 and self.isJson(resp) and resp.json().get('status') == 200:
             weatherJson = resp.json()
@@ -245,29 +243,32 @@ class GFWeather:
             high_c = high[high.find(' ') + 1:]
             low = today_weather.get('low')
             low_c = low[low.find(' ') + 1:]
-            temperature = f"温度 : {low_c}/{high_c}"
+            temperature = '温度 : {}/{}'.format(low_c, high_c)
 
             # 风
             fx = today_weather.get('fx')
             fl = today_weather.get('fl')
-            wind = f"{fx} : {fl}"
+            wind = '{} : {}'.format(fx, fl)
 
             # 空气指数
             aqi = today_weather.get('aqi')
-            aqi = f"空气 : {aqi}"
+            aqi = '空气 : {}'.format(aqi)
 
             # 在一起，一共多少天了，如果没有设置初始日期，则不用处理
             if start_date:
                 try:
-                    start_datetime = datetime.strptime(start_date, "%Y-%m-%d")
+                    start_datetime = datetime.strptime(start_date, '%Y-%m-%d')
                     day_delta = (datetime.now() - start_datetime).days
-                    delta_msg = f'宝贝这是我们在一起的第 {day_delta} 天。\n'
+                    delta_msg = '宝贝这是我们在一起的第 {} 天。\n'.format(day_delta)
                 except:
                     delta_msg = ''
             else:
                 delta_msg = ''
 
-            today_msg = f'{today_time}\n{delta_msg}{notice}。\n{temperature}\n{wind}\n{aqi}\n{dictum_msg}{sweet_words if sweet_words else ""}\n'
+            # today_msg = f'{today_time}\n{delta_msg}{notice}。\n{temperature}\n{wind}\n{aqi}\n{dictum_msg}{sweet_words if sweet_words else ""}\n'
+            today_msg = '{today_time}\n{delta_msg}{notice}。\n{temperature}\n{wind}\n{aqi}\n{dictum_msg}{sweet_words}\n' \
+                .format(today_time=today_time, delta_msg=delta_msg, notice=notice, temperature=temperature, wind=wind,
+                        aqi=aqi, dictum_msg=dictum_msg, sweet_words=sweet_words if sweet_words else "")
             return today_msg
 
 
