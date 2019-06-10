@@ -14,7 +14,7 @@ def test_run():
     运行前的测试
     :return:
     """
-    GFWeather().start_today_info()
+    GFWeather().start_today_info(is_test=True)
 
 
 if __name__ == '__main__':
