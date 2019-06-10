@@ -79,7 +79,7 @@ def get_dictum_info(self):
 有英文和中文翻译，例如：
 > When you finally get your own happiness, you will understand the
 > previous sadness is a kind of treasure, which makes you better to hold
-> and cherish the people you love.  
+> and cherish the people you love.
 > 等你获得真正属于你的幸福之后，你就会明白一起的伤痛其实是一种财富，它让你学会更好地去把握和珍惜你爱的人。
 
 代码实现 ：
@@ -113,7 +113,7 @@ def get_lovelive_info(self):
     else:
         print('每日一句获取失败')
         return None
-```  
+```
 
 #### 3. 获取今日天气 。
 天气数据来源：[SOJSON][7]
@@ -136,7 +136,7 @@ itchat.auto_login()
 itchat.send(today_msg, toUserName=name_uuid)
 ```
 
-## 项目配置 
+## 项目配置
 
 ### 安装依赖
 
@@ -187,13 +187,13 @@ python run.py
 #Ctrl+A+D 退出 Screen 窗口
 ```
 
-### 3.使用 Docker  
+### 3.使用 Docker
 ```
 sudo docker build -t everydaywechat .
 sudo docker run --name '项目所在地址'
 # 扫码登陆
-#Ctrl+P+Q 退出容器  
-```  
+#Ctrl+P+Q 退出容器
+```
 
 ## 最后
 项目地址：[https://github.com/sfyc23/EverydayWechat](https://github.com/sfyc23/EverydayWechat)  
