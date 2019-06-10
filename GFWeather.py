@@ -10,11 +10,8 @@ from bs4 import BeautifulSoup
 
 import city_dict
 
-# DEBUG mode, if on, it will send a test message every 2 minutes
-DEBUG = False
-
 # fire the job again if it was missed within GRACE_PERIOD
-GRACE_PERIOD = 15*60
+GRACE_PERIOD = 15 * 60
 
 class GFWeather:
     headers = {
@@ -125,8 +122,8 @@ class GFWeather:
         scheduler.add_job(self.start_today_info, 'cron', hour=self.alarm_hour,
                           minute=self.alarm_minute, misfire_grace_time=GRACE_PERIOD)
         # 每隔 2 分钟发送一条数据用于测试。
-        if DEBUG:
-            scheduler.add_job(self.start_today_info, 'interval', seconds=120)
+#         if DEBUG:
+#             scheduler.add_job(self.start_today_info, 'interval', seconds=120)
         scheduler.start()
 
     def start_today_info(self, is_test=False):
