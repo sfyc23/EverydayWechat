@@ -1,6 +1,14 @@
 ![python_vesion](https://img.shields.io/badge/Python%20-%3E%3D%203.5-green.svg)  
 # 用 Python + itchat 写一个爬虫脚本每天定时给多个女友发给微信暖心话
 
+## 待优化功能
+
+> * [ ]  更友好的 DEBUG 和文档，方便第一次跑通程序。
+> * [ ]  图灵机器人自动回复。
+> * [ ]  断线提醒。
+> * [ ]  给女友群发消息。
+
+---
 ## 项目介绍：
 
 开发环境：Python >= 3.5
@@ -197,7 +205,7 @@ sudo docker run --name '项目所在地址'
 ```
 
 ## 最后
-项目地址：[https://github.com/sfyc23/EverydayWechat](https://github.com/sfyc23/EverydayWechat)  
+项目地址：[https://github.com/sfyc23/EverydayWechat](https://github.com/sfyc23/EverydayWechat)  。
 写完后才发现，我并没有女朋友啊！
 
 ## 类似项目
