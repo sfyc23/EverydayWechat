@@ -26,7 +26,7 @@ Github: [https://github.com/sfyc23/EverydayWechat](https://github.com/sfyc23/Eve
 ### 数据来源
 - 每日一句和上面的大佬一样也是来自 [ONE●一个][6]
 - 金山词霸 ● 每日一句（英文加中文）：[iciba](http://open.iciba.com/?c=api)
-- 土味情话： [api](https://api.lovelive.tools/api/SweetNothings)
+- 土味情话： [渣男在线](https://www.v2ex.com/t/569853)
 - 天气信息来自 [SOJSON][7] 
 
 ### 实现效果
