@@ -202,8 +202,9 @@ sudo docker run --name '项目所在地址'
 
 ## 类似项目
 
-[wechatBot](https://github.com/gengchen528/wechatBot) —— 微信每日说，每日自动发送微信消息。（Node + Wechaty）  
-[NodeMail](https://github.com/Vincedream/NodeMail) —— 用 Node 写一个爬虫脚本每天定时给女朋友发一封暖心邮件。
+[wechatBot](https://github.com/gengchen528/wechatBot) —— 微信每日说，每日自动发送微信消息（Node + Wechaty）。  
+[NodeMail](https://github.com/Vincedream/NodeMail) —— 用 Node 写一个爬虫脚本每天定时给女朋友发一封暖心邮件。  
+[wechat-assistant](https://github.com/gengchen528/wechat-assistant) —— koa+wechaty实现的微信个人秘书，把你闲置的微信号利用起来做个个人秘书。
 
 
   [1]: https://juejin.im/post/5c77c6bef265da2de6611cff
