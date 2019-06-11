@@ -9,11 +9,12 @@ alarm_timed: '9:30'
 # 1 : ONE●一个
 # 2 : 词霸（每日英语，双语）
 # 3 : 土味情话
-dictum_channel: 2
+# 4 : 一言
+dictum_channel: 4
 
 girlfriend_infos:
   -
-    #女友微信昵称
+    #女友微信昵称或者备注名，不能输入微信号。
     wechat_name: '古典'
     #女友所在桂林
     city_name: '桂林'

@@ -26,7 +26,7 @@ class GFWeather:
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) '
                       'Chrome/67.0.3396.87 Safari/537.36',
     }
-    dictum_channel_name = {1: 'ONE●一个', 2: '词霸(每日英语)', 3: '土味情话'}
+    dictum_channel_name = {1: 'ONE●一个', 2: '词霸(每日英语)', 3: '土味情话', 4: '一言'}
 
     def __init__(self):
         self.girlfriend_list, self.alarm_hour, self.alarm_minute, self.dictum_channel = self.get_init_data()
@@ -38,7 +38,7 @@ class GFWeather:
             1.dict 需要发送的用户的信息；
             2.int 时；
             3.int 分；
-            4.int 格言渠道。（1: 'ONE●一个', 2: '词霸(每日英语)', 3: '土味情话'）
+            4.int 格言渠道。{1: 'ONE●一个', 2: '词霸(每日英语)', 3: '土味情话', 4: '一言'}
         """
         with open('_config.yaml', 'r', encoding='utf-8') as file:
             config = yaml.load(file, Loader=yaml.Loader)
@@ -122,11 +122,12 @@ class GFWeather:
             return
         for girlfriend in self.girlfriend_list:
             wechat_name = girlfriend.get('wechat_name')
+            # 搜索用户名搜索用户，得到一个 用户列表 list
             friends = itchat.search_friends(name=wechat_name)
-            if not friends:
+            if not friends:  # 如果用户列表为空，表示用户昵称填写有误。
                 print('昵称『{}』有误。'.format(wechat_name))
                 return
-            name_uuid = friends[0].get('UserName')
+            name_uuid = friends[0].get('UserName')  # 取第一个用户的 uuid。
             girlfriend['name_uuid'] = name_uuid
 
         # 定时任务
@@ -156,21 +157,26 @@ class GFWeather:
             dictum_msg = self.get_ciba_info()
         elif self.dictum_channel == 3:
             dictum_msg = self.get_lovelive_info()
+        elif self.dictum_channel == 4:
+            dictum_msg = self.get_hitokoto_info()
         else:
             dictum_msg = ''
 
         for girlfriend in self.girlfriend_list:
             city_code = girlfriend.get('city_code')
-            start_date = girlfriend.get('start_date').strip()
+            start_date = girlfriend.get('start_date')
             sweet_words = girlfriend.get('sweet_words')
+            # 获取天气信息，并整合数据。
             today_msg = self.get_weather_info(
                 dictum_msg, city_code=city_code, start_date=start_date, sweet_words=sweet_words)
             name_uuid = girlfriend.get('name_uuid')
             wechat_name = girlfriend.get('wechat_name')
             print('给『{}』发送的内容是:\n{}'.format(wechat_name, today_msg))
 
+            # 当为 is_test = True 时，不发送微信信息，仅仅获取数据
             if not is_test:
-                if self.is_online(auto_login=True):
+                if self.is_online(auto_login=True):  # 微信在线
+                    # 发送微信消息
                     itchat.send(today_msg, toUserName=name_uuid)
                 # 防止信息发送过快。
                 time.sleep(5)
@@ -196,14 +202,19 @@ class GFWeather:
         :return:str ,返回每日一句（双语）
         """
         print('获取格言信息（双语）...')
-        resp = requests.get('http://open.iciba.com/dsapi')
-        if resp.status_code == 200 and self.is_json(resp):
-            content_dict = resp.json()
-            content = content_dict.get('content')
-            note = content_dict.get('note')
-            return '{}\n{}\n'.format(content, note)
+        try:
+            resp = requests.get('http://open.iciba.com/dsapi')
+            if resp.status_code == 200 and self.is_json(resp):
+                content_dict = resp.json()
+                content = content_dict.get('content')
+                note = content_dict.get('note')
+                return '{}\n{}\n'.format(content, note)
 
-        print('没有获取到数据。')
+            print('没有获取到格言数据。')
+            return None
+        except requests.exceptions.RequestException as exception:
+            print(exception)
+            return None
         return None
 
     def get_dictum_info(self):
@@ -213,6 +224,7 @@ class GFWeather:
         """
         print('获取格言信息...')
         user_url = 'http://wufazhuce.com/'
+
         resp = requests.get(user_url, headers=self.headers)
         if resp.status_code == 200:
             soup_texts = BeautifulSoup(resp.text, 'lxml')
@@ -229,11 +241,31 @@ class GFWeather:
         :return: str,土味情话。
         """
         print('获取土味情话...')
-        resp = requests.get('https://api.lovelive.tools/api/SweetNothings')
-        if resp.status_code == 200:
-            return resp.text + '\n'
+        try:
+            resp = requests.get('https://api.lovelive.tools/api/SweetNothings')
+            if resp.status_code == 200:
+                return resp.text + '\n'
+            print('土味情话获取失败。')
+        except requests.exceptions.RequestException as exception:
+            print(exception)
+            return None
+        return None
 
-        print('土味情话获取失败。')
+    @staticmethod
+    def get_hitokoto_info():
+        """
+        从『一言』获取信息。(官网：https://hitokoto.cn/)
+        :return: str,一言。
+        """
+        print('获取一言...')
+        try:
+            resp = requests.get('https://v1.hitokoto.cn/', params={'encode': 'text'})
+            if resp.status_code == 200:
+                return resp.text + '\n'
+            print('一言获取失败。')
+        except requests.exceptions.RequestException as exception:
+            print(exception)
+            return None
         return None
 
     def get_weather_info(self, dictum_msg, city_code, start_date, sweet_words):
@@ -298,7 +330,7 @@ if __name__ == '__main__':
     # GFWeather().run()
 
     # 只查看获取数据，
-    # GFWeather().start_today_info(True)
+    GFWeather().start_today_info(True)
 
     # 测试获取词霸信息
     # ciba = GFWeather().get_ciba_info()
