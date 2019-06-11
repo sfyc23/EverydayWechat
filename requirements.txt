@@ -4,3 +4,4 @@ itchat
 apscheduler
 pyyaml
 lxml
+simplejson
