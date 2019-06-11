@@ -15,27 +15,28 @@
 
 ### 灵感来源
 
-在掘金看到了一篇《[用Node+wechaty写一个爬虫脚本每天定时给女(男)朋友发微信暖心话][1]》后，我就想为什么不用 Python 去实现这个功能呢。 JUST DO IT，说做就做。  
+在掘金看到了一篇《[用Node+wechaty写一个爬虫脚本每天定时给女(男)朋友发微信暖心话](https://juejin.im/post/5c77c6bef265da2de6611cff)》后，我就想为什么不用 Python 去实现这个功能呢。 JUST DO IT，说做就做。  
 这文章的结构也是参考上面这位朋友的。  
 本来只是写单人的，不过有些优（作）秀（死）的人表示女朋友不止一个。现已支持添加多人信息。
 
 ### 项目地址：
 Github: [https://github.com/sfyc23/EverydayWechat](https://github.com/sfyc23/EverydayWechat)。
 
+
 ### 使用库
-- [itchat][2] - 微信个人号接口
-- [requests][3] - 网络请求库
-- [beautifulsoup4][4] - 解析网页
-- [APScheduler][5] - 定时任务
+- [itchat](https://github.com/littlecodersh/ItChat) - 微信个人号接口
+- [requests](http://docs.python-requests.org/en/master/) - 网络请求库
+- [beautifulsoup4](https://www.crummy.com/software/BeautifulSoup/bs4/doc/index.zh.html#) - 解析网页
+- [APScheduler](https://apscheduler.readthedocs.io/en/latest/) - 定时任务
 
 ### 功能
 定时给女朋友发送每日天气、提醒、每日一句。
 
 ### 数据来源
-- 每日一句和上面的大佬一样也是来自 [ONE●一个][6]
+- 每日一句和上面的大佬一样也是来自 [ONE●一个](http://wufazhuce.com/)
 - 金山词霸 ● 每日一句（英文加中文）：[iciba](http://open.iciba.com/?c=api)
-- 土味情话： [渣男在线](https://www.v2ex.com/t/569853)
-- 天气信息来自 [SOJSON][7] 
+- 土味情话： [渣男在线](https://www.v2ex.com/t/569853)(目前失效。)
+- 天气信息来自 [SOJSON](https://www.sojson.com/blog/305.html) 
 
 ### 实现效果
 ![命令行信息](http://vlog.sfyc23.xyz/wechat_everyday/20190312010620.png)  
@@ -66,7 +67,7 @@ scheduler.start()
 *start_today_info* 是方法处理类。
 
 #### 2. 获取每日一句。
-数据来源 1： [ONE●一个][6]
+数据来源 1： [ONE●一个](http://wufazhuce.com/)
 ```
 def get_dictum_info(self):
     '''
@@ -123,7 +124,7 @@ def get_lovelive_info(self):
 ```
 
 #### 3. 获取今日天气 。
-天气数据来源：[SOJSON][7]
+天气数据来源：[SOJSON](https://www.sojson.com/blog/305.html)
 
 ```
 def get_weather_info(self, city_code=''）：
@@ -213,12 +214,3 @@ sudo docker run --name '项目所在地址'
 [wechatBot](https://github.com/gengchen528/wechatBot) —— 微信每日说，每日自动发送微信消息（Node + Wechaty）。  
 [NodeMail](https://github.com/Vincedream/NodeMail) —— 用 Node 写一个爬虫脚本每天定时给女朋友发一封暖心邮件。  
 [wechat-assistant](https://github.com/gengchen528/wechat-assistant) —— koa+wechaty实现的微信个人秘书，把你闲置的微信号利用起来做个个人秘书。
-
-
-  [1]: https://juejin.im/post/5c77c6bef265da2de6611cff
-  [2]: https://github.com/littlecodersh/ItChat
-  [3]: http://docs.python-requests.org/en/master/
-  [4]: https://www.crummy.com/software/BeautifulSoup/bs4/doc/index.zh.html#
-  [5]: https://apscheduler.readthedocs.io/en/latest/
-  [6]: http://wufazhuce.com/
-  [7]: https://www.sojson.com/blog/305.html
