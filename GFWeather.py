@@ -133,10 +133,6 @@ class GFWeather:
                 itchat.auto_login(enableCmdQR=2, hotReload=True)
             else:
                 itchat.auto_login(hotReload=True)
-            # if os.environ.get('MODE') == 'server':
-            #     itchat.auto_login(enableCmdQR=2)
-            # else:
-            #     itchat.auto_login()
             if _online():
                 print('登录成功')
                 return True
@@ -149,7 +145,6 @@ class GFWeather:
         主运行入口。
         :return:None
         """
-
         global reply_name_uuid_list
         # 自动登录
         if not self.is_online(auto_login=True):
@@ -171,9 +166,8 @@ class GFWeather:
         scheduler = BlockingScheduler()
 
         # 每天9：30左右给女朋友发送每日一句
-        # scheduler.add_job(self.start_today_info, 'cron', hour=self.alarm_hour,
-        #                   minute=self.alarm_minute, misfire_grace_time=GRACE_PERIOD)
-
+        scheduler.add_job(self.start_today_info, 'cron', hour=self.alarm_hour,
+                          minute=self.alarm_minute, misfire_grace_time=GRACE_PERIOD)
         # 每隔 2 分钟发送一条数据用于测试。
         # scheduler.add_job(self.start_today_info, 'interval', seconds=120)
 
