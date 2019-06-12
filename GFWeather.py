@@ -21,7 +21,7 @@ GRACE_PERIOD = 15 * 60
 reply_name_uuid_list = []
 tuling_apikey, tuling_userid = '', ''
 
-TULING_ERROR_CODE_LIST = [ # 图灵错误码
+TULING_ERROR_CODE_LIST = [  # 图灵错误码
     5000, 6000, 4000, 4001, 4002,
     4003, 4005, 4007, 4100, 4200,
     4300, 4400, 4500, 4600, 4602,
@@ -168,7 +168,7 @@ class GFWeather:
         # 每天9：30左右给女朋友发送每日一句
         scheduler.add_job(self.start_today_info, 'cron', hour=self.alarm_hour,
                           minute=self.alarm_minute, misfire_grace_time=GRACE_PERIOD)
-        # 每隔 2 分钟发送一条数据用于测试。
+        # # 每隔 2 分钟发送一条数据用于测试。
         # scheduler.add_job(self.start_today_info, 'interval', seconds=120)
 
         if self.is_turing:
@@ -203,7 +203,7 @@ class GFWeather:
                     print('{}发来信息：{}\n回复{}：{}'
                           .format(msg.user.nickName, receive_text, msg.user.nickName, reply_text))
                 else:
-                    print('{}发来信息：{}\t 自动回复失败'
+                    print('{}发来信息：{}\t自动回复失败'
                           .format(msg.user.nickName, receive_text))
         except Exception as e:
             print(str(e))
@@ -223,7 +223,7 @@ class GFWeather:
             dictum_msg = self.get_ciba_info()
         elif self.dictum_channel == 3:
             dictum_msg = self.get_lovelive_info()
-        else self.dictum_channel == 4:
+        elif self.dictum_channel == 4:
             dictum_msg = self.get_hitokoto_info()
         if not dictum_msg:
             dictum_msg = '我们一直在一起，所以最后也想在你身旁'
@@ -261,7 +261,7 @@ class GFWeather:
         except JSONDecodeError:
             return False
 
-    def get_ciba_info(self):
+    def get_acib_info(self):
         """
         从词霸中获取每日一句，带英文。
         :return:str ,返回每日一句（双语）
@@ -345,6 +345,7 @@ class GFWeather:
         print('获取天气信息...')
         weather_url = 'http://t.weather.sojson.com/api/weather/city/{}'.format(city_code)
         resp = requests.get(url=weather_url)
+        print(resp.text)
         if resp.status_code == 200 and self.is_json(resp) and resp.json().get('status') == 200:
             weather_dict = resp.json()
             # 今日天气
@@ -448,6 +449,7 @@ if __name__ == '__main__':
     # 测试获取天气信息
     # wi = GFWeather().get_weather_info('好好学习，天天向上 \n', city_code='101030100',
     #                                   start_date='2018-01-01', sweet_words='美味的肉松')
+    #
     # print(wi)
 
     pass
