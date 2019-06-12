@@ -3,12 +3,14 @@
 
 ## 待优化功能：
 
+> * [ ]  正在重构代码中。。。
 > * [ ]  更友好的 DEBUG 和文档，方便第一次跑通程序。
 > * [ ]  断线提醒。
 > * [ ]  给女友群发消息。
 
 
-2019-6-12 已添加图灵机器人实现自动回复
+
+2019-6-12 已添加图灵机器人实现自动回复。
 
 ---
 ## 项目介绍：
@@ -39,13 +41,19 @@ Github: [https://github.com/sfyc23/EverydayWechat](https://github.com/sfyc23/Eve
 ### 数据来源
 - 每日一句和上面的大佬一样也是来自 [ONE●一个](http://wufazhuce.com/)
 - 金山词霸 ● 每日一句（英文加中文）：[iciba](http://open.iciba.com/?c=api)
+- 一言 ：[hitokoto](https://hitokoto.cn/)
 - 土味情话： [渣男在线](https://www.v2ex.com/t/569853)(目前失效。)
-- 天气信息来自 [SOJSON](https://www.sojson.com/blog/305.html) 
+- 天气信息来自： [SOJSON](https://www.sojson.com/blog/305.html) 
 
 ### 实现效果
 ![命令行信息](http://vlog.sfyc23.xyz/wechat_everyday/20190312010620.png)  
 ![微信截图](http://vlog.sfyc23.xyz/wechat_everyday/20190312010621.png)
 
+图灵自动回复机器人：
+
+![自动回复机器人](https://raw.githubusercontent.com/sfyc23/image/master/vlog/20190612173126.jpg)
+
+这简直就是分手神器！
 ## 代码说明
 
 ### 目录结构
@@ -113,7 +121,8 @@ def get_dictum_info(self):
         return None
 ```
 
-数据来源 3： [土味情话](https://api.lovelive.tools/api/SweetNothings)（感谢 [tomatoF](https://github.com/tomatoF)、[QSCTech-Sange](https://github.com/QSCTech-Sange))
+数据来源 3： [土味情话](https://api.lovelive.tools/api/SweetNothings)（感谢 [tomatoF](https://github.com/tomatoF)、[QSCTech-Sange](https://github.com/QSCTech-Sange))（已失效）
+
 ```
 def get_lovelive_info(self):
     '''
@@ -125,6 +134,21 @@ def get_lovelive_info(self):
     else:
         print('每日一句获取失败')
         return None
+```
+
+数据来源 4： [一言](https://v1.hitokoto.cn/)
+
+```
+def get_hitokoto_info():
+    try:
+        resp = requests.get('https://v1.hitokoto.cn/', params={'encode': 'text'})
+        if resp.status_code == 200:
+            return resp.text + '\n'
+        print('一言获取失败。')
+    except requests.exceptions.RequestException as exception:
+        print(exception)
+        return None
+    return None
 ```
 
 #### 3. 获取今日天气 。
@@ -165,9 +189,13 @@ turing_conf:
   userId: ''
 ```
 
-配置成功后，每天可免费回复 100 条信息。且用且珍惜。
-目前只能自动回复文字。
 
+目前可以公开的情报：
+1. 只能自动回复文字类消息；
+2. 免费版用户，每天可使用 100 条信息，且用且珍惜；
+3. 群消息自动回复还未现实。（待完成）；
+4. 如果消息发送太频繁，微信会限制登录网页端登录。放心，并不会封号；
+5. 并不是对所有人自动回复，只是回复 girlfriend_infos 中的人。
 
 ### 安装依赖
 
@@ -183,6 +211,7 @@ alarm_timed: '9:30'
 # 1 : ONE●一个
 # 2 : 词霸（每日英语,双语）
 # 3 : 土味情话
+# 4 : 一言
 dictum_channel: 2
 
 girlfriend_infos:
@@ -234,11 +263,14 @@ sudo docker run --name '项目所在地址'
 
 
 
-## 类似项目
+## Credits 致谢
 
-[wechatBot](https://github.com/gengchen528/wechatBot) —— 微信每日说，每日自动发送微信消息（Node + Wechaty）。  
-[NodeMail](https://github.com/Vincedream/NodeMail) —— 用 Node 写一个爬虫脚本每天定时给女朋友发一封暖心邮件。  
-[wechat-assistant](https://github.com/gengchen528/wechat-assistant) —— koa+wechaty实现的微信个人秘书，把你闲置的微信号利用起来做个个人秘书。
+本项目受以下项目启发，参考了其中一部分思路，向这些开发者表示感谢。
 
-## 致谢
-[likaixiang](https://github.com/likaixiang)
+- [wechatBot](https://github.com/gengchen528/wechatBot) —— 微信每日说，每日自动发送微信消息（Node + Wechaty）。  
+- [NodeMail](https://github.com/Vincedream/NodeMail) —— 用 Node 写一个爬虫脚本每天定时给女朋友发一封暖心邮件。  
+- [wechat-assistant](https://github.com/gengchen528/wechat-assistant) —— koa+wechaty实现的微信个人秘书，把你闲置的微信号利用起来做个个人秘书。
+- <https://github.com/likaixiang/EverydayWechat>
+
+## LICENSE
+[MIT License](https://github.com/sfyc23/EverydayWechat/blob/master/LICENSE)
