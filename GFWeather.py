@@ -6,16 +6,26 @@ import os
 import time
 from datetime import datetime
 import itchat
+from itchat.content import TEXT
 import requests
 import yaml
 from apscheduler.schedulers.blocking import BlockingScheduler
 from bs4 import BeautifulSoup
 from simplejson import JSONDecodeError
+import threading
 
 import city_dict
 
 # fire the job again if it was missed within GRACE_PERIOD
 GRACE_PERIOD = 15 * 60
+reply_name_uuid_list = []
+tuling_apikey, tuling_userid = '', ''
+
+TULING_ERROR_CODE_LIST = [ # 图灵错误码
+    5000, 6000, 4000, 4001, 4002,
+    4003, 4005, 4007, 4100, 4200,
+    4300, 4400, 4500, 4600, 4602,
+    7002, 8008, 0]
 
 
 class GFWeather:
@@ -29,16 +39,17 @@ class GFWeather:
     dictum_channel_name = {1: 'ONE●一个', 2: '词霸(每日英语)', 3: '土味情话', 4: '一言'}
 
     def __init__(self):
-        self.girlfriend_list, self.alarm_hour, self.alarm_minute, self.dictum_channel = self.get_init_data()
+        self.girlfriend_list, self.alarm_hour, self.alarm_minute, self.dictum_channel, self.is_turing = self.get_init_data()
 
     def get_init_data(self):
         """
         初始化基础数据。
-        :return: (dict,int,int,int)
+        :return: (dict,int,int,int,bool)
             1.dict 需要发送的用户的信息；
             2.int 时；
             3.int 分；
             4.int 格言渠道。{1: 'ONE●一个', 2: '词霸(每日英语)', 3: '土味情话', 4: '一言'}
+            5.bool 是否开启自动回复图灵机器人。
         """
         with open('_config.yaml', 'r', encoding='utf-8') as file:
             config = yaml.load(file, Loader=yaml.Loader)
@@ -49,15 +60,31 @@ class GFWeather:
         dictum_channel = config.get('dictum_channel', -1)
         init_msg += '格言获取渠道：{}\n'.format(self.dictum_channel_name.get(dictum_channel, '无'))
 
+        # 是否开启图灵
+        turing_conf = config.get('turing_conf')
+        is_turing = False
+        if turing_conf:
+            is_turing = turing_conf.get('is_turing')
+            if is_turing:
+                apikey = turing_conf.get('apiKey')
+                userId = turing_conf.get('userId')
+                if apikey and userId:
+                    global tuling_apikey, tuling_userid
+                    tuling_apikey = apikey
+                    tuling_userid = userId
+                else:
+                    print('apikey 与 userid 不能为空')
+                    is_turing = False
+
         girlfriend_list = []
         girlfriend_infos = config.get('girlfriend_infos')
         for girlfriend in girlfriend_infos:
             girlfriend.get('wechat_name').strip()
-            # 根据城市名称获取城市编号，用于查询天气。查看支持的城市为：http://cdn.sojson.com/_city.json
+            # 根据城市名称获取城市编号。查看支持的城市为：http://cdn.sojson.com/_city.json
             city_name = girlfriend.get('city_name').strip()
             city_code = city_dict.city_dict.get(city_name)
-            if not city_code:
-                print('您输入的城市无法收取到天气信息。')
+            if not city_code:  # 如果没有城市code,跳过此用户。
+                print('您输入的城市『{}』无法收取到天气信息。'.format(city_name))
                 break
             girlfriend['city_code'] = city_code
             girlfriend_list.append(girlfriend)
@@ -70,7 +97,7 @@ class GFWeather:
         print(init_msg)
 
         hour, minute = [int(x) for x in alarm_timed.split(':')]
-        return girlfriend_list, hour, minute, dictum_channel
+        return girlfriend_list, hour, minute, dictum_channel, is_turing
 
     @staticmethod
     def is_online(auto_login=False):
@@ -101,10 +128,15 @@ class GFWeather:
         # 登陆，尝试 5 次。
         for _ in range(5):
             # 命令行显示登录二维码。
+            # 如果需要切换微信，删除 hotReload=True
             if os.environ.get('MODE') == 'server':
                 itchat.auto_login(enableCmdQR=2, hotReload=True)
             else:
                 itchat.auto_login(hotReload=True)
+            # if os.environ.get('MODE') == 'server':
+            #     itchat.auto_login(enableCmdQR=2)
+            # else:
+            #     itchat.auto_login()
             if _online():
                 print('登录成功')
                 return True
@@ -117,6 +149,8 @@ class GFWeather:
         主运行入口。
         :return:None
         """
+
+        global reply_name_uuid_list
         # 自动登录
         if not self.is_online(auto_login=True):
             return
@@ -130,17 +164,55 @@ class GFWeather:
             name_uuid = friends[0].get('UserName')  # 取第一个用户的 uuid。
             girlfriend['name_uuid'] = name_uuid
 
+            if name_uuid not in reply_name_uuid_list:
+                reply_name_uuid_list.append(name_uuid)
+
         # 定时任务
         scheduler = BlockingScheduler()
 
         # 每天9：30左右给女朋友发送每日一句
-        scheduler.add_job(self.start_today_info, 'cron', hour=self.alarm_hour,
-                          minute=self.alarm_minute, misfire_grace_time=GRACE_PERIOD)
+        # scheduler.add_job(self.start_today_info, 'cron', hour=self.alarm_hour,
+        #                   minute=self.alarm_minute, misfire_grace_time=GRACE_PERIOD)
 
         # 每隔 2 分钟发送一条数据用于测试。
         # scheduler.add_job(self.start_today_info, 'interval', seconds=120)
 
-        scheduler.start()
+        if self.is_turing:
+            def _itchatRun():
+                itchat.run()
+
+            print('已开启图灵自动回复...')
+            thread = threading.Thread(target=_itchatRun, name='LoopThread')
+            thread.start()
+            scheduler.start()
+            thread.join()
+        else:
+            scheduler.start()
+
+    @itchat.msg_register([TEXT])
+    def text_reply(msg):
+        '''
+        自动回复内容
+        :return:
+        '''
+        try:
+            # print(msg)
+            uuid = msg.fromUserName
+            if uuid in reply_name_uuid_list:
+                receive_text = msg.text  # 好友发送来的消息
+                # reply_text = receive_text * 3
+                # 通过图灵 api 获取要回复的内容。
+                reply_text = get_turing_msg(receive_text)
+                time.sleep(2)
+                if reply_text:  # 如内容不为空，回复消息
+                    msg.user.send(reply_text)
+                    print('{}发来信息：{}\n回复{}：{}'
+                          .format(msg.user.nickName, receive_text, msg.user.nickName, reply_text))
+                else:
+                    print('{}发来信息：{}\t 自动回复失败'
+                          .format(msg.user.nickName, receive_text))
+        except Exception as e:
+            print(str(e))
 
     def start_today_info(self, is_test=False):
         """
@@ -172,7 +244,6 @@ class GFWeather:
             name_uuid = girlfriend.get('name_uuid')
             wechat_name = girlfriend.get('wechat_name')
             print('给『{}』发送的内容是:\n{}'.format(wechat_name, today_msg))
-
             # 当为 is_test = True 时，不发送微信信息，仅仅获取数据
             if not is_test:
                 if self.is_online(auto_login=True):  # 微信在线
@@ -325,12 +396,52 @@ class GFWeather:
             return today_msg
 
 
+def get_turing_msg(text):
+    """
+    通过 图灵 api 获取对话
+    :param text:
+    :return:
+    """
+    url = "http://openapi.tuling123.com/openapi/api/v2"
+    data = {
+        "reqType": 0,
+        "perception": {
+            "inputText": {
+                "text": text
+            }
+        },
+        "userInfo": {
+            # 图灵机器人apiKey,需官网申请
+            "apiKey": tuling_apikey,
+            "userId": tuling_userid
+        }
+    }
+    try:
+        # print('发出消息:{}'.format(text))
+        resp = requests.post(url, json=data)
+        if resp.status_code == 200:
+            # print(resp.text)
+            conent = resp.json()
+            if resp.json()['intent']['code'] not in TULING_ERROR_CODE_LIST:
+                return_text = conent['results'][0]['values']['text']
+                return return_text
+            else:
+                error_text = conent['results'][0]['values']['text']
+                print('图灵机器人错误信息：{}'.format(error_text))
+        print('图灵机器人发送失败')
+        return None
+    except Exception as e:
+        print(e)
+        return None
+    return None
+
+
 if __name__ == '__main__':
     # 直接运行
     # GFWeather().run()
 
     # 只查看获取数据，
-    GFWeather().start_today_info(True)
+    # GFWeather().start_today_info(True)
 
     # 测试获取词霸信息
     # ciba = GFWeather().get_ciba_info()
@@ -344,4 +455,5 @@ if __name__ == '__main__':
     # wi = GFWeather().get_weather_info('好好学习，天天向上 \n', city_code='101030100',
     #                                   start_date='2018-01-01', sweet_words='美味的肉松')
     # print(wi)
+
     pass

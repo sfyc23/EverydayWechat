@@ -12,9 +12,18 @@ alarm_timed: '9:30'
 # 4 : 一言
 dictum_channel: 4
 
+#图灵机器人(http://www.tuling123.com/)免费用户每天可用 100 条。
+#在官网注册并申请 apikey ,userID。
+turing_conf:
+  # 是否开启自动回复,只可选 False && True
+  is_turing: False
+  apiKey: ''
+  userId: ''
+
+
+
 girlfriend_infos:
-  -
-    #女友微信昵称或者备注名，不能输入微信号。
+  - #女友微信昵称或者备注名，不能输入微信号。
     wechat_name: '古典'
     #女友所在桂林
     city_name: '桂林'
@@ -25,8 +34,7 @@ girlfriend_infos:
 
   #如果你有多个人需要发送，则参照这个样式，复制即可
   #如不需要，则删除或注解下面所有的数据
-  -
-    wechat_name: '陈老师'
+  - wechat_name: 'happy'
     city_name: '朝阳区'
     start_date: '2018-11-11'
     sweet_words: '来自你俊美的老公。'

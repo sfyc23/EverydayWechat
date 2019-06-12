@@ -4,9 +4,11 @@
 ## 待优化功能：
 
 > * [ ]  更友好的 DEBUG 和文档，方便第一次跑通程序。
-> * [ ]  图灵机器人自动回复。
 > * [ ]  断线提醒。
 > * [ ]  给女友群发消息。
+
+
+2019-6-12 已添加图灵机器人实现自动回复
 
 ---
 ## 项目介绍：
@@ -146,7 +148,26 @@ itchat.auto_login()
 itchat.send(today_msg, toUserName=name_uuid)
 ```
 
+
+
 ## 项目配置
+
+### 配置图灵机器人自动回复
+
+1. 打开图灵机器人官网：[http://www.turingapi.com](http://www.turingapi.com/) 进行注册。
+2. 通过认证后，创建机器人,得到 apikey，userid。
+3. 将获取到的 apiKey，userId 填入到 **_config.yaml** 文件中：
+```
+turing_conf:
+  # 是否开启自动回复,只可选 False && True
+  is_turing: True
+  apiKey: ''
+  userId: ''
+```
+
+配置成功后，每天可免费回复 100 条信息。且用且珍惜。
+目前只能自动回复文字。
+
 
 ### 安装依赖
 
@@ -211,8 +232,13 @@ sudo docker run --name '项目所在地址'
 项目地址：[https://github.com/sfyc23/EverydayWechat](https://github.com/sfyc23/EverydayWechat)  。
 写完后才发现，我并没有女朋友啊！
 
+
+
 ## 类似项目
 
 [wechatBot](https://github.com/gengchen528/wechatBot) —— 微信每日说，每日自动发送微信消息（Node + Wechaty）。  
 [NodeMail](https://github.com/Vincedream/NodeMail) —— 用 Node 写一个爬虫脚本每天定时给女朋友发一封暖心邮件。  
 [wechat-assistant](https://github.com/gengchen528/wechat-assistant) —— koa+wechaty实现的微信个人秘书，把你闲置的微信号利用起来做个个人秘书。
+
+## 致谢
+[likaixiang](https://github.com/likaixiang)
