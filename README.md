@@ -83,7 +83,7 @@ auto_reply_names:
 alarm_info:
   is_alarm: True
   #定时发送时间
-  alarm_timed: '11:45'
+  alarm_timed: '11:40'
 ```
 
 #### 2.填写需要发送的好友信息
