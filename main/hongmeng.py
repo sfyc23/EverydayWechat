@@ -48,14 +48,15 @@ def is_online(auto_login=False):
     if not auto_login:  # 不自动登录，则直接返回 False
         return False
 
-    is_forced_switch = get_yaml().get('is_forced_switch', True)
+    # 切换微信号，重新扫码。
+    is_forced_switch = get_yaml().get('is_forced_switch', False)
     for _ in range(2):  # 登陆，尝试 2 次。
         # 如果需要切换微信，删除 hotReload=True
         if os.environ.get('MODE') == 'server':
             # 命令行显示登录二维码。
-            itchat.auto_login(enableCmdQR=2, hotReload=is_forced_switch)
+            itchat.auto_login(enableCmdQR=2, hotReload=(not is_forced_switch))
         else:
-            itchat.auto_login(hotReload=is_forced_switch)
+            itchat.auto_login(hotReload=(not is_forced_switch))
         if _online():
             print('登录成功')
             return True
