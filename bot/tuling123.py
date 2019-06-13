@@ -1,3 +1,5 @@
+# coding=utf-8
+
 '''
 图灵机器人自动回复
 官网：http://www.tuling123.com/
