@@ -5,15 +5,12 @@
 import os
 import time
 import threading
-
 from apscheduler.schedulers.blocking import BlockingScheduler
 import itchat
 from itchat.content import TEXT
-
 from main.common import (
     get_yaml
 )
-
 from main.utils import (
     get_bot_info,
     get_weather_info,
@@ -24,6 +21,7 @@ from main.utils import (
 reply_name_uuid_list = []
 # fire the job again if it was missed within GRACE_PERIOD
 GRACE_PERIOD = 15 * 60
+
 
 def is_online(auto_login=False):
     """
@@ -66,10 +64,7 @@ def is_online(auto_login=False):
 
 @itchat.msg_register([TEXT])
 def text_reply(msg):
-    '''
-    自动回复内容
-    :return:
-    '''
+    """ 监听用户消息 """
     try:
         # print(msg)
         uuid = msg.fromUserName
@@ -95,7 +90,7 @@ def init_reply():
     :return:
     """
     conf = get_yaml()
-    for name in conf['auto_reply_names']:
+    for name in conf.get('auto_reply_names', None):
         friends = itchat.search_friends(name=name)
         if not friends:  # 如果用户列表为空，表示用户昵称填写有误。
             print('昵称『{}』有误。'.format(name))
@@ -106,23 +101,27 @@ def init_reply():
 
 
 def init_alarm():
+    """ 初始化定时提醒 """
     alarm_info = get_yaml().get('alarm_info', None)
     if not alarm_info: return
     is_alarm = alarm_info.get('is_alarm', False)
     if not is_alarm: return
     alarm_timed = alarm_info.get('alarm_timed', None)
-    if not alarm_timed : return
+    if not alarm_timed: return
     hour, minute = [int(x) for x in alarm_timed.split(':')]
 
     # 定时任务
     scheduler = BlockingScheduler()
     # 每天9：30左右给女朋友发送每日一句
-    # scheduler.add_job(get_alarm_msg, 'cron', hour=hour,
-    #                   minute=minute, misfire_grace_time=GRACE_PERIOD)
+    scheduler.add_job(get_alarm_msg, 'cron', hour=hour,
+                      minute=minute, misfire_grace_time=GRACE_PERIOD)
+
     # 每隔 2 分钟发送一条数据用于测试。
-    scheduler.add_job(get_alarm_msg, 'interval', seconds=120)
+    # scheduler.add_job(get_alarm_msg, 'interval', seconds=180)
+
     print('已开启定时发送提醒功能...')
     scheduler.start()
+
 
 def get_alarm_msg():
     conf = get_yaml()
@@ -137,7 +136,8 @@ def get_alarm_msg():
             authors = itchat.search_friends(nickName=gf['wechat_name'])
             if authors:
                 authors[0].send(send_msg)
-                print('给『{}』发送的内容是:\n{}\n发送成功...\n'.format(gf['wechat_name'], send_msg))
+                print('\n定时给『{}』发送的内容是:\n{}\n发送成功...\n'.format(gf['wechat_name'], send_msg))
+
 
 def run():
     if not is_online(auto_login=True):
@@ -147,6 +147,7 @@ def run():
     if conf.get('is_auto_relay', False):
         def _itchatRun():
             itchat.run()
+
         init_reply()
         thread = threading.Thread(target=_itchatRun, name='LoopThread')
         thread.start()

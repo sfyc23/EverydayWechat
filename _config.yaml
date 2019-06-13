@@ -1,8 +1,8 @@
-# 配置文件请严格遵循yaml语法格式，yaml学习地址:
+# 配置文件请严格遵循 yaml 语法格式，yaml 学习地址:
 #  https://ansible-tran.readthedocs.io/en/latest/docs/YAMLSyntax.html
 #  http://einverne.github.io/post/2015/08/yaml.html
 
-# 是否开启自动回复
+# 是否开启自动回复,False
 is_auto_relay: True
 
 #图灵机器人(http://www.tuling123.com/)免费用户每天可用 100 条。

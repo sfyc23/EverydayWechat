@@ -1,266 +1,132 @@
 ![python_vesion](https://img.shields.io/badge/Python%20-%3E%3D%203.5-green.svg)  
-# 用 Python + itchat 写一个爬虫脚本每天定时给多个女友发给微信暖心话
 
-## 待优化功能：
+[EverydayWechat](https://github.com/sfyc23/EverydayWechat) 是基于 Python3 与 Itchat 的微信小工具。可以定时给朋友发送每日天气、提醒、每日一句，也可以智能自动回复好友信息。
 
-> * [ ]  正在重构代码中。。。
-> * [ ]  更友好的 DEBUG 和文档，方便第一次跑通程序。
-> * [ ]  断线提醒。
-> * [ ]  给女友群发消息。
+**禁止将本工具用于商业用途**，如产生法律纠纷与本人无关。
 
+## 功能说明
 
+- 支持对多个微信好友自动回复。
+- 定时发送提醒，内容包括（天气、格言、自定义的话）。
 
-2019-6-12 已添加图灵机器人实现自动回复。
+> 注意：仅支持 Python3，建议使用 **Python3.5 以上版本**
 
----
-## 项目介绍：
+## 相关数据来源
 
-### 开发环境
-
-    Python >= 3.5
-
-### 灵感来源
-
-在掘金看到了一篇《[用Node+wechaty写一个爬虫脚本每天定时给女(男)朋友发微信暖心话](https://juejin.im/post/5c77c6bef265da2de6611cff)》后，我就想为什么不用 Python 去实现这个功能呢。 JUST DO IT，说做就做。  
-这文章的结构也是参考上面这位朋友的。  
-本来只是写单人的，不过有些优（作）秀（死）的人表示女朋友不止一个。现已支持添加多人信息。
-
-### 项目地址：
-Github: [https://github.com/sfyc23/EverydayWechat](https://github.com/sfyc23/EverydayWechat)。
-
-
-### 使用库
-- [itchat](https://github.com/littlecodersh/ItChat) - 微信个人号接口
-- [requests](http://docs.python-requests.org/en/master/) - 网络请求库
-- [beautifulsoup4](https://www.crummy.com/software/BeautifulSoup/bs4/doc/index.zh.html#) - 解析网页
-- [APScheduler](https://apscheduler.readthedocs.io/en/latest/) - 定时任务
-
-### 功能
-定时给女朋友发送每日天气、提醒、每日一句。
-
-### 数据来源
+- 天气信息来自：[SOJSON](https://www.sojson.com/blog/305.html) 
 - 每日一句和上面的大佬一样也是来自 [ONE●一个](http://wufazhuce.com/)
 - 金山词霸 ● 每日一句（英文加中文）：[iciba](http://open.iciba.com/?c=api)
 - 一言 ：[hitokoto](https://hitokoto.cn/)
-- 土味情话： [渣男在线](https://www.v2ex.com/t/569853)(目前失效。)
-- 天气信息来自： [SOJSON](https://www.sojson.com/blog/305.html) 
-
-### 实现效果
-![命令行信息](http://vlog.sfyc23.xyz/wechat_everyday/20190312010620.png)  
-![微信截图](http://vlog.sfyc23.xyz/wechat_everyday/20190312010621.png)
-
-图灵自动回复机器人：
-
-![自动回复机器人](https://raw.githubusercontent.com/sfyc23/image/master/vlog/20190612173126.jpg)
-
-这简直就是分手神器！
-## 代码说明
-
-### 目录结构
-![](http://vlog.sfyc23.xyz/wechat_everyday/20190312011740.png)  
-
-- city_dict.py ：城市对应编码字典
-- config.yaml ：设置定时时间，女友微信名称等参数
-- GFWeather.py：核心代码
-- requirements.txt：需要安装的库
-- run.py：项目运行类
-
-### 核心代码
-
-#### 1. 定时任务。
-每天 9：30 给女朋友们开始给女朋友发送内容。
-```
-# 定时任务
-scheduler = BlockingScheduler()
-# 每天9：30给女朋友发送每日一句
-# scheduler.add_job(start_today_info, 'cron', hour=9, minute=30)
-scheduler.start()
-```
-*start_today_info* 是方法处理类。
-
-#### 2. 获取每日一句。
-数据来源 1： [ONE●一个](http://wufazhuce.com/)
-```
-def get_dictum_info(self):
-    '''
-    获取格言信息（从『一个。one』获取信息 http://wufazhuce.com/）
-    :return: str 一句格言或者短语
-    '''
-    print('获取格言信息..')
-    user_url = 'http://wufazhuce.com/'
-    resp = requests.get(user_url, headers=self.headers)
-    soup_texts = BeautifulSoup(resp.text, 'lxml')
-    # 『one -个』 中的每日一句
-    every_msg = soup_texts.find_all('div', class_='fp-one-cita')[0].find('a').text
-    return every_msg
-```
-数据来源 2： [金山词霸 ● 每日一句](http://open.iciba.com/?c=api)  
-
-有英文和中文翻译，例如：
-> When you finally get your own happiness, you will understand the
-> previous sadness is a kind of treasure, which makes you better to hold
-> and cherish the people you love.  
-> 等你获得真正属于你的幸福之后，你就会明白一起的伤痛其实是一种财富，它让你学会更好地去把握和珍惜你爱的人。
-
-代码实现 ：
-```
- def get_ciba_info(self):
-    '''
-    从词霸中获取每日一句，带英文。
-    :return:
-    '''
-    resp = requests.get('http://open.iciba.com/dsapi')
-    if resp.status_code == 200 and self.isJson(resp):
-        conentJson = resp.json()
-        content = conentJson.get('content')
-        note = conentJson.get('note')
-        # print(f"{content}\n{note}")
-        return f"{content}\n{note}\n"
-    else:
-        print("没有获取到数据")
-        return None
-```
-
-数据来源 3： [土味情话](https://api.lovelive.tools/api/SweetNothings)（感谢 [tomatoF](https://github.com/tomatoF)、[QSCTech-Sange](https://github.com/QSCTech-Sange))（已失效）
-
-```
-def get_lovelive_info(self):
-    '''
-    从土味情话中获取每日一句。
-    '''
-    resp = requests.get("https://api.lovelive.tools/api/SweetNothings")
-    if resp.status_code == 200:
-        return resp.text + "\n"
-    else:
-        print('每日一句获取失败')
-        return None
-```
-
-数据来源 4： [一言](https://v1.hitokoto.cn/)
-
-```
-def get_hitokoto_info():
-    try:
-        resp = requests.get('https://v1.hitokoto.cn/', params={'encode': 'text'})
-        if resp.status_code == 200:
-            return resp.text + '\n'
-        print('一言获取失败。')
-    except requests.exceptions.RequestException as exception:
-        print(exception)
-        return None
-    return None
-```
-
-#### 3. 获取今日天气 。
-天气数据来源：[SOJSON](https://www.sojson.com/blog/305.html)
-
-```
-def get_weather_info(self, city_code=''）：
-    weather_url = f'http://t.weather.sojson.com/api/weather/city/{city_code}'
-    resp = requests.get(url=weather_url)
-    if resp.status_code == 200 and resp.json().get('status') == 200:
-        weatherJson = resp.json()
-        # 今日天气
-        today_weather = weatherJson.get('data').get('forecast')[1]
-```
-city_code 城市对应 id。
-[http://cdn.sojson.com/_city.json](http://cdn.sojson.com/_city.json)
-
-#### 4. 登录微信并发送内容。
-```
-itchat.auto_login()
-itchat.send(today_msg, toUserName=name_uuid)
-```
-
-
+- 土味情话： [渣男在线](https://www.v2ex.com/t/569853)(目前失联中)
+- 图灵机器人：<http://www.turingapi.com/>（需求实名制认证，并每天免费数量只有100条）
+- 青云客智能聊天机器人：<http://api.qingyunke.com/>（直接能用，无限制数量，但回复不太智能。图灵机器人的备胎）
 
 ## 项目配置
+所有项目相关都是 **[_config.yaml](https://github.com/sfyc23/EverydayWechat/blob/master/_config.yaml)** 文件中。
+配置文件请严格遵循 yaml 语法格式，yaml 学习地址:
+https://ansible-tran.readthedocs.io/en/latest/docs/YAMLSyntax.html
+http://einverne.github.io/post/2015/08/yaml.html
 
-### 配置图灵机器人自动回复
+### 配置自动回复机器人。
 
-1. 打开图灵机器人官网：[http://www.turingapi.com](http://www.turingapi.com/) 进行注册。
-2. 通过认证后，创建机器人,得到 apikey，userid。
-3. 将获取到的 apiKey，userId 填入到 **_config.yaml** 文件中：
+#### 1. 开启自动回复：
+将 **is_auto_relay** 设置为：True。
+#### 2. 配置图灵机器人:
+打开图灵机器人官网：[http://www.turingapi.com](http://www.turingapi.com/) 进行注册。创建机器人，得到 apikey，userid。将填入到 **_config.yaml** 文件中的：
 ```
 turing_conf:
-  # 是否开启自动回复,只可选 False && True
-  is_turing: True
-  apiKey: ''
-  userId: ''
+  apiKey: '你所获取'
+  userId: '你所获取的userId'
+```
+> 图灵机器人必须认证后才能使用，免费版用户，每天可使用 100 条信息，且用且珍惜。
+
+#### 3. 指定自动回复的好友名单:
+```
+# 指定自动回复的好友名单。
+auto_reply_names:
+  - '好友1'
+  - '好友2'
 ```
 
-
-目前可以公开的情报：
+关于自动回复，目前可以公开的情报：
 1. 只能自动回复文字类消息；
-2. 免费版用户，每天可使用 100 条信息，且用且珍惜；
 3. 群消息自动回复还未现实。（待完成）；
 4. 如果消息发送太频繁，微信会限制登录网页端登录。放心，并不会封号；
 5. 并不是对所有人自动回复，只是回复 girlfriend_infos 中的人。
+6. 当没有图灵机器人 apikey 与 UserId，或者数量失效时。会使用备用的青云客智能聊天机器人获取数据。
 
-### 安装依赖
-
-使用 pip install -r requirements.txt 安装所有依赖
-
-### 参数配置
-config.yaml
+### 配置定时提醒
+#### 1.开启并设置提醒时间
+如：
 ```
-# 定时时间
-alarm_timed: '9:30'
+alarm_info:
+  is_alarm: True
+  #定时发送时间
+  alarm_timed: '9:30'
+```
+关闭将 is_alarm 设置为：False
 
-# 格言渠道
-# 1 : ONE●一个
-# 2 : 词霸（每日英语,双语）
-# 3 : 土味情话
-# 4 : 一言
-dictum_channel: 2
-
+#### 2.填写需要发送的好友。
+如：
+```
 girlfriend_infos:
-  -
-    #女友微信昵称
+  - #女友微信昵称或者备注名，不能输入微信号。
     wechat_name: '古典'
-    #女友所在桂林
+    #女友所在城市，用于发送天气。（可空）
     city_name: '桂林'
-    # 从那天开始勾搭的（可空）
-    start_date: '2017-11-11'
-    # 短句的最后留言（可空）
+    # 从那天开始勾搭的（可空）(最终效果为：宝贝这是我们在一起的第 111 天)
+    start_date: '2017-10-10'
+    # 后缀（可空）
     sweet_words: '来自最爱你的我。'
 
-  #如果有你多个人需要发送，则参照这个样式，复制即可
-  -
-    wechat_name: '陈老师'
+  #如果你有多个人需要发送，则参照这个样式，复制即可
+  #如不需要，则删除或注解下面所有的数据
+  - wechat_name: 'happy'
     city_name: '朝阳区'
     start_date: '2018-11-11'
     sweet_words: '来自你俊美的老公。'
 ```
 
-## 项目运行
 
-建议使用微信小号。
 
-### 1.直接运行
+本项目在以下环境以测试通过：
+
+| 系统名称 | 系统版本       | Python版本 |
+| -------- | -------------- | ---------- |
+| Windows  | Windows 10 x 64 | 3.6.5      |
+
+
+## 安装
+
+下载或 clone 项目到本地。  
+
+### 安装依赖:
+在本地 cmd 中跳转项目目录下，运行：
+```
+pip3 install -r requirements.txt
+```
+
+### 直接运行:
 ```
 python run.py
 ```
 
-### 2.使用 Screen 开始运行
-```
-screen -S '项目所在地址'
-python run.py
-#Ctrl+A+D 退出 Screen 窗口
-```
+## 示例截图：
 
-### 3.使用 Docker
-```
-sudo docker build -t everydaywechat .
-sudo docker run --name '项目所在地址'
-# 扫码登陆
-#Ctrl+P+Q 退出容器
-```
+日志：
+![日志](https://raw.githubusercontent.com/sfyc23/image/master/vlog/20190613171703.png)
 
-## 最后
-项目地址：[https://github.com/sfyc23/EverydayWechat](https://github.com/sfyc23/EverydayWechat)  。
-写完后才发现，我并没有女朋友啊！
+自动回复：
+![自动回复](https://raw.githubusercontent.com/sfyc23/image/master/vlog/20190613162524.png)
 
+## 提 [issues](https://github.com/sfyc23/EverydayWechat/issues) 说明
+
+- **检查是否是最新的代码，检查是否是 Python3.5+，检查依赖有没有安装完整**。
+- 先检查微信是否可登录 [微信网页版](https://wx.qq.com/)，如网页端不能用，此项目也不能用。
+- 请更新你的 [itchat](https://github.com/littlecodersh/ItChat) 为最新版本。
+- 与微信相关的可以先去 itchat [issues](https://github.com/littlecodersh/ItChat/issues) 是否有相似问题。
+- 微信名只能是昵称或者备注名，不能输入微信号。
+- 如果有新的思路和建议也欢迎提交。
 
 
 ## Credits 致谢
@@ -271,6 +137,7 @@ sudo docker run --name '项目所在地址'
 - [NodeMail](https://github.com/Vincedream/NodeMail) —— 用 Node 写一个爬虫脚本每天定时给女朋友发一封暖心邮件。  
 - [wechat-assistant](https://github.com/gengchen528/wechat-assistant) —— koa+wechaty实现的微信个人秘书，把你闲置的微信号利用起来做个个人秘书。
 - <https://github.com/likaixiang/EverydayWechat>
+- <https://github.com/0xHJK/music-dl>
 
 ## LICENSE
 [MIT License](https://github.com/sfyc23/EverydayWechat/blob/master/LICENSE)
