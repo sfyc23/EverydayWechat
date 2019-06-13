@@ -106,7 +106,7 @@ girlfriend_infos:
 | wechat_name | '老婆' | 必填 |好友名：需要发送的人的微信昵称或者备注名（不能输入微信号）|
 | city_name | '成都' | 可空| 城市名：女友所在城市，用于发送天气。 |
 | dictum_channel | 2 |可空|格言渠道（1 : ONE●一个，2 : 词霸（双语）， 4 : 一言)|
-| start_date | '2017-10-10' | 可空 |相识日期：计算到当前天的天数 。（最终显示：宝贝这是我们在一起的第 111 天）|
+| start_date | '2017-10-10' | 可空 |相识日期：计算到当前天的天数 。|
 | sweet_words |'来自你俊美的老公' | 可空 |甜密的后缀。（钢铁直男的直描）|
 
 
@@ -114,7 +114,8 @@ girlfriend_infos:
 
 >  Without you, today's emotions would be the scurf of
 > yesterday's.如果没有你，如此的良辰美景让我去向何人诉说？  
-2019-06-13 星期四 多云 北风 <3级 高温 29.0℃ 低温 22.0℃ 阴晴之间，谨防紫外线侵扰 宝贝这是我们在一起的第 611 天。  
+2019-06-13 星期四 多云 北风 <3级 高温 29.0℃ 低温 22.0℃ 阴晴之间，谨防紫外线侵扰  
+宝贝这是我们在一起的第 611 天。  
 来自最爱你的我。
 
 本项目在以下环境以测试通过：
@@ -157,7 +158,7 @@ python run.py
 - **检查是否是最新的代码，检查是否是 Python3.5+，检查依赖有没有安装完整**。
 - 先检查微信是否可登录 [微信网页版](https://wx.qq.com/)，如网页端不能用，此项目也不能用。
 - 请更新你的 [itchat](https://github.com/littlecodersh/ItChat) 为最新版本。
-- 与微信相关的可以先去 itchat [issues](https://github.com/littlecodersh/ItChat/issues) 是否有相似问题。
+- 与微信相关的问题可以先去 itchat [issues](https://github.com/littlecodersh/ItChat/issues)， 查看是否有相似问题。
 - 微信名只能是昵称或者备注名，不能输入微信号。
 - 如果有新的思路和建议也欢迎提交。
 
