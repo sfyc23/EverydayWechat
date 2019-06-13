@@ -2,13 +2,15 @@
 程序运行入口
 """
 from GFWeather import GFWeather
+from  main import hongmeng
 
 def run():
     """
     主程序入口
     :return: None
     """
-    GFWeather().run()
+    # GFWeather().run()
+    hongmeng.run()
 
 def test_run():
     """
