@@ -1,3 +1,5 @@
+# coding=utf-8
+
 """
 http://api.qingyunke.com/
 青云客智能聊天机器人API

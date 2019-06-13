@@ -1,3 +1,5 @@
+# coding=utf-8
+
 import requests
 
 def get_lovelive_info():
