@@ -1,3 +1,5 @@
+import requests
+
 city_dict = {
     '北京': '101010100', '上海': '101020100', '天津': '101030100', '重庆': '101040100', '香港': '101320101', '澳门': '101330101',
     '安庆': '101220601', '蚌埠': '101220201', '巢湖市': '101220105', '池州': '101221701', '滁州': '101221101', '阜阳': '101220801',
@@ -501,3 +503,52 @@ city_dict = {
     '合肥': '101220101', '长丰县': '101220102', '肥东县': '101220103', '肥西县': '101220104', '加格达奇区': '101050708',
     '新林区': '101050706', '呼中区': '101050705', '塔城市': '101131101'
 }
+
+
+def get_sojson_weather(city_name):
+    """
+     获取天气信息。网址：https://www.sojson.com/blog/305.html .
+    :param city_name: str,城市名
+    :return: str ,例如：2019-06-12 星期三 晴 南风 3-4级 高温 22.0℃ 低温 18.0℃ 愿你拥有比阳光明媚的心情
+    """
+    print('获取天气信息...')
+    city_code = city_dict.get(city_name, None)
+    if not city_code:
+        print('没有此城市的消息...')
+        return None
+    weather_url = 'http://t.weather.sojson.com/api/weather/city/{}'.format(city_code)
+    try:
+        resp = requests.get(url=weather_url)
+        weather_dict = resp.json()
+        # 今日天气
+        # {
+        # "sunrise": "04:45",
+        # "high": "高温 34.0℃",
+        # "low": "低温 25.0℃",
+        # "sunset": "19:37",
+        # "aqi": 145,
+        # "ymd": "2019-06-12",
+        # "week": "星期三",
+        # "fx": "西南风",
+        # "fl": "3-4级",
+        # "type": "多云",
+        # "notice": "阴晴之间，谨防紫外线侵扰"
+        # }
+        today_weather = weather_dict.get('data').get('forecast')[0]
+
+        display = ['ymd', 'week', 'type', 'fx', 'fl', 'high', 'low', 'notice']
+        weather_info = ' '.join(today_weather[p] for p in display if today_weather.get(p, None))
+        # print(weather_info)
+        return weather_info
+
+    except Exception as exception:
+        print(exception)
+        return None
+
+
+get_today_weather = get_sojson_weather
+
+if __name__ == '__main__':
+    # get_today_weather('青岛')
+
+    pass
