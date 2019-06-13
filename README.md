@@ -1,7 +1,8 @@
 ![python_vesion](https://img.shields.io/badge/Python%20-%3E%3D%203.5-green.svg)  
 
 [EverydayWechat](https://github.com/sfyc23/EverydayWechat) 是基于 Python3 与 Itchat 的微信小工具。  
-可以定时给朋友发送每日天气、提醒、每日一句，也可以智能自动回复好友信息。
+可以定时给朋友发送每日天气、提醒、每日一句，也可以智能自动回复好友信息。  
+操作简单。
 
 
 
@@ -92,7 +93,6 @@ girlfriend_infos:
 ```
 
 
-
 本项目在以下环境以测试通过：
 
 | 系统名称 | 系统版本       | Python版本 |
@@ -117,10 +117,8 @@ python run.py
 
 ## 示例截图：
 
-日志：
 ![日志](https://raw.githubusercontent.com/sfyc23/image/master/vlog/20190613171703.png)
 
-自动回复：
 ![自动回复](https://raw.githubusercontent.com/sfyc23/image/master/vlog/20190613162524.png)
 
 ## 提 [issues](https://github.com/sfyc23/EverydayWechat/issues) 说明
@@ -148,4 +146,4 @@ python run.py
 
 ## 交流群
 
-![交流群](https://raw.githubusercontent.com/sfyc23/image/master/vlog/20190613173641.jpg)
+![交流群](https://raw.githubusercontent.com/sfyc23/image/master/vlog/20190613174556.png)
