@@ -25,10 +25,10 @@
 - 青云客智能聊天机器人：<http://api.qingyunke.com/>（直接能用，无限制数量，但回复不太智能。图灵机器人的备胎）
 
 ## 项目配置
-所有项目相关都是 **[_config.yaml](https://github.com/sfyc23/EverydayWechat/blob/master/_config.yaml)** 文件中。
-配置文件请严格遵循 yaml 语法格式，yaml 学习地址:
-https://ansible-tran.readthedocs.io/en/latest/docs/YAMLSyntax.html
-http://einverne.github.io/post/2015/08/yaml.html
+所有项目相关都是 **[_config.yaml](https://github.com/sfyc23/EverydayWechat/blob/master/_config.yaml)** 文件中。  
+配置文件请严格遵循 yaml 语法格式，yaml 学习地址:  
+<https://ansible-tran.readthedocs.io/en/latest/docs/YAMLSyntax.html>    
+<http://einverne.github.io/post/2015/08/yaml.html>
 
 ### 配置自动回复机器人。
 
