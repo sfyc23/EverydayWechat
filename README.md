@@ -1,8 +1,10 @@
 ![python_vesion](https://img.shields.io/badge/Python%20-%3E%3D%203.5-green.svg)  
 
-[EverydayWechat](https://github.com/sfyc23/EverydayWechat) 是基于 Python3 与 Itchat 的微信小工具。可以定时给朋友发送每日天气、提醒、每日一句，也可以智能自动回复好友信息。
+[EverydayWechat](https://github.com/sfyc23/EverydayWechat) 是基于 Python3 与 Itchat 的微信小工具。  
+可以定时给朋友发送每日天气、提醒、每日一句，也可以智能自动回复好友信息。
 
-**禁止将本工具用于商业用途**，如产生法律纠纷与本人无关。
+
+
 
 ## 功能说明
 
@@ -32,7 +34,9 @@ http://einverne.github.io/post/2015/08/yaml.html
 #### 1. 开启自动回复：
 将 **is_auto_relay** 设置为：True。
 #### 2. 配置图灵机器人:
-打开图灵机器人官网：[http://www.turingapi.com](http://www.turingapi.com/) 进行注册。创建机器人，得到 apikey，userid。将填入到 **_config.yaml** 文件中的：
+打开图灵机器人官网：[http://www.turingapi.com](http://www.turingapi.com/) 进行注册。  
+创建机器人，得到 apikey，userid。  
+将填入到 **_config.yaml** 文件中的：
 ```
 turing_conf:
   apiKey: '你所获取'
@@ -141,3 +145,7 @@ python run.py
 
 ## LICENSE
 [MIT License](https://github.com/sfyc23/EverydayWechat/blob/master/LICENSE)
+
+## 交流群
+
+![交流群](https://raw.githubusercontent.com/sfyc23/image/master/vlog/20190613173641.jpg)
