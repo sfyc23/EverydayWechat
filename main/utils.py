@@ -14,13 +14,13 @@ DICTUM_NAME_DICT = {1: 'wufazhuce', 2: 'acib', 3: 'lovelive', 4: 'hitokoto'}
 BOT_NAME_DICT = {1: 'tuling123', 2: 'qingyunke'}
 
 
-def get_dictum_info():
+def get_dictum_info(channel):
     """
-    获取格言信息
-    :return:
+    获取每日提醒。
+    :return:str
     """
-    conf = get_yaml()
-    channel = conf.get('dictum_channel')
+    if not channel:
+        return None
     source = DICTUM_NAME_DICT.get(channel, '')
     if source:
         addon = importlib.import_module('onewords.' + source, __package__)
@@ -36,6 +36,8 @@ def get_weather_info(cityname):
     :param cityname:str,城市名称
     :return: str,天气情况
     """
+    if not cityname:
+        return
     return get_today_weather(cityname)
 
 
@@ -52,23 +54,26 @@ def get_bot_info(message):
 
 
 def get_diff_time(start_date):
-    # 在一起，一共多少天了，如果没有设置初始日期，则不用处理
-    delta_msg = None
-    if start_date:
-        try:
-            start_datetime = datetime.strptime(start_date, '%Y-%m-%d')
-            day_delta = (datetime.now() - start_datetime).days
-            delta_msg = '宝贝这是我们在一起的第 {} 天。'.format(day_delta)
-        except Exception as exception:
-            print(exception)
-            delta_msg = None
+    """
+    # 在一起，一共多少天了。
+    :param start_date:str,日期
+    :return: str,eg（宝贝这是我们在一起的第 111 天。）
+    """
+    if not start_date:
+        return None
+    try:
+        start_datetime = datetime.strptime(start_date, '%Y-%m-%d')
+        day_delta = (datetime.now() - start_datetime).days
+        delta_msg = '宝贝这是我们在一起的第 {} 天。'.format(day_delta)
+    except Exception as exception:
+        print(exception)
+        delta_msg = None
     return delta_msg
-
 
 
 # from onewords
 
 if __name__ == '__main__':
-    get_dictum_info()
+    print(get_dictum_info(2))
 
     pass

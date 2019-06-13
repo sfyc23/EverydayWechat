@@ -513,6 +513,8 @@ def get_sojson_weather(city_name):
     :param city_name: str,城市名
     :return: str ,例如：2019-06-12 星期三 晴 南风 3-4级 高温 22.0℃ 低温 18.0℃ 愿你拥有比阳光明媚的心情
     """
+    if not city_name:
+        return None
     print('获取天气信息...')
     city_code = city_dict.get(city_name, None)
     if not city_code:

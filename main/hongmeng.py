@@ -45,22 +45,22 @@ def is_online(auto_login=False):
         return True
 
     if _online(): return True  # 如果在线，则直接返回 True
-    if not auto_login:
-        print('微信已离线')
-        return _online()  # 仅仅判断是否在线。
+    if not auto_login:  # 不自动登录，则直接返回 False
+        return False
 
+    is_forced_switch = get_yaml().get('is_forced_switch', True)
     for _ in range(2):  # 登陆，尝试 2 次。
         # 如果需要切换微信，删除 hotReload=True
         if os.environ.get('MODE') == 'server':
             # 命令行显示登录二维码。
-            itchat.auto_login(enableCmdQR=2, hotReload=True)
+            itchat.auto_login(enableCmdQR=2, hotReload=is_forced_switch)
         else:
-            itchat.auto_login(hotReload=True)
+            itchat.auto_login(hotReload=is_forced_switch)
         if _online():
             print('登录成功')
             return True
 
-    print('登录成功')
+    print('登录失败。')
     return False
 
 
@@ -74,7 +74,7 @@ def text_reply(msg):
             receive_text = msg.text  # 好友发送来的消息
             # 通过图灵 api 获取要回复的内容。
             reply_text = get_bot_info(receive_text)
-            time.sleep(1)
+            time.sleep(1)  # 休眠一秒，保安全，想更快的，可以直接用。
             if reply_text:  # 如内容不为空，回复消息
                 msg.user.send(reply_text)  # 发送回复
                 print('\n{}发来信息：{}\n回复{}：{}'
@@ -119,29 +119,34 @@ def init_alarm():
                       minute=minute, misfire_grace_time=GRACE_PERIOD)
 
     # 每隔 2 分钟发送一条数据用于测试。
-    # scheduler.add_job(get_alarm_msg, 'interval', seconds=180)
+    # scheduler.add_job(get_alarm_msg, 'interval', seconds=120)
 
     print('已开启定时发送提醒功能...')
     scheduler.start()
 
 
 def get_alarm_msg():
+    """ 定时提醒内容 """
     conf = get_yaml()
-    for gf in conf['girlfriend_infos']:
-        dictum = get_dictum_info()
-        weather = get_weather_info(gf['city_name'])
-        diff_time = get_diff_time(gf['start_date'])
-        sweet_words = gf['sweet_words']
+    for gf in conf.get('girlfriend_infos'):
+        dictum = get_dictum_info(gf.get('dictum_channel'))
+        weather = get_weather_info(gf.get('city_name'))
+        diff_time = get_diff_time(gf.get('start_date'))
+        sweet_words = gf.get('sweet_words')
         send_msg = '\n'.join(x for x in [dictum, weather, diff_time, sweet_words] if x)
-        # print(send_msg)
+        print(send_msg)
         if send_msg and is_online():
-            authors = itchat.search_friends(nickName=gf['wechat_name'])
+            wechat_name = gf.get('wechat_name')
+            authors = itchat.search_friends(nickName=wechat_name)
             if authors:
                 authors[0].send(send_msg)
-                print('\n定时给『{}』发送的内容是:\n{}\n发送成功...\n'.format(gf['wechat_name'], send_msg))
+                print('\n定时给『{}』发送的内容是:\n{}\n发送成功...\n'.format(wechat_name, send_msg))
+            else:
+                print('定时提醒发送失败，微信名 {} 失效。'.format(wechat_name))
 
 
 def run():
+    """ 主运行入口 """
     if not is_online(auto_login=True):
         print('登录失败')
         return
@@ -161,5 +166,6 @@ def run():
 
 
 if __name__ == '__main__':
-    run()
+    # run()
+    # get_alarm_msg()
     pass

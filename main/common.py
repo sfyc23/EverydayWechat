@@ -1,9 +1,11 @@
 # coding=utf-8
+"""
+工具类
+"""
 
 import os
 import yaml
 from simplejson import JSONDecodeError
-
 
 def get_yaml():
     """

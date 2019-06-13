@@ -2,13 +2,15 @@
 #  https://ansible-tran.readthedocs.io/en/latest/docs/YAMLSyntax.html
 #  http://einverne.github.io/post/2015/08/yaml.html
 
+# 切换微信号
+is_forced_switch: False
+
 # 是否开启自动回复,False
 is_auto_relay: True
 
 #图灵机器人(http://www.tuling123.com/)免费用户每天可用 100 条。
 #在官网注册并申请 apikey ,userID。
 turing_conf:
-  is_turing: False
   # 是否开启自动回复,只可选 False && True
   apiKey: ''
   userId: ''
@@ -26,21 +28,25 @@ alarm_info:
   #定时发送时间
   alarm_timed: '9:30'
 
-# 格言渠道（1 : ONE●一个， 2 : 词霸（每日英语，双语） 3 : 土味情话（失效中） 4 : 一言
-dictum_channel: 2
 girlfriend_infos:
   - #女友微信昵称或者备注名，不能输入微信号。
     wechat_name: '古典'
     #女友所在城市，用于发送天气。（可空）
     city_name: '桂林'
-    # 从那天开始勾搭的（可空）(最终效果为：宝贝这是我们在一起的第 111 天)
+    # 格言渠道（1 : ONE●一个， 2 : 词霸（每日英语，双语）  4 : 一言)(可空)
+    dictum_channel : 2
+    # 从那天开始勾搭的(最终效果为：宝贝这是我们在一起的第 111 天)（可空）
     start_date: '2017-10-10'
     # 后缀（可空）
     sweet_words: '来自最爱你的我。'
 
-  #如果你有多个人需要发送，则参照这个样式，复制即可
-  #如不需要，则删除或注解下面所有的数据
-#  - wechat_name: 'happy'
-#    city_name: '朝阳区'
-#    start_date: '2018-11-11'
-#    sweet_words: '来自你俊美的老公。'
+
+#  如果你有多个好友需要发送，则参照这个样式，复制即可
+#  如不需要，则删除或注解下面所有的数据
+  - wechat_name: 'happy'
+    city_name: '朝阳区'
+    dictum_channel : 4
+    start_date: '2018-11-11'
+    sweet_words: '来自你俊美的老公。'
+
+
