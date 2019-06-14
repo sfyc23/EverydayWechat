@@ -102,6 +102,25 @@ def init_reply():
         if name_uuid not in reply_name_uuid_list:
             reply_name_uuid_list.append(name_uuid)
 
+def get_alarm_msg():
+    """ 定时提醒内容 """
+    conf = get_yaml()
+    for gf in conf.get('girlfriend_infos'):
+        dictum = get_dictum_info(gf.get('dictum_channel'))
+        weather = get_weather_info(gf.get('city_name'))
+        diff_time = get_diff_time(gf.get('start_date'))
+        sweet_words = gf.get('sweet_words')
+        send_msg = '\n'.join(x for x in [dictum, weather, diff_time, sweet_words] if x)
+        print(send_msg)
+        if send_msg and is_online():
+            wechat_name = gf.get('wechat_name')
+            authors = itchat.search_friends(name=wechat_name)
+            if authors:
+                authors[0].send(send_msg)
+                print('\n定时给『{}』发送的内容是:\n{}\n发送成功...\n'.format(wechat_name, send_msg))
+            else:
+                print('定时提醒发送失败，微信名 {} 失效。'.format(wechat_name))
+
 
 def init_alarm():
     """ 初始化定时提醒 """
@@ -126,24 +145,7 @@ def init_alarm():
     scheduler.start()
 
 
-def get_alarm_msg():
-    """ 定时提醒内容 """
-    conf = get_yaml()
-    for gf in conf.get('girlfriend_infos'):
-        dictum = get_dictum_info(gf.get('dictum_channel'))
-        weather = get_weather_info(gf.get('city_name'))
-        diff_time = get_diff_time(gf.get('start_date'))
-        sweet_words = gf.get('sweet_words')
-        send_msg = '\n'.join(x for x in [dictum, weather, diff_time, sweet_words] if x)
-        print(send_msg)
-        if send_msg and is_online():
-            wechat_name = gf.get('wechat_name')
-            authors = itchat.search_friends(nickName=wechat_name)
-            if authors:
-                authors[0].send(send_msg)
-                print('\n定时给『{}』发送的内容是:\n{}\n发送成功...\n'.format(wechat_name, send_msg))
-            else:
-                print('定时提醒发送失败，微信名 {} 失效。'.format(wechat_name))
+
 
 
 def run():

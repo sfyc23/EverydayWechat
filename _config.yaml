@@ -2,16 +2,15 @@
 #  https://ansible-tran.readthedocs.io/en/latest/docs/YAMLSyntax.html
 #  http://einverne.github.io/post/2015/08/yaml.html
 
-# 切换微信号
+# 是否强制切换微信号
 is_forced_switch: False
 
-# 是否开启自动回复,False
+# 是否开启自动回复
 is_auto_relay: True
 
 #图灵机器人(http://www.tuling123.com/)免费用户每天可用 100 条。
 #请在官网注册并申请 apikey ,userID。
 turing_conf:
-  # 是否开启自动回复,只可选 False && True
   apiKey: ''
   userId: ''
 
