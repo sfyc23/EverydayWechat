@@ -185,7 +185,8 @@ python run.py
 
 ## 交流群
 
-![交流群](https://raw.githubusercontent.com/sfyc23/image/master/vlog/20190613174556.png)  
+群已满。加我小号微信：[sfyc1314](https://raw.githubusercontent.com/sfyc23/image/master/vlog/20190614125724.png)，备注：github。我拉你入群。
+ ![我的微信](https://raw.githubusercontent.com/sfyc23/image/master/vlog/20190614125724.png)
  
 ## 联系我
 
