@@ -126,13 +126,20 @@ girlfriend_infos:
 
 
 ## 安装
+首先，把 Python3 安装好，并配置好环境，个人建议新手安装 anaconda，具体安装教程，可自行谷歌搜索~
 
-下载或 clone 项目到本地。  
+直接下载此项目或 clone 项目到本地。  
 
-### 安装依赖:
+使用 pip 安装依赖:
 
 ```
 pip3 install -r requirements.txt
+```
+
+如果你的安装是 anaconda ，则使用：
+
+```
+conda install -r requirements.txt
 ```
 
 ## 运行：

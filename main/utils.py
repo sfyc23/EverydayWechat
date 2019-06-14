@@ -10,7 +10,7 @@ from weather.sojson import get_today_weather
 from bot.qingyunke import get_qingyunke
 from bot.tuling123 import get_tuling123
 
-DICTUM_NAME_DICT = {1: 'wufazhuce', 2: 'acib', 3: 'lovelive', 4: 'hitokoto'}
+DICTUM_NAME_DICT = {1: 'wufazhuce', 2: 'acib', 3: 'lovelive', 4: 'hitokoto', 5: 'rtjokes'}
 BOT_NAME_DICT = {1: 'tuling123', 2: 'qingyunke'}
 
 
@@ -43,7 +43,8 @@ def get_weather_info(cityname):
 
 def get_bot_info(message):
     """
-    获取自动回复的话
+    获取自动回复的话。
+    优先获取图灵机器人API的回复，但失效时，会使用青云客智能聊天机器人API
     :param message:str, 发送的话
     :return:str, 回复的话
     """
