@@ -6,10 +6,9 @@
 """
 import os
 import time
-import threading
 from apscheduler.schedulers.blocking import BlockingScheduler
 import itchat
-from itchat.content import TEXT
+from itchat.content import *
 from main.common import (
     get_yaml
 )
@@ -20,9 +19,8 @@ from main.utils import (
     get_diff_time,
 )
 
-reply_name_uuid_list = []
-# fire the job again if it was missed within GRACE_PERIOD
-GRACE_PERIOD = 15 * 60
+reply_user_name_uuid_list = []
+invalid_wechat_list = []
 
 
 def is_online(auto_login=False):
@@ -46,17 +44,19 @@ def is_online(auto_login=False):
 
     if _online(): return True  # 如果在线，则直接返回 True
     if not auto_login:  # 不自动登录，则直接返回 False
+        print('微信已离线..')
         return False
 
-    # 切换微信号，重新扫码。
-    is_forced_switch = get_yaml().get('is_forced_switch', False)
-    for _ in range(2):  # 登陆，尝试 2 次。
-        # 如果需要切换微信，删除 hotReload=True
+    hotReload = not get_yaml().get('is_forced_switch', False)  # 切换微信号，重新扫码。
+    loginCallback = init_wechat
+    for _ in range(2):  # 尝试登录 2 次。
         if os.environ.get('MODE') == 'server':
             # 命令行显示登录二维码。
-            itchat.auto_login(enableCmdQR=2, hotReload=(not is_forced_switch))
+            itchat.auto_login(enableCmdQR=2, hotReload=hotReload, loginCallback=loginCallback)
+            itchat.run(blockThread=False)
         else:
-            itchat.auto_login(hotReload=(not is_forced_switch))
+            itchat.auto_login(hotReload=hotReload, loginCallback=loginCallback)
+            itchat.run(blockThread=False)
         if _online():
             print('登录成功')
             return True
@@ -67,16 +67,18 @@ def is_online(auto_login=False):
 
 @itchat.msg_register([TEXT])
 def text_reply(msg):
-    """ 监听用户消息 """
+    """ 监听用户消息，用于自动回复 """
     try:
         # print(msg)
-        uuid = msg.fromUserName
-        if uuid in reply_name_uuid_list:
-            receive_text = msg.text  # 好友发送来的消息
+        uuid = msg.fromUserName  # 获取发送者的用户id
+        # 如果用户id是自动回复列表的人员，则进行下一步的操作
+        if uuid in reply_user_name_uuid_list:
+            receive_text = msg.text  # 好友发送来的消息内容
             # 通过图灵 api 获取要回复的内容。
             reply_text = get_bot_info(receive_text)
             time.sleep(1)  # 休眠一秒，保安全，想更快的，可以直接用。
             if reply_text:  # 如内容不为空，回复消息
+                # send_alarm_msg()
                 msg.user.send(reply_text)  # 发送回复
                 print('\n{}发来信息：{}\n回复{}：{}'
                       .format(msg.user.nickName, receive_text, msg.user.nickName, reply_text))
@@ -87,23 +89,24 @@ def text_reply(msg):
         print(str(e))
 
 
-def init_reply():
-    """
-    初始化自动回复相关数据。
-    :return:
-    """
+def init_wechat():
+    """ 初始化微信所需数据 """
     conf = get_yaml()
-    for name in conf.get('auto_reply_names', None):
+    itchat.get_chatrooms(update=True)  # 更新群信息。
+    for name in conf.get('auto_reply_names'):
         friends = itchat.search_friends(name=name)
         if not friends:  # 如果用户列表为空，表示用户昵称填写有误。
-            print('昵称『{}』有误。'.format(name))
+            print('自动回复中的昵称『{}』有误。'.format(name))
             break
-        name_uuid = friends[0].get('UserName')  # 取第一个用户的 uuid。
-        if name_uuid not in reply_name_uuid_list:
-            reply_name_uuid_list.append(name_uuid)
+        else:
+            name_uuid = friends[0].get('UserName')  # 取第一个用户的 uuid。
+            if name_uuid not in reply_user_name_uuid_list:
+                reply_user_name_uuid_list.append(name_uuid)
 
-def get_alarm_msg():
-    """ 定时提醒内容 """
+
+def send_alarm_msg():
+    """ 发送定时提醒 """
+    print('\n启动定时自动提醒...')
     conf = get_yaml()
     for gf in conf.get('girlfriend_infos'):
         dictum = get_dictum_info(gf.get('dictum_channel'))
@@ -111,16 +114,24 @@ def get_alarm_msg():
         diff_time = get_diff_time(gf.get('start_date'))
         sweet_words = gf.get('sweet_words')
         send_msg = '\n'.join(x for x in [dictum, weather, diff_time, sweet_words] if x)
-        print(send_msg)
+        # print(send_msg)
         if send_msg and is_online():
+            # 给微信好友发信息
             wechat_name = gf.get('wechat_name')
-            authors = itchat.search_friends(name=wechat_name)
-            if authors:
-                authors[0].send(send_msg)
-                print('\n定时给『{}』发送的内容是:\n{}\n发送成功...\n'.format(wechat_name, send_msg))
-            else:
-                print('定时提醒发送失败，微信名 {} 失效。'.format(wechat_name))
+            if wechat_name:
+                wechat_users = itchat.search_friends(name=wechat_name)
+                if wechat_users:
+                    wechat_users[0].send(send_msg)
+                    print('定时给『{}』发送的内容是:\n{}\n发送成功...\n\n'.format(wechat_name, send_msg))
 
+            # 给群聊发信息
+            group_name = gf.get('group_name')
+            if group_name:
+                groups = itchat.search_chatrooms(name=group_name)
+                if groups:
+                    groups[0].send(send_msg)
+                    print('定时给群聊『{}』发送的内容是:\n{}\n发送成功...\n\n'.format(group_name, send_msg))
+    print('自动提醒消息发送完成...\n')
 
 def init_alarm():
     """ 初始化定时提醒 """
@@ -132,43 +143,40 @@ def init_alarm():
     if not alarm_timed: return
     hour, minute = [int(x) for x in alarm_timed.split(':')]
 
+    # 检查数据的有效性
+    for info in get_yaml().get('girlfriend_infos'):
+        wechat_name = info.get('wechat_name')
+        if wechat_name and not itchat.search_friends(name=wechat_name):
+            print('定时任务中的好友名称『{}』有误。'.format(wechat_name))
+        group_name = info.get('group_name')
+        if group_name and not itchat.search_chatrooms(name=group_name):
+            print('定时任务中的群聊名称『{}』有误。(注意：必须要把需要的群聊保存到通讯录)'.format(group_name))
+
+
     # 定时任务
     scheduler = BlockingScheduler()
     # 每天9：30左右给女朋友发送每日一句
-    scheduler.add_job(get_alarm_msg, 'cron', hour=hour,
-                      minute=minute, misfire_grace_time=GRACE_PERIOD)
+    scheduler.add_job(send_alarm_msg, 'cron', hour=hour,
+                      minute=minute, misfire_grace_time=15 * 60)
 
     # 每隔 2 分钟发送一条数据用于测试。
-    # scheduler.add_job(get_alarm_msg, 'interval', seconds=120)
+    # scheduler.add_job(send_alarm_msg, 'interval', seconds=30)
 
     print('已开启定时发送提醒功能...')
     scheduler.start()
 
 
-
-
-
 def run():
     """ 主运行入口 """
     if not is_online(auto_login=True):
-        print('登录失败')
         return
     conf = get_yaml()
-    if conf.get('is_auto_relay', False):
-        def _itchatRun():
-            itchat.run()
-
-        init_reply()
-        thread = threading.Thread(target=_itchatRun, name='LoopThread')
-        thread.start()
+    if conf.get('is_auto_relay'):
         print('已开启图灵自动回复...')
-        init_alarm()
-        thread.join()
-    else:
-        init_alarm()
+    init_alarm()
 
 
 if __name__ == '__main__':
     # run()
-    # get_alarm_msg()
+    # send_alarm_msg()
     pass

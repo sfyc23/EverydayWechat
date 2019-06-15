@@ -3,10 +3,8 @@
 import importlib
 from datetime import datetime
 
-from main.common import (
-    get_yaml
-)
 from weather.sojson import get_today_weather
+from weather.rtweather import get_rttodayweather
 from bot.qingyunke import get_qingyunke
 from bot.tuling123 import get_tuling123
 
@@ -39,6 +37,7 @@ def get_weather_info(cityname):
     if not cityname:
         return
     return get_today_weather(cityname)
+    # return get_rttodayweather(cityname)
 
 
 def get_bot_info(message):
@@ -64,7 +63,7 @@ def get_diff_time(start_date):
         return None
     try:
         start_datetime = datetime.strptime(start_date, '%Y-%m-%d')
-        day_delta = (datetime.now() - start_datetime).days
+        day_delta = (datetime.now() - start_datetime).days + 1
         delta_msg = '宝贝这是我们在一起的第 {} 天。'.format(day_delta)
     except Exception as exception:
         print(exception)

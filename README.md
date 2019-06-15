@@ -1,14 +1,14 @@
 ![python_vesion](https://img.shields.io/badge/Python%20-%3E%3D%203.5-green.svg)  
 
 [EverydayWechat](https://github.com/sfyc23/EverydayWechat) 是基于 Python3 与 [Itchat](https://github.com/littlecodersh/ItChat) 的微信小工具。  
-可以定时给朋友发送每日天气、提醒、每日一句，也可以智能自动回复好友信息。  
+可以定时给朋友或者群聊发送每日天气、提醒、每日一句，也可以智能自动回复好友信息。  
 操作简单，小白用户也可快速上手。
 
 
 ## 功能说明
 
 - 支持对多个微信好友自动回复。
-- 定时发送提醒，内容包括（天气、格言、自定义的话）。
+- 定时给好友与群聊组发送提醒，内容包括（天气、格言、自定义的话）。
 
 > 注意：仅支持 Python3，建议使用 **Python3.5 以上版本**
 
@@ -17,6 +17,7 @@
 ### 天气信息：
 
 - SOJSON：<https://www.sojson.com/blog/305.html>
+- RollToolsApi：[获取特定城市今日天气](https://github.com/MZCretin/RollToolsApi#%E8%8E%B7%E5%8F%96%E7%89%B9%E5%AE%9A%E5%9F%8E%E5%B8%82%E4%BB%8A%E6%97%A5%E5%A4%A9%E6%B0%94)
 
 ### 每日一句：
 
@@ -24,6 +25,7 @@
 - 金山词霸 ● 每日一句（双语）：<http://open.iciba.com/?c=api>
 - 一言 ：<https://hitokoto.cn/>
 - 土味情话： <https://www.v2ex.com/t/569853> (目前已失联)
+- RollToolsApi: [随机获取笑话段子列表](https://github.com/MZCretin/RollToolsApi#%E9%9A%8F%E6%9C%BA%E8%8E%B7%E5%8F%96%E7%AC%91%E8%AF%9D%E6%AE%B5%E5%AD%90%E5%88%97%E8%A1%A8)
 
 ### 人工智能机器人
 
@@ -93,6 +95,7 @@ alarm_info:
 girlfriend_infos:
   #  如果你有多个好友需要发送，则参照这个样式，复制即可
   - wechat_name: '宝宝'
+    group_name: 'EverydayWechat 交流群'
     city_name: '朝阳区'
     dictum_channel : 4
     start_date: '2011-11-11'
@@ -104,11 +107,13 @@ girlfriend_infos:
 | 名称 | 示例       | 必填 | 说明 |
 | -------- | -------------- | ---------- |---------- |
 | wechat_name | '老婆' | 必填 |好友名：需要发送的人的微信昵称或者备注名（不能输入微信号）|
+| group_name | '交流群' | 必填 |群聊名称，必须要把需要的群聊保存到通讯录。|
 | city_name | '成都' | 可空| 城市名：女友所在城市，用于发送天气。 |
-| dictum_channel | 2 |可空|格言渠道（1 : ONE●一个，2 : 词霸（双语）， 4 : 一言)|
+| dictum_channel | 2 |可空|格言渠道（1 : ONE●一个，2 : 词霸（双语），4 : 一言，5：笑话)|
 | start_date | '2017-10-10' | 可空 |相识日期：计算到当前天的天数 。|
 | sweet_words |'来自你俊美的老公' | 可空 |甜密的后缀。（钢铁直男的直描）|
 
+wechat_name，group_name 至少要有一个。
 
 如果全填，最终显示效果：
 

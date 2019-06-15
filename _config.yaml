@@ -25,7 +25,7 @@ alarm_info:
   #True 开启定时提醒，False 关闭
   is_alarm: True
   #定时发送时间
-  alarm_timed: '10:55'
+  alarm_timed: '19:00'
 
 girlfriend_infos:
   - #女友微信昵称或者备注名，不能输入微信号。
@@ -33,19 +33,19 @@ girlfriend_infos:
     #女友所在城市，用于发送天气。（可空）
     city_name: '桂林'
     # 格言渠道（1 : ONE●一个，2 : 词霸（每日英语，双语）4 : 一言，5：笑话)(可空)
-    dictum_channel : 5
+    dictum_channel : 2
     # 从那天开始勾搭的(最终效果为：宝贝这是我们在一起的第 111 天)（可空）
     start_date: '2017-10-10'
     # 后缀（可空）
     sweet_words: '来自最爱你的我。'
 
-
 #  如果你有多个好友需要发送，则参照这个样式，复制即可
 #  如不需要，则删除或注解下面所有的数据
-  - wechat_name: 'happy'
-    city_name: '朝阳区'
+  -
+    # 群聊名称，必须要把需要的群聊保存到通讯录。
+    group_name: 'EverydayWechat 交流群'
+    city_name: '漳州'
     dictum_channel : 4
-    start_date: '2018-11-11'
-    sweet_words: '来自你俊美的老公。'
+    sweet_words: '来自帅气的群主。'
 
 
