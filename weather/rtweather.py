@@ -22,7 +22,6 @@ def get_rttodayweather(cityname):
         # "humidity":"58%","reportTime":"2019-06-14 10:49:37"}}
         '''
         if resp.status_code == 200:
-
             if resp.json()['code'] == 1:
                 data_dict = resp.json()['data']
                 address = data_dict['address'].strip()
@@ -30,12 +29,10 @@ def get_rttodayweather(cityname):
                     address = address.split(' ')[-1]
                 reportTime = data_dict['reportTime'].strip()
                 reportTime = reportTime.split(' ')[0]
-
                 return_text = ' '.join(
                     x for x in [reportTime,address, data_dict['weather'], data_dict['temp'],
                                 data_dict['windDirection'] + '风', data_dict['windPower'],
                                 '湿度：' + data_dict['humidity']] if x)
-
                 # print(return_text)
                 return return_text
             else:

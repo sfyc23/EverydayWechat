@@ -14,11 +14,13 @@ turing_conf:
   apiKey: ''
   userId: ''
 
-# 指定自动回复的好友名单。
+# 指定自动回复的好友名单。（填：文件传输助手，可回复自己，测试效果）
 # - '好友1'
 # - '好友2'
 auto_reply_names:
   - '古典'
+  - '文件传输助手'
+
 
 #------------------------ 定时时间功能--------------------------
 alarm_info:
@@ -28,8 +30,8 @@ alarm_info:
   alarm_timed: '19:00'
 
 girlfriend_infos:
-  - #女友微信昵称或者备注名，不能输入微信号。
-    wechat_name: '古典'
+  - #女友微信昵称或者备注名，不能输入微信号。（如填：文件传输助手，发消息到文件传输助手，测试效果）
+    wechat_name: '文件传输助手'
     #女友所在城市，用于发送天气。（可空）
     city_name: '桂林'
     # 格言渠道（1 : ONE●一个，2 : 词霸（每日英语，双语）4 : 一言，5：笑话)(可空)
@@ -46,6 +48,7 @@ girlfriend_infos:
     group_name: 'EverydayWechat 交流群'
     city_name: '漳州'
     dictum_channel : 4
+    start_date: '2019-6-15'
     sweet_words: '来自帅气的群主。'
 
 

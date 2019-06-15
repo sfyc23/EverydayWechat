@@ -18,9 +18,12 @@ from main.utils import (
     get_dictum_info,
     get_diff_time,
 )
+import json
 
 reply_user_name_uuid_list = []
-invalid_wechat_list = []
+
+FILEHELPER_MARK = ['文件传输助手', 'filehelper']  # 文件传输助手标识
+FILEHELPER = 'filehelper'
 
 
 def is_online(auto_login=False):
@@ -68,20 +71,27 @@ def is_online(auto_login=False):
 @itchat.msg_register([TEXT])
 def text_reply(msg):
     """ 监听用户消息，用于自动回复 """
+
     try:
-        # print(msg)
+        # print(json.dumps(msg, ensure_ascii=False))
+
         uuid = msg.fromUserName  # 获取发送者的用户id
-        # 如果用户id是自动回复列表的人员，则进行下一步的操作
-        if uuid in reply_user_name_uuid_list:
+        # 如果用户id是自动回复列表的人员或者文件传输助手，则进行下一步的操作
+        if uuid in reply_user_name_uuid_list or msg['ToUserName'] == FILEHELPER:
             receive_text = msg.text  # 好友发送来的消息内容
             # 通过图灵 api 获取要回复的内容。
             reply_text = get_bot_info(receive_text)
             time.sleep(1)  # 休眠一秒，保安全，想更快的，可以直接用。
             if reply_text:  # 如内容不为空，回复消息
-                # send_alarm_msg()
-                msg.user.send(reply_text)  # 发送回复
-                print('\n{}发来信息：{}\n回复{}：{}'
-                      .format(msg.user.nickName, receive_text, msg.user.nickName, reply_text))
+                if msg['ToUserName'] == FILEHELPER:
+                    reply_text = '机器人自动回复：{}'.format(reply_text)
+                    itchat.send(reply_text, toUserName=FILEHELPER)
+                    print('\n我发出信息：{}\n回复{}：'
+                          .format(receive_text, reply_text))
+                else:
+                    msg.user.send(reply_text)
+                    print('\n{}发来信息：{}\n回复{}：{}'
+                          .format(msg.user.nickName, receive_text, msg.user.nickName, reply_text))
             else:
                 print('{}发来信息：{}\t自动回复失败'
                       .format(msg.user.nickName, receive_text))
@@ -93,7 +103,12 @@ def init_wechat():
     """ 初始化微信所需数据 """
     conf = get_yaml()
     itchat.get_chatrooms(update=True)  # 更新群信息。
+
     for name in conf.get('auto_reply_names'):
+        if name.lower() in FILEHELPER_MARK:  # 判断是否文件传输助手
+            if FILEHELPER not in reply_user_name_uuid_list:
+                reply_user_name_uuid_list.append(FILEHELPER)
+            break
         friends = itchat.search_friends(name=name)
         if not friends:  # 如果用户列表为空，表示用户昵称填写有误。
             print('自动回复中的昵称『{}』有误。'.format(name))
@@ -102,6 +117,7 @@ def init_wechat():
             name_uuid = friends[0].get('UserName')  # 取第一个用户的 uuid。
             if name_uuid not in reply_user_name_uuid_list:
                 reply_user_name_uuid_list.append(name_uuid)
+
 
 
 def send_alarm_msg():
@@ -119,10 +135,14 @@ def send_alarm_msg():
             # 给微信好友发信息
             wechat_name = gf.get('wechat_name')
             if wechat_name:
-                wechat_users = itchat.search_friends(name=wechat_name)
-                if wechat_users:
-                    wechat_users[0].send(send_msg)
+                if wechat_name.lower() in FILEHELPER_MARK:
+                    itchat.send(send_msg, toUserName=FILEHELPER)
                     print('定时给『{}』发送的内容是:\n{}\n发送成功...\n\n'.format(wechat_name, send_msg))
+                else:
+                    wechat_users = itchat.search_friends(name=wechat_name)
+                    if wechat_users:
+                        wechat_users[0].send(send_msg)
+                        print('定时给『{}』发送的内容是:\n{}\n发送成功...\n\n'.format(wechat_name, send_msg))
 
             # 给群聊发信息
             group_name = gf.get('group_name')
@@ -132,6 +152,7 @@ def send_alarm_msg():
                     groups[0].send(send_msg)
                     print('定时给群聊『{}』发送的内容是:\n{}\n发送成功...\n\n'.format(group_name, send_msg))
     print('自动提醒消息发送完成...\n')
+
 
 def init_alarm():
     """ 初始化定时提醒 """
@@ -146,12 +167,14 @@ def init_alarm():
     # 检查数据的有效性
     for info in get_yaml().get('girlfriend_infos'):
         wechat_name = info.get('wechat_name')
-        if wechat_name and not itchat.search_friends(name=wechat_name):
+
+        if (wechat_name and wechat_name not in ['filehelper', '文件传输助手']
+                and not itchat.search_friends(name=wechat_name)):
             print('定时任务中的好友名称『{}』有误。'.format(wechat_name))
+
         group_name = info.get('group_name')
         if group_name and not itchat.search_chatrooms(name=group_name):
             print('定时任务中的群聊名称『{}』有误。(注意：必须要把需要的群聊保存到通讯录)'.format(group_name))
-
 
     # 定时任务
     scheduler = BlockingScheduler()
@@ -159,7 +182,7 @@ def init_alarm():
     scheduler.add_job(send_alarm_msg, 'cron', hour=hour,
                       minute=minute, misfire_grace_time=15 * 60)
 
-    # 每隔 2 分钟发送一条数据用于测试。
+    # # 每隔 2 分钟发送一条数据用于测试。
     # scheduler.add_job(send_alarm_msg, 'interval', seconds=30)
 
     print('已开启定时发送提醒功能...')
@@ -177,6 +200,6 @@ def run():
 
 
 if __name__ == '__main__':
-    # run()
+    run()
     # send_alarm_msg()
     pass
