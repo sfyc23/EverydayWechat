@@ -9,7 +9,8 @@ import requests
 
 URL = 'http://api.qingyunke.com/api.php?key=free&appid=0&msg={}'
 
-def get_qingyunke(text):
+
+def get_qingyunke(text, userId=''):
     try:
         # print('发出消息:{}'.format(text))
         resp = requests.get(URL.format(text))

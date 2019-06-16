@@ -13,26 +13,26 @@ from main.common import (
 # 一个AI错误集合
 TULING_ERROR_CODE_LIST = ['501', '502', '503', '504', '507', '510']
 
-def get_yigeai(text):
+def get_yigeai(text, userid):
     """
     『一个AI』自动回复 (http://www.yige.ai/)
-    :param text: 需要发送的话
+    接口说明：http://docs.yige.ai/Query%E6%8E%A5%E5%8F%A3.html
+    :param text:str, 需要发送的话
+    :userid:str,机器唯一标识
     :return:str
     """
     conf = get_yaml()
     token = conf['yigeai_conf']['client_token']
     if not token:
-        print('错误 .一个AI token 为空')
+        print('错误 .一个「AI」token 为空')
         return None
-
-    # 一个字符串token，最多36个字符，用来识别客户端和服务端每个会话参数
-    session_id = md5_encode(''.join(conf.get('auto_reply_names')))
+    session_id = md5_encode(userid)
     try:
         # print('发出消息:{}'.format(text))
         resp = requests.post('http://www.yige.ai/v1/query',
                              data={'token': token, 'query': text, 'session_id': session_id})
         if resp.status_code == 200 and is_json(resp):
-            print(resp.text)
+            # print(resp.text)
             re_data = resp.json()
             code = re_data['status']['code']
             # 错误码返回有时是数字，有点是str。一起做处理

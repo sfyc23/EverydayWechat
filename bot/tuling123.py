@@ -7,11 +7,12 @@ apiKey,userid 需要去官网申请。
 '''
 
 import requests
-
 from main.common import (
     get_yaml,
     is_json,
+    md5_encode
 )
+
 # 图灵机器人错误码集合
 TULING_ERROR_CODE_LIST = [
     5000, 6000, 4000, 4001, 4002,
@@ -20,16 +21,23 @@ TULING_ERROR_CODE_LIST = [
     7002, 8008, 0]
 URL = "http://openapi.tuling123.com/openapi/api/v2"
 
-def get_tuling123(text):
+
+def get_tuling123(text, userId):
     """
+    接口地址：(https://www.kancloud.cn/turing/www-tuling123-com/718227)
     获取图灵机器人对话
-    :param text:
-    :return:
+    :param text: 发送的话
+    :param userId: 用户唯一标识（最好用微信好友uuid）
+    :return: 对白
     """
     info = get_yaml()['turing_conf']
     apiKey = info['apiKey']
-    userId = info['userId']
-    if not apiKey or not userId: return None
+
+    if not apiKey:
+        print('图灵机器人 apikey 为空，请求出错')
+        return None
+    userId = md5_encode(userId if userId else '250')
+
     content = {
         'perception': {
             'inputText': {
@@ -67,6 +75,6 @@ get_auto_reply = get_tuling123
 
 if __name__ == '__main__':
     text = '雷军 are you ok?'
-    reply = get_auto_reply(text)
+    reply = get_auto_reply(text,'WE……………………………………')
     print(reply)
     pass

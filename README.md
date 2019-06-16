@@ -1,4 +1,6 @@
-![python_vesion](https://img.shields.io/badge/Python%20-%3E%3D%203.5-green.svg)  
+![python_vesion](https://img.shields.io/badge/Python-3.5%2B-green.svg)   [![itchat_vesion](https://img.shields.io/badge/Itchat-1.3.10-brightgreen.svg)](https://github.com/littlecodersh/ItChat)   [![codebeat badge](https://codebeat.co/badges/0953014f-dbd3-41f4-bacd-60018e7d5065)](https://codebeat.co/projects/github-com-sfyc23-everydaywechat-master)   [![MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/sfyc23/EverydayWechat/blob/master/LICENSE)               [![weibo](https://img.shields.io/badge/weibo-@sfyc23-red.svg)](https://www.weibo.com/sfyc23)
+
+
 
 [EverydayWechat](https://github.com/sfyc23/EverydayWechat) 是基于 Python3 与 [Itchat](https://github.com/littlecodersh/ItChat) 的微信小工具。  
 可以定时给朋友或者群聊发送每日天气、提醒、每日一句，也可以智能自动回复好友信息。  
@@ -60,12 +62,11 @@ bot_channel: 2
 #### 3. 配置图灵机器人
 如果要
 打开图灵机器人官网：[http://www.turingapi.com](http://www.turingapi.com/) 进行注册。  
-创建机器人，得到 apikey，userid。  
+创建机器人，得到 apikey。  
 将填入到 **_config.yaml** 文件中的：
 ```
 turing_conf:
   apiKey: '你所获取apikey'
-  userId: '你所获取的userId'
 ```
 > 图灵机器人必须认证后才能使用，免费版用户，每天可使用 100 条信息，且用且珍惜。
 
@@ -87,8 +88,7 @@ auto_reply_names:
 3. 群消息自动回复还未现实（待完成）；
 4. 如果消息发送太频繁，微信会限制登录网页端登录。放心，并不会封号；
 5. 并不是对所有人自动回复，只是回复 **auto_reply_names** 中的人；
-6. 当没有图灵机器人 apikey 与 UserId，或者数量超出时，会使用备用的青云客智能聊天机器人获取数据；
-7. 好友里可以填入名称『文件传输助手』，这样你就可以在文件传输助手，发送消息，查看自动回复消息效果。
+6. 好友里可以填入名称『文件传输助手』，这样你就可以在文件传输助手，发送消息，查看自动回复消息效果。
 
 ### 配置定时提醒
 #### 1.开启并设置提醒时间
@@ -128,7 +128,7 @@ girlfriend_infos:
 | group_name | '交流群' | 必填 |群聊名称，必须要把需要的群聊保存到通讯录。|
 | city_name | '成都' | 可空| 城市名：女友所在城市，用于发送天气。 |
 | dictum_channel | 2 |可空|格言渠道（1 : ONE●一个，2 : 词霸（双语），4 : 一言，5：笑话)|
-| start_date | '2017-10-10' | 可空 |相识日期：计算到当前天的天数 。|
+| start_date | '2017-10-10' | 可空 |相识日期：计算到当天的天数 。|
 | sweet_words |'来自你俊美的老公' | 可空 |甜密的后缀。（钢铁直男的直描）|
 
 wechat_name，group_name 至少要有一个。
@@ -175,7 +175,7 @@ python run.py
 ```
 
 第一次运行会跳出二维码，扫码登录。如输出日志中打印成：『登录成功』，则表示运行成功。 
-之后一段时间再运行，微信会保持登录状态，不需要再扫码。  
+登录成功后一段时间内再运行，微信会保持登录状态，不需要再扫码。  
 如果需要切换用户，则在 *_config.yaml* 文件中，修改 *is_forced_switch* 的属性为 True。
 
 ## 示例截图：
@@ -184,13 +184,15 @@ python run.py
 
 ![自动回复](https://raw.githubusercontent.com/sfyc23/image/master/vlog/20190613162524.png)
 
-## 提 [issues](https://github.com/sfyc23/EverydayWechat/issues) 说明
+## 提 [issues](https://github.com/sfyc23/EverydayWechat/issues) & 加群提问的建议。
 
+- 当你拋出一个技术问题时，最终是否能得到有用的回答，往往取决于你所提问和追问的方式。推荐阅读：[提问的智慧](https://github.com/ryanhanwu/How-To-Ask-Questions-The-Smart-Way/blob/master/README-zh_CN.md)。
 - **检查是否是最新的代码，检查是否是 Python3.5+，检查依赖有没有安装完整**。
 - 先检查微信是否可登录 [微信网页版](https://wx.qq.com/)，如网页端不能用，此项目也不能用。
-- 请更新你的 [itchat](https://github.com/littlecodersh/ItChat) 为最新版本。
+- 请更新你的 [itchat](https://github.com/littlecodersh/ItChat) 至最新版本 **1.3.10** 。查看 itchat 版本 **print(itchat.__version__ ）**。
 - 与微信相关的问题可以先去 itchat [issues](https://github.com/littlecodersh/ItChat/issues)， 查看是否有相似问题。
 - 微信名只能是昵称或者备注名，不能输入微信号。
+- 对群聊操作时，必须要把需要的群聊保存到通讯录。
 - 如果有新的思路和建议也欢迎提交。
 
 
@@ -209,9 +211,6 @@ python run.py
 
 ## 交流群
 
-群已满。加我小号微信：[sfyc1314](https://raw.githubusercontent.com/sfyc23/image/master/vlog/20190614125724.png)，备注：Github。我拉你入群。
+加我微信：[sfyc1314](https://raw.githubusercontent.com/sfyc23/image/master/vlog/20190614125724.png)，备注：Github。我拉你入群。
  ![我的微信](https://raw.githubusercontent.com/sfyc23/image/master/vlog/20190614125724.png)
  
-## 联系我
-
-微博：[诗风悠存](https://weibo.com/sfyc23)
