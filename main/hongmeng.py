@@ -71,7 +71,6 @@ def is_online(auto_login=False):
 @itchat.msg_register([TEXT])
 def text_reply(msg):
     """ 监听用户消息，用于自动回复 """
-
     try:
         # print(json.dumps(msg, ensure_ascii=False))
 
@@ -98,7 +97,6 @@ def text_reply(msg):
     except Exception as e:
         print(str(e))
 
-
 def init_wechat():
     """ 初始化微信所需数据 """
     conf = get_yaml()
@@ -117,6 +115,8 @@ def init_wechat():
             name_uuid = friends[0].get('UserName')  # 取第一个用户的 uuid。
             if name_uuid not in reply_user_name_uuid_list:
                 reply_user_name_uuid_list.append(name_uuid)
+
+
 
 
 
@@ -166,7 +166,10 @@ def init_alarm():
 
     # 检查数据的有效性
     for info in get_yaml().get('girlfriend_infos'):
-        wechat_name = info.get('wechat_name')
+
+        if not info: break # 解决无数据时会出现的 bug。
+
+        wechat_name = info.get('wechat_name',None)
         if (wechat_name and wechat_name.lower() not in FILEHELPER_MARK
                 and not itchat.search_friends(name=wechat_name)):
             print('定时任务中的好友名称『{}』有误。'.format(wechat_name))
@@ -190,13 +193,17 @@ def init_alarm():
 
 def run():
     """ 主运行入口 """
+    conf = get_yaml()
+    if not conf: #如果 conf，表示配置文件出错。
+        print('程序中止...')
+        return
+
+    # 判断是否登录，如果没有登录则自动登录，返回 False 表示登录失败
     if not is_online(auto_login=True):
         return
-    conf = get_yaml()
     if conf.get('is_auto_relay'):
         print('已开启图灵自动回复...')
-    init_alarm()
-
+    init_alarm() # 初始化定时任务
 
 if __name__ == '__main__':
     run()
