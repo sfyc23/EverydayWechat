@@ -12,7 +12,6 @@ from main.common import (
     get_yaml,
     is_json,
 )
-
 # 图灵机器人错误码集合
 TULING_ERROR_CODE_LIST = [
     5000, 6000, 4000, 4001, 4002,

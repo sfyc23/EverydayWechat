@@ -167,8 +167,7 @@ def init_alarm():
     # 检查数据的有效性
     for info in get_yaml().get('girlfriend_infos'):
         wechat_name = info.get('wechat_name')
-
-        if (wechat_name and wechat_name not in ['filehelper', '文件传输助手']
+        if (wechat_name and wechat_name.lower() not in FILEHELPER_MARK
                 and not itchat.search_friends(name=wechat_name)):
             print('定时任务中的好友名称『{}』有误。'.format(wechat_name))
 

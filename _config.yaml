@@ -8,11 +8,19 @@ is_forced_switch: False
 # 是否开启自动回复
 is_auto_relay: True
 
+# 机器人渠道（1: 图灵机器人，2: 一个AI ,3 : 青云客)
+bot_channel: 2
+
 #图灵机器人(http://www.tuling123.com/)免费用户每天可用 100 条。
 #请在官网注册并申请 apikey ,userID。
 turing_conf:
   apiKey: ''
   userId: ''
+
+# 一个 Al (http://www.yige.ai/),
+#  client_token.（客户端访问令牌）默认这个是博主自己申请的。朋友们最好自行申请并替换。
+yigeai_conf:
+  client_token: '16EF6A50EC5912DB1428147256CFA4FC'
 
 # 指定自动回复的好友名单。（填：文件传输助手，可回复自己，测试效果）
 # - '好友1'

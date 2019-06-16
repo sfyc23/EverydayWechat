@@ -1,7 +1,7 @@
-requests
-beautifulsoup4
-itchat
-apscheduler
-pyyaml
-lxml
-simplejson
+requests==2.22.0
+beautifulsoup4==4.6.0
+itchat==1.3.10
+apscheduler==3.5.3
+pyyaml==5.1.1
+lxml==4.3.4
+simplejson==3.16.0
