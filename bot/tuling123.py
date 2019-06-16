@@ -20,10 +20,9 @@ TULING_ERROR_CODE_LIST = [
     7002, 8008, 0]
 URL = "http://openapi.tuling123.com/openapi/api/v2"
 
-
 def get_tuling123(text):
     """
-    获取
+    获取图灵机器人对话
     :param text:
     :return:
     """
@@ -54,10 +53,12 @@ def get_tuling123(text):
             else:
                 error_text = re_data['results'][0]['values']['text']
                 print('图灵机器人错误信息：{}'.format(error_text))
-        print('图灵机器人发送失败')
+
+        print('图灵机器人获取数据失败')
         return None
     except Exception as e:
         print(e)
+        print('图灵机器人获取数据失败')
         return None
     return None
 

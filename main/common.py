@@ -14,9 +14,16 @@ def get_yaml():
     :return: s  字典
     """
     path = os.path.join(os.path.dirname(os.path.dirname(__file__)), '_config.yaml')
-    with open(path, 'r', encoding='utf-8') as file:
-        config = yaml.load(file, Loader=yaml.Loader)
-    return config
+
+    try:
+        with open(path, 'r', encoding='utf-8') as file:
+            config = yaml.load(file, Loader=yaml.Loader)
+
+        return config
+    except Exception as error:
+        print(error)
+        print('你的 _config.yaml 文件配置出错...')
+    return None
 
 
 def is_json(resp):
@@ -36,3 +43,6 @@ def md5_encode(text):
     md5.update(text.encode('utf-8'))
     encodedStr = md5.hexdigest().upper()
     return encodedStr
+
+if __name__ == '__main__':
+    get_yaml()
