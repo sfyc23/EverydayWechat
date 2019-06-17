@@ -20,7 +20,7 @@ from main.utils import (
     get_dictum_info,
     get_diff_time,
 )
-
+from selenium import webdriver
 
 reply_user_name_uuid_list = []
 FILEHELPER_MARK = ['文件传输助手', 'filehelper']  # 文件传输助手标识
@@ -30,6 +30,22 @@ sweetie = ['厌物', '你脚下的蚂蚁', '专说骗人的诳话者', '黄天�
 sweet_words = sweetie[random.randint(0, 9)]
 
 
+
+def autoReply(driver,text):
+    time.sleep(10)
+    elem = driver.find_element_by_css_selector('#prompt')
+    elem.clear()
+    elem.send_keys(text)
+
+    driver.find_element_by_css_selector('#subm').click()
+    time.sleep(90)
+
+    completion = driver.find_element_by_css_selector('#result').text
+    print(completion)
+    time.sleep(50)
+    assert "No results found." not in driver.page_source
+    
+    
 def is_online(auto_login=False):
     """
     判断是否还在线。
@@ -73,7 +89,7 @@ def is_online(auto_login=False):
 
 
 @itchat.msg_register([TEXT])
-def text_reply(msg):
+def text_reply(driver,msg):
     """ 监听用户消息，用于自动回复 """
     try:
         # print(json.dumps(msg, ensure_ascii=False))
@@ -83,8 +99,10 @@ def text_reply(msg):
         if uuid in reply_user_name_uuid_list or msg['ToUserName'] == FILEHELPER:
             receive_text = msg.text  # 好友发送来的消息内容
             # 通过图灵 api 获取要回复的内容。
-            reply_text = get_bot_info(receive_text, uuid)  # modifried
-
+            
+            
+            #reply_text = get_bot_info(receive_text, uuid)  # modifried
+            reply_text = autoReply(driver,receive_text)
 
             time.sleep(5)  # 休眠一秒，保安全，想更快的，可以直接用。
             if reply_text:  # 如内容不为空，回复消息
@@ -167,7 +185,7 @@ def send_alarm_msg():
     print('自动提醒消息发送完成...\n')
 
 
-def init_alarm():
+def init_alarm(driver):
     """ 初始化定时提醒 """
     alarm_info = get_yaml().get('alarm_info', None)
     if not alarm_info: return
@@ -215,7 +233,15 @@ def run():
         return
     if conf.get('is_auto_relay'):
         print('已开启图灵自动回复...')
-    init_alarm()  # 初始化定时任务
+
+    driver = webdriver.Firefox()
+    driver.get("https://www.thisstorydoesnotexist.com")
+    
+    init_alarm(driver) # 初始化定时任务
+    
+
+
+
 
 
 if __name__ == '__main__':
