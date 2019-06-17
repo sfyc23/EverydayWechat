@@ -158,13 +158,10 @@ wechat_name，group_name 至少要有一个。
 
 ```
 pip3 install -r requirements.txt
+# pip install -r requirements.txt
 ```
 
-如果你的安装是 anaconda ，则使用：
 
-```
-conda install -r requirements.txt
-```
 
 ## 运行：
 
