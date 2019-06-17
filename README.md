@@ -60,7 +60,7 @@ bot_channel: 2
 ```
 
 #### 3. 配置图灵机器人
-如果要
+如果有需要。  
 打开图灵机器人官网：[http://www.turingapi.com](http://www.turingapi.com/) 进行注册。  
 创建机器人，得到 apikey。  
 将填入到 **_config.yaml** 文件中的：
@@ -70,9 +70,18 @@ turing_conf:
 ```
 > 图灵机器人必须认证后才能使用，免费版用户，每天可使用 100 条信息，且用且珍惜。
 
+#### 4. 配置「一个AI」
+打开图灵机器人官网：[http://www.yige.ai](http://www.yige.ai) 进行注册。  
+创建应用，得到「API密钥」中的 「客户端访问令牌」
+将填入到 **_config.yaml** 文件中的：
+```
+yigeai_conf:
+  client_token: '客户访问令牌'
+```
+> _config.yaml 里默认放一个 token 可使用，但这个是博主自己申请的。朋友们最好自行申请并替换。这使用的人太多，已被玩坏了。
 
 
-#### 4. 指定自动回复的好友名单
+#### 5. 指定自动回复的好友名单
 
 在 **auto_reply_names** 填入需要自动回复的好友名单。如下：
 
@@ -206,8 +215,5 @@ python run.py
 ## LICENSE
 [MIT License](https://github.com/sfyc23/EverydayWechat/blob/master/LICENSE)
 
-## 交流群
 
-加我微信：[sfyc1314](https://raw.githubusercontent.com/sfyc23/image/master/vlog/20190614125724.png)，备注：Github。我拉你入群。
- ![我的微信](https://raw.githubusercontent.com/sfyc23/image/master/vlog/20190614125724.png)
  
