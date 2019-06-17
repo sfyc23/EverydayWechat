@@ -26,4 +26,4 @@ def get_zsh_info():
 
 get_one_words = get_zsh_info()
 
-print(get_one_words)
+#print(get_one_words)
