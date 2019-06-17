@@ -1,11 +1,12 @@
 # coding=utf-8
 
 """
-开心玩耍。
+快乐玩耍
 核心代码。
 """
 import os
 import time
+import random
 import json
 from apscheduler.schedulers.blocking import BlockingScheduler
 import itchat
@@ -24,6 +25,9 @@ from main.utils import (
 reply_user_name_uuid_list = []
 FILEHELPER_MARK = ['文件传输助手', 'filehelper']  # 文件传输助手标识
 FILEHELPER = 'filehelper'
+
+sweetie = ['厌物', '你脚下的蚂蚁', '专说骗人的诳话者', '黄天霸', 'cxk', '魔鬼的叔父', '哺乳类脊椎动物之一', '名字写在水上的人', 'BIG BAD WOLF', '你的兄弟']
+sweet_words = sweetie[random.randint(0, 9)]
 
 
 def is_online(auto_login=False):
@@ -79,8 +83,10 @@ def text_reply(msg):
         if uuid in reply_user_name_uuid_list or msg['ToUserName'] == FILEHELPER:
             receive_text = msg.text  # 好友发送来的消息内容
             # 通过图灵 api 获取要回复的内容。
-            reply_text = get_bot_info(receive_text, uuid)
-            time.sleep(1)  # 休眠一秒，保安全，想更快的，可以直接用。
+            reply_text = get_bot_info(receive_text, uuid)  # modifried
+
+
+            time.sleep(5)  # 休眠一秒，保安全，想更快的，可以直接用。
             if reply_text:  # 如内容不为空，回复消息
                 if msg['ToUserName'] == FILEHELPER:
                     reply_text = '机器人自动回复：{}'.format(reply_text)
@@ -126,16 +132,20 @@ def send_alarm_msg():
     print('\n启动定时自动提醒...')
     conf = get_yaml()
     for gf in conf.get('girlfriend_infos'):
-        dictum = get_dictum_info(gf.get('dictum_channel'))
         weather = get_weather_info(gf.get('city_name'))
-        diff_time = get_diff_time(gf.get('start_date'))
-        sweet_words = gf.get('sweet_words')
-        send_msg = '\n'.join(x for x in [dictum, weather, diff_time, sweet_words] if x)
-        # print(send_msg)
+        dictum = get_dictum_info(gf.get('dictum_channel'))
 
-        if not send_msg or not is_online():continue
-        # 给微信好友发信息
+        diff_time = get_diff_time(gf.get('start_date'))
+        # sweet_words = gf.get('sweet_words')  # To Be Modified
         wechat_name = gf.get('wechat_name')
+        if '宋清如' in dictum:
+            dictum = '我是'+wechat_name+'至上主义者'
+        send_msg = '\n'.join(x for x in [weather, dictum, sweet_words] if x)
+        print(send_msg)
+
+        if not send_msg or not is_online(): continue
+        # 给微信好友发信息
+
         if wechat_name:
             if wechat_name.lower() in FILEHELPER_MARK:
                 itchat.send(send_msg, toUserName=FILEHELPER)
@@ -147,12 +157,12 @@ def send_alarm_msg():
                 print('定时给『{}』发送的内容是:\n{}\n发送成功...\n\n'.format(wechat_name, send_msg))
 
         # 给群聊里发信息
-        group_name = gf.get('group_name')
-        if not group_name: continue
-        groups = itchat.search_chatrooms(name=group_name)
-        if not groups: continue
-        groups[0].send(send_msg)
-        print('定时给群聊『{}』发送的内容是:\n{}\n发送成功...\n\n'.format(group_name, send_msg))
+        # group_name = gf.get('group_name')
+        # if not group_name: continue
+        # groups = itchat.search_chatrooms(name=group_name)
+        # if not groups: continue
+        # groups[0].send(send_msg)
+        # print('定时给群聊『{}』发送的内容是:\n{}\n发送成功...\n\n'.format(group_name, send_msg))
 
     print('自动提醒消息发送完成...\n')
 
@@ -175,10 +185,10 @@ def init_alarm():
                 and not itchat.search_friends(name=wechat_name)):
             print('定时任务中的好友名称『{}』有误。'.format(wechat_name))
 
-        group_name = info.get('group_name')
-        if group_name and not itchat.search_chatrooms(name=group_name):
-            print('定时任务中的群聊名称『{}』有误。'
-                  '(注意：必须要把需要的群聊保存到通讯录)'.format(group_name))
+        # group_name = info.get('group_name')
+        # if group_name and not itchat.search_chatrooms(name=group_name):
+        # print('定时任务中的群聊名称『{}』有误。'
+        # '(注意：必须要把需要的群聊保存到通讯录)'.format(group_name))
 
     # 定时任务
     scheduler = BlockingScheduler()
@@ -210,5 +220,5 @@ def run():
 
 if __name__ == '__main__':
     run()
-    # send_alarm_msg()
+    #send_alarm_msg()
     pass
