@@ -51,8 +51,8 @@ def get_bot_info(message, userId=''):
     :param message:str, 发送的话
     :return:str, 回复的话
     """
-    channel = get_yaml().get('bot_channel', 2)
-    source = BOT_NAME_DICT.get(channel, 'yigeai')
+    channel = get_yaml().get('bot_channel', 3)
+    source = BOT_NAME_DICT.get(channel, 'qingyunke')
     if source:
         addon = importlib.import_module('bot.' + source, __package__)
         reply_msg = addon.get_auto_reply(message, userId)

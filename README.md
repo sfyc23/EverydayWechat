@@ -56,8 +56,10 @@
 #### 2.选择渠道
 ```
 机器人渠道（1: 图灵机器人，2: 一个AI ,3 : 青云客)
-bot_channel: 2
+bot_channel: 3
 ```
+
+> 默认为青云客，但请注意这个比较智障。。
 
 #### 3. 配置图灵机器人
 如果有需要。  
@@ -78,7 +80,6 @@ turing_conf:
 yigeai_conf:
   client_token: '客户访问令牌'
 ```
-> _config.yaml 里默认放一个 token 可使用，但这个是博主自己申请的。朋友们最好自行申请并替换。这使用的人太多，已被玩坏了。
 
 
 #### 5. 指定自动回复的好友名单
@@ -215,5 +216,8 @@ python run.py
 ## LICENSE
 [MIT License](https://github.com/sfyc23/EverydayWechat/blob/master/LICENSE)
 
+## 交流群
 
+加我微信：[sfyc1314](https://raw.githubusercontent.com/sfyc23/image/master/vlog/20190614125724.png)，备注：Github。我拉你入群。
+ ![我的微信](https://raw.githubusercontent.com/sfyc23/image/master/vlog/20190614125724.png)
  

@@ -54,8 +54,8 @@ def get_yigeai(text, userid):
 get_auto_reply = get_yigeai
 
 if __name__ == '__main__':
-    text = '自动机器人'
-    rt = get_auto_reply(text)
+    text = '我爱北京'
+    rt = get_auto_reply(text,'dd--00')
     print('回复：', rt)
     # y = get_yaml().get('auto_reply_names')
     # print(type(y))
