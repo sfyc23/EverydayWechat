@@ -27,7 +27,6 @@ FILEHELPER_MARK = ['文件传输助手', 'filehelper']  # 文件传输助手标�
 FILEHELPER = 'filehelper'
 
 sweetie = ['厌物', '你脚下的蚂蚁', '专说骗人的诳话者', '黄天霸', 'cxk', '魔鬼的叔父', '哺乳类脊椎动物之一', '名字写在水上的人', 'BIG BAD WOLF', '你的兄弟']
-sweet_words = sweetie[random.randint(0, 9)]
 
 def is_online(auto_login=False):
     """
@@ -132,7 +131,9 @@ def send_alarm_msg():
         dictum = get_dictum_info(gf.get('dictum_channel'))
         weather = get_weather_info(gf.get('city_name'))
         diff_time = get_diff_time(gf.get('start_date'))
-        #sweet_words = gf.get('sweet_words')
+        sweet_words = gf.get('sweet_words')
+        if not sweet_words:
+            sweet_words = random.choice(sweetie)
         send_msg = '\n'.join(x for x in [weather, dictum, sweet_words] if x)
         print(send_msg)
 
@@ -150,12 +151,12 @@ def send_alarm_msg():
                 print('定时给『{}』发送的内容是:\n{}\n发送成功...\n\n'.format(wechat_name, send_msg))
 
         # 给群聊里发信息
-        #group_name = gf.get('group_name')
-        #if not group_name: continue
-        #groups = itchat.search_chatrooms(name=group_name)
-        #if not groups: continue
-        #groups[0].send(send_msg)
-        #print('定时给群聊『{}』发送的内容是:\n{}\n发送成功...\n\n'.format(group_name, send_msg))
+        group_name = gf.get('group_name')
+        if not group_name: continue
+        groups = itchat.search_chatrooms(name=group_name)
+        if not groups: continue
+        groups[0].send(send_msg)
+        print('定时给群聊『{}』发送的内容是:\n{}\n发送成功...\n\n'.format(group_name, send_msg))
 
     print('自动提醒消息发送完成...\n')
 
