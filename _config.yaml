@@ -48,6 +48,8 @@ girlfriend_infos:
     start_date: '2017-10-10'
     # 后缀（可空）
     sweet_words: '来自最爱你的我。'
+    #sweetie = ['厌物', '你脚下的蚂蚁', '专说骗人的诳话者', '黄天霸', 'cxk', '魔鬼的叔父', '哺乳类脊椎动物之一', '名字写在水上的人', 'BIG BAD WOLF', '你的兄弟']
+    # for your reference
 
 #  如果你有多个好友需要发送，则参照这个样式，复制即可
 #  如不需要，则删除或注解下面所有的数据
@@ -56,5 +58,6 @@ girlfriend_infos:
     dictum_channel : 4
     start_date: '2019-6-15'
     sweet_words: '来自帅气的群主。'
-
+  #sweetie = ['厌物', '你脚下的蚂蚁', '专说骗人的诳话者', '黄天霸', 'cxk', '魔鬼的叔父', '哺乳类脊椎动物之一', '名字写在水上的人', 'BIG BAD WOLF', '你的兄弟']
+  # same as above
 
