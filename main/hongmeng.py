@@ -135,7 +135,7 @@ def send_alarm_msg():
         if not sweet_words:
             sweet_words = random.choice(sweetie)
         send_msg = '\n'.join(x for x in [weather, dictum, sweet_words] if x)
-        print(send_msg)
+        #print(send_msg)
 
         if not send_msg or not is_online():continue
         # 给微信好友发信息
