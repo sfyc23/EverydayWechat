@@ -12,7 +12,7 @@ from main.common import (
     get_yaml
 )
 
-DICTUM_NAME_DICT = {1: 'wufazhuce', 2: 'acib', 3: 'lovelive', 4: 'hitokoto', 5: 'rtjokes'}
+DICTUM_NAME_DICT = {1: 'wufazhuce', 2: 'acib', 3: 'scapy', 4: 'hitokoto', 5: 'rtjokes'}
 BOT_NAME_DICT = {1: 'tuling123', 2: 'yigeai', 3: 'qingyunke'}
 
 
