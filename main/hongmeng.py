@@ -26,7 +26,6 @@ reply_user_name_uuid_list = []
 FILEHELPER_MARK = ['文件传输助手', 'filehelper']  # 文件传输助手标识
 FILEHELPER = 'filehelper'
 
-sweetie = ['厌物', '你脚下的蚂蚁', '专说骗人的诳话者', '黄天霸', 'cxk', '魔鬼的叔父', '哺乳类脊椎动物之一', '名字写在水上的人', 'BIG BAD WOLF', '你的兄弟']
 
 def is_online(auto_login=False):
     """
@@ -132,8 +131,6 @@ def send_alarm_msg():
         weather = get_weather_info(gf.get('city_name'))
         diff_time = get_diff_time(gf.get('start_date'))
         sweet_words = gf.get('sweet_words')
-        if not sweet_words:
-            sweet_words = random.choice(sweetie)
         send_msg = '\n'.join(x for x in [weather, dictum, sweet_words] if x)
         #print(send_msg)
 
