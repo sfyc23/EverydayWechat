@@ -32,6 +32,7 @@
 - 金山词霸 ● 每日一句（双语）：<http://open.iciba.com/?c=api>
 - 一言 ：<https://hitokoto.cn/>
 - 土味情话： <https://www.v2ex.com/t/569853> (目前已失联)
+- 民国情书 句子迷
 - RollToolsApi: [随机获取笑话段子列表](https://github.com/MZCretin/RollToolsApi#%E9%9A%8F%E6%9C%BA%E8%8E%B7%E5%8F%96%E7%AC%91%E8%AF%9D%E6%AE%B5%E5%AD%90%E5%88%97%E8%A1%A8)
 
 ### 人工智能机器人

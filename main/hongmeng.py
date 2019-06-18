@@ -1,7 +1,7 @@
 # coding=utf-8
 
 """
-每天定时给多个女友发给微信暖心话
+开心玩耍
 核心代码。
 """
 import os
@@ -19,6 +19,7 @@ from main.utils import (
     get_dictum_info,
     get_diff_time,
 )
+import random
 
 
 reply_user_name_uuid_list = []
@@ -130,8 +131,8 @@ def send_alarm_msg():
         weather = get_weather_info(gf.get('city_name'))
         diff_time = get_diff_time(gf.get('start_date'))
         sweet_words = gf.get('sweet_words')
-        send_msg = '\n'.join(x for x in [dictum, weather, diff_time, sweet_words] if x)
-        # print(send_msg)
+        send_msg = '\n'.join(x for x in [weather, dictum, sweet_words] if x)
+        #print(send_msg)
 
         if not send_msg or not is_online():continue
         # 给微信好友发信息
@@ -210,5 +211,5 @@ def run():
 
 if __name__ == '__main__':
     run()
-    # send_alarm_msg()
+    #send_alarm_msg()
     pass

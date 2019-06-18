@@ -48,6 +48,6 @@ def get_rttodayweather(cityname):
 get_today_weather = get_rttodayweather
 
 if __name__ == '__main__':
-    cityname = '全州'
+    cityname = '香港'
     get_today_weather(cityname)
 
