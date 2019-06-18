@@ -540,19 +540,26 @@ def get_sojson_weather(city_name):
         # }
         today_weather = weather_dict.get('data').get('forecast')[0]
 
-        display = ['ymd', 'week', 'type', 'fx', 'fl', 'high', 'low', 'notice']
-        weather_info = ' '.join(today_weather[p] for p in display if today_weather.get(p, None))
+        # display = ['ymd', 'week', 'type', 'fx', 'fl', 'high', 'low', 'notice']
+        # weather_info = ' '.join(today_weather[p] for p in display if today_weather.get(p, None))
         # print(weather_info)
+
+        weather_info = city_name + '天气预报\n'
+        weather_info = weather_info + today_weather['ymd'] + '，' + today_weather['week'] + '\n'
+        weather_info = weather_info + '【天气预报】' + today_weather['type'] + '\n'
+        weather_info = weather_info + '【今日温度】' + today_weather['low'] + '，' + today_weather['high'] + '\n'
+        weather_info = weather_info + '【今日风速】' + today_weather['fx'] + today_weather['fl'] + '\n'
+        weather_info = weather_info + '【出行提示】' + today_weather['notice']
+
         return weather_info
 
     except Exception as exception:
         print(exception)
         return None
 
-
 get_today_weather = get_sojson_weather
 
 if __name__ == '__main__':
-    # get_today_weather('青岛')
-
+    we = get_today_weather('青岛')
+    print(we)
     pass

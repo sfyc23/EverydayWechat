@@ -6,6 +6,8 @@
 可以定时给朋友或者群聊发送每日天气、提醒、每日一句，也可以智能自动回复好友信息。  
 操作简单，小白用户也可快速上手。
 
+**禁止将本工具用于商业用途**，如产生法律纠纷与本人无关。
+
 > 注意：如果给女朋友添加图灵机器人回复，请慎重考虑！！！！  
 并不是你的每一个女朋友都能接受，你用机器人给他回复『暖心话』，安慰她。人工智能也有可能是一个智障机器人。想想如果机器人回复给你女朋友：『我们分手吧』。可能你们真的就分手了。虽然我会在心里默默的点个赞（单身狗的自白）
 > 
@@ -31,8 +33,8 @@
 - ONE ● 一个： <http://wufazhuce.com/>
 - 金山词霸 ● 每日一句（双语）：<http://open.iciba.com/?c=api>
 - 一言 ：<https://hitokoto.cn/>
-- 土味情话： <https://www.v2ex.com/t/569853> (目前已失联)
-- 民国情书 句子迷
+- 土味情话： <https://www.v2ex.com/t/569853> （土）
+- 句子迷-民国情书: <https://www.juzimi.com/>（高雅）
 - RollToolsApi: [随机获取笑话段子列表](https://github.com/MZCretin/RollToolsApi#%E9%9A%8F%E6%9C%BA%E8%8E%B7%E5%8F%96%E7%AC%91%E8%AF%9D%E6%AE%B5%E5%AD%90%E5%88%97%E8%A1%A8)
 
 ### 人工智能机器人
@@ -138,11 +140,13 @@ girlfriend_infos:
 | wechat_name | '老婆' | 必填 |好友名：需要发送的人的微信昵称或者备注名（不能输入微信号）|
 | group_name | '交流群' | 必填 |群聊名称，必须要把需要的群聊保存到通讯录。|
 | city_name | '成都' | 可空| 城市名：女友所在城市，用于发送天气。 |
-| dictum_channel | 2 |可空|格言渠道（1 : ONE●一个，2 : 词霸（双语），4 : 一言，5：笑话)|
+| dictum_channel | 2 |可空|格言渠道（见下表）|
 | start_date | '2017-10-10' | 可空 |相识日期：计算到当天的天数 。|
 | sweet_words |'来自你俊美的老公' | 可空 |甜密的后缀。（钢铁直男的直描）|
 
 wechat_name，group_name 至少要有一个。
+格言渠道 ： 1 : ONE●一个，2 : 词霸（每日双语）3: 土味情话， 4 : 一言，5：笑话，6 民国情书。
+
 
 >Tips：可以把 **wechat_name**  填入『**文件传输助手**』，这样，提醒会发送到自己微信里的 **文件传输助手** 中。在不打扰别人的情况下，方便快速查看效果。
 
@@ -217,8 +221,5 @@ python run.py
 ## LICENSE
 [MIT License](https://github.com/sfyc23/EverydayWechat/blob/master/LICENSE)
 
-## 交流群
 
-加我微信：[sfyc1314](https://raw.githubusercontent.com/sfyc23/image/master/vlog/20190614125724.png)，备注：Github。我拉你入群。
- ![我的微信](https://raw.githubusercontent.com/sfyc23/image/master/vlog/20190614125724.png)
  
