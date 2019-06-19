@@ -95,7 +95,7 @@ def init_wechat():
             reply_userNames.append(friend['UserName'])
         else:
             print('自动回复中的好友昵称『{}』有误。'.format(name))
-    print(reply_userNames)
+    # print(reply_userNames)
 
 def init_alarm():
     """ 初始化定时提醒 """
