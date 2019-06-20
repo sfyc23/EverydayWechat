@@ -43,6 +43,9 @@
 - 一个AI：<http://www.yige.ai/>（免费且无数量限制。可自定义回复、对话、场景。但高级功能使用比较复杂）
 - 青云客智能聊天机器人：<http://api.qingyunke.com/>（无须申请，无数量限制，但有点智障，分手神器。分手神器，慎用）
 
+### 星座运势
+- 星座屋 <https://www.xzw.com/> (基于爬虫获取数据)
+
 计划再想加上幽默段子，养生之类的数据来源，欢迎提供相关网页与接口。
 
 ## 项目配置
@@ -131,6 +134,7 @@ girlfriend_infos:
     dictum_channel : 4
     start_date: '2011-11-11'
     sweet_words: '来自最爱你的我。'
+    birthday: '10-23'
 ```
 
 相关参数说明：
@@ -143,6 +147,7 @@ girlfriend_infos:
 | dictum_channel | 2 |可空|格言渠道（见下表）|
 | start_date | '2017-10-10' | 可空 |相识日期：计算到当天的天数 。|
 | sweet_words |'来自你俊美的老公' | 可空 |甜密的后缀。（钢铁直男的直描）|
+| birthday | '10-23' | 可空 | 生日，用于发送星座运势 |
 
 wechat_name，group_name 至少要有一个。
 格言渠道 ： 1 : ONE●一个，2 : 词霸（每日双语）3: 土味情话， 4 : 一言，5：笑话，6 民国情书。
@@ -181,7 +186,7 @@ pip3 install -r requirements.txt
 ## 运行：
 
 
-在本地 cmd 中跳转项目目录下，运行：
+- 在本地 cmd 中跳转项目目录下，运行：
 ```
 python run.py
 ```
@@ -189,6 +194,10 @@ python run.py
 第一次运行会跳出二维码，扫码登录。如输出日志中打印成：『登录成功』，则表示运行成功。 
 登录成功后一段时间内再运行，微信会保持登录状态，不需要再扫码。  
 如果需要切换用户，则在 *_config.yaml* 文件中，修改 *is_forced_switch* 的属性为 True。
+
+- docker下运行
+    - 构建 `docker build -t everyday_wechat:v1 .`
+    - 运行 `docker run everyday_wechat:v1`
 
 ## 示例截图：
 

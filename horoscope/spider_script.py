@@ -92,7 +92,7 @@ def get_xzw_text(birthday_str):
     data_list = get_xzw_data_list(constellation)
 
     for item in data_list:
-        resp += "\n\n" + item['title_name'] + "  " + item['date'] + "\n"
+        resp += "\n\n" + item['title_name'] + "（" + item['date'] + "）\n"
         resp += "幸运颜色：%s \n" % item['lucky_colour']
         resp += "幸运数字：%s \n" % item['lucky_num']
         for detail in item['detail_info']:
@@ -103,7 +103,7 @@ def get_xzw_text(birthday_str):
 
 
 if __name__ == '__main__':
-    print(get_xzw_text("a-cc"))
+    print(get_xzw_text("01-22"))
 
 
 
