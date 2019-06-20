@@ -7,26 +7,35 @@ Author: ClaireYiu(https://github.com/ClaireYiu)
 import random
 from requests_html import HTMLSession
 
+
 def get_zsh_info():
     """
     句子迷：（https://www.juzimi.com/）
+    朱生豪：https://www.juzimi.com/writer/朱生豪
+    爱你就像爱生命（王小波）：https://www.juzimi.com/article/爱你就像爱生命
+    三行情书：https://www.juzimi.com/article/25637
     :return: str 情话
     """
     print('正在获取民国情话...')
     try:
-        name = [['writer/朱生豪', 38, 'xqfamoustermspage'], ['article/爱你就像爱生命', 22, 'xqarticletermspage']]
+
+        name = [
+            ['writer/朱生豪', 38,],
+            ['article/爱你就像爱生命', 22],
+            ['article/25637', 55],
+                ]
         apdix = random.choice(name)
-        url = 'https://www.juzimi.com/{}?page={}'.format(apdix[0], random.randint(0, apdix[1] - 1))
+        # page 从零开始计数的。
+        url = 'https://www.juzimi.com/{}?page={}'.format(apdix[0], random.randint(1, apdix[1]))
         # print(url)
         resp = HTMLSession().get(url)
         if resp.status_code == 200:
-            num = random.randint(1, 10)
-            mode = 'even' if num % 2 == 0 else 'odd'
-            block = apdix[2]
-            sel = '#block-views-' + block + '-block_1 > div > div > div > div > div.view-content > div.views-row.views-row-' + str(
-                num) + '.views-row-' + mode + ' > div > div.views-field-phpcode-1 > a'
-            results = resp.html.find(sel)
-            return results[0].text
+            results = resp.html.find('a.xlistju')
+            if results:
+                re_text = random.choice(results).text
+                if re_text and '\n' in re_text:
+                    re_text = re_text.replace('\n\n','\n')
+                return re_text
         print('获取民国情话失败..')
         return None
     except Exception as exception:
@@ -34,10 +43,12 @@ def get_zsh_info():
         return None
     return None
 
+
 get_one_words = get_zsh_info
 
 if __name__ == '__main__':
-    for _ in range(100):
-        # ow = get_one_words()
-        # print(ow)
-        print(random.randint(1, 10))
+    for _ in range(15):
+        ow = get_one_words()
+        print(ow)
+        print()
+

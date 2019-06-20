@@ -9,6 +9,7 @@ import time
 import json
 from apscheduler.schedulers.blocking import BlockingScheduler
 import itchat
+import random
 from itchat.content import *
 from main.common import (
     get_yaml
@@ -25,16 +26,17 @@ reply_userNames = []
 FILEHELPER_MARK = ['文件传输助手', 'filehelper']  # 文件传输助手标识
 FILEHELPER = 'filehelper'
 
+
 def run():
     """ 主运行入口 """
     conf = get_yaml()
     if not conf:  # 如果 conf，表示配置文件出错。
         print('程序中止...')
         return
-
     # 判断是否登录，如果没有登录则自动登录，返回 False 表示登录失败
     if not is_online(auto_login=True):
         return
+    set_system_notice('登录成功')
     if conf.get('is_auto_relay'):
         print('已开启图灵自动回复...')
     init_alarm()  # 初始化定时任务
@@ -46,6 +48,7 @@ def is_online(auto_login=False):
     :param auto_login: bool,当为 Ture 则自动重连(默认为 False)。
     :return: bool,当返回为 True 时，在线；False 已断开连接。
     """
+
     def _online():
         """
         通过获取好友信息，判断用户是否还在线。
@@ -65,13 +68,15 @@ def is_online(auto_login=False):
 
     hotReload = not get_yaml().get('is_forced_switch', False)  # 切换微信号，重新扫码。
     loginCallback = init_wechat
+    exitCallback = exit_msg
     for _ in range(2):  # 尝试登录 2 次。
         if os.environ.get('MODE') == 'server':
             # 命令行显示登录二维码。
-            itchat.auto_login(enableCmdQR=2, hotReload=hotReload, loginCallback=loginCallback)
+            itchat.auto_login(enableCmdQR=2, hotReload=hotReload, loginCallback=loginCallback,
+                              exitCallback=exitCallback)
             itchat.run(blockThread=False)
         else:
-            itchat.auto_login(hotReload=hotReload, loginCallback=loginCallback)
+            itchat.auto_login(hotReload=hotReload, loginCallback=loginCallback, exitCallback=exitCallback)
             itchat.run(blockThread=False)
         if _online():
             print('登录成功')
@@ -96,7 +101,8 @@ def init_wechat():
             reply_userNames.append(friend['UserName'])
         else:
             print('自动回复中的好友昵称『{}』有误。'.format(name))
-    print(reply_userNames)
+    # print(reply_userNames)
+
 
 def init_alarm():
     """ 初始化定时提醒 """
@@ -139,8 +145,8 @@ def init_alarm():
 def text_reply(msg):
     """ 监听用户消息，用于自动回复 """
     try:
-        print(json.dumps(msg, ensure_ascii=False))
-        print(reply_userNames)
+        # print(json.dumps(msg, ensure_ascii=False))
+        # print(reply_userNames)
         # 获取发送者的用户id
         uuid = FILEHELPER if msg['ToUserName'] == FILEHELPER else msg.fromUserName
         # 如果用户id是自动回复列表的人员
@@ -150,7 +156,7 @@ def text_reply(msg):
             nickName = FILEHELPER if uuid == FILEHELPER else msg.user.nickName
             print('\n{}发来信息：{}'.format(nickName, receive_text))
             reply_text = get_bot_info(receive_text, uuid)  # 获取自动回复
-            time.sleep(1)  # 休眠一秒，保安全。想更快的，可以直接注释。
+            time.sleep(random.randint(0, 2))  # 休眠一秒，保安全。想更快的，可以直接注释。
             if reply_text:  # 如内容不为空，回复消息
                 reply_text = reply_text if not uuid == FILEHELPER else '机器人回复：' + reply_text
                 itchat.send(reply_text, toUserName=uuid)
@@ -197,6 +203,22 @@ def send_alarm_msg():
                 print('定时给群聊『{}』发送的内容是:\n{}\n发送成功...\n\n'.format(group_name, send_msg))
 
     print('自动提醒消息发送完成...\n')
+
+
+def set_system_notice(text):
+    """
+    给文件传输助手发送系统日志。
+    :param text:日志内容
+    :return:None
+    """
+    if text:
+        text = '系统通知：' + text
+        itchat.send(text, toUserName=FILEHELPER)
+
+
+def exit_msg():
+    set_system_notice('项目已断开连接')
+
 
 
 def get_group(gruop_name, update=False):
