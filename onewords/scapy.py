@@ -37,11 +37,8 @@ def get_zsh_info():
                     re_text = re_text.replace('\n\n','\n')
                 return re_text
         print('获取民国情话失败..')
-        return None
     except Exception as exception:
         print(exception)
-        return None
-    return None
 
 
 get_one_words = get_zsh_info

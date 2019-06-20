@@ -43,12 +43,9 @@ def get_yigeai(text, userid):
                 error_text = re_data['status']['error_type']
                 print('『一个AI』机器人错误信息：{}'.format(error_text))
         print('『一个AI』机器人获取数据失败')
-        return None
     except Exception as e:
         print(e)
         print('『一个AI』机器人获取数据失败')
-        return None
-    return None
 
 
 get_auto_reply = get_yigeai

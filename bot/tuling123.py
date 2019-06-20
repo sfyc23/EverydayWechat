@@ -63,12 +63,9 @@ def get_tuling123(text, userId):
                 print('图灵机器人错误信息：{}'.format(error_text))
 
         print('图灵机器人获取数据失败')
-        return None
     except Exception as e:
         print(e)
         print('图灵机器人获取数据失败')
-        return None
-    return None
 
 
 get_auto_reply = get_tuling123

@@ -25,12 +25,9 @@ def get_qingyunke(text, userId=''):
                 print('青云客机器人错误信息：{}'.format(error_text))
 
         print('青云客机器人获取失败')
-        return None
     except Exception as e:
         print(e)
         print('青云客机器人获取失败')
-        return None
-    return None
 
 
 get_auto_reply = get_qingyunke
