@@ -88,6 +88,8 @@ def get_xzw_info(birthday_str):
     """获取今日、明日运势发送文本
         birthday_str :  "10-12" 或  "1980-01-08"
     """
+    if not birthday_str: return
+
     birthday_list = birthday_str.split("-")
     try:
         if len(birthday_list) == 3:
