@@ -45,7 +45,7 @@ alarm_info:
   #True 开启定时提醒，False 关闭
   is_alarm: True
   #定时发送时间
-  alarm_timed: '19:00'
+  alarm_timed: '10:35'
 
 girlfriend_infos:
   - #女友微信昵称或者备注名，不能输入微信号。（如填：文件传输助手，发消息到文件传输助手，测试效果）
@@ -59,7 +59,8 @@ girlfriend_infos:
     # 落款（可空）
     sweet_words: '你脚下的蚂蚁'
     # 落款参考：['厌物', '你脚下的蚂蚁', '专说骗人的诳话者', '黄天霸', 'cxk', '魔鬼的叔父', '哺乳类脊椎动物之一', '名字写在水上的人', 'BIG BAD WOLF', '你的兄弟']
-
+    # 生日："1980-06-15" or "06-15"
+    birthday: "1980-06-15"
 
 #  如果你有多个好友需要发送，则参照这个样式，复制即可
 #  如不需要，则删除或注解下面所有的数据
@@ -69,5 +70,6 @@ girlfriend_infos:
     dictum_channel : 4
     start_date: '2019-6-15'
     sweet_words: '名字写在水上的人'
+    birthday: "1980-06-15"
 
 

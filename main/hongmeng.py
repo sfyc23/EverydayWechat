@@ -18,6 +18,7 @@ from main.utils import (
     get_weather_info,
     get_dictum_info,
     get_diff_time,
+    get_xzw_info
 )
 
 reply_userNames = []
@@ -169,7 +170,9 @@ def send_alarm_msg():
         weather = get_weather_info(gf.get('city_name'))
         diff_time = get_diff_time(gf.get('start_date'))
         sweet_words = gf.get('sweet_words')
-        send_msg = '\n'.join(x for x in [weather, dictum, diff_time, sweet_words] if x)
+        horoscope = get_xzw_info(gf.get("birthday"))
+
+        send_msg = '\n'.join(x for x in [weather, dictum, diff_time, sweet_words, horoscope] if x)
         print(send_msg)
 
         if not send_msg or not is_online(): continue
@@ -227,4 +230,3 @@ def get_friend(wechat_name, update=False):
 if __name__ == '__main__':
     run()
     # send_alarm_msg()
-    pass
