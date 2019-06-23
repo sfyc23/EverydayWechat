@@ -6,7 +6,7 @@
     https://www.xzw.com/
 """
 
-from onewords.wufazhuce import HEADERS
+from everyday_wechat.utils.common import SPIDER_HEADERS
 import requests
 from bs4 import BeautifulSoup
 
@@ -39,7 +39,7 @@ def get_xzw_data_list(constellation_name):
     print("获取星座屋数据 ...")
     for i in ["/", "/1.html"]:
         req_url = XZW_BASE_URL + constellation_dict[constellation_name] + i
-        resp = requests.get(req_url, headers=HEADERS)
+        resp = requests.get(req_url, headers=SPIDER_HEADERS)
         if resp.status_code == 200:
             resp.encoding = 'utf-8'
             soup = BeautifulSoup(resp.text, "lxml")

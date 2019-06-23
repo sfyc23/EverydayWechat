@@ -4,7 +4,7 @@
 """
 import requests
 
-from main.common import (
+from everyday_wechat.utils.common import (
     get_yaml,
     is_json,
     md5_encode,

@@ -5,7 +5,7 @@
 """
 
 import requests
-from main.common import (
+from everyday_wechat.utils.common import (
     is_json
 )
 
