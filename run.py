@@ -4,11 +4,12 @@
 程序运行入口
 """
 
-from  main import hongmeng
+from everyday_wechat import main
+
 
 def run():
     """ 主程序入口"""
-    hongmeng.run()
+    main.run()
 
 if __name__ == '__main__':
     run()

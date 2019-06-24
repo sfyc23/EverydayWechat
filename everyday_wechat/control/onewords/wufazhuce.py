@@ -2,11 +2,8 @@
 
 import requests
 from bs4 import BeautifulSoup
+from everyday_wechat.utils.common import SPIDER_HEADERS
 
-HEADERS = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) '
-                  'Chrome/67.0.3396.87 Safari/537.36',
-}
 
 def get_wufazhuce_info():
     """
@@ -16,7 +13,7 @@ def get_wufazhuce_info():
     print('获取 ONE 信息...')
     user_url = 'http://wufazhuce.com/'
     try:
-        resp = requests.get(user_url, headers=HEADERS)
+        resp = requests.get(user_url, headers=SPIDER_HEADERS)
         if resp.status_code == 200:
             soup_texts = BeautifulSoup(resp.text, 'lxml')
 

@@ -6,15 +6,12 @@
 """
 import os
 import time
-import json
 from apscheduler.schedulers.blocking import BlockingScheduler
 import itchat
 import random
 from itchat.content import *
-from main.common import (
-    get_yaml
-)
-from main.utils import (
+from everyday_wechat.utils.common import get_yaml
+from everyday_wechat.utils.data_collection import (
     get_bot_info,
     get_weather_info,
     get_dictum_info,

@@ -7,7 +7,7 @@ apiKey,userid 需要去官网申请。
 '''
 
 import requests
-from main.common import (
+from everyday_wechat.utils.common import (
     get_yaml,
     is_json,
     md5_encode
