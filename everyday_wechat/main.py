@@ -10,9 +10,7 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 import itchat
 import random
 from itchat.content import *
-from everyday_wechat.utils.common import (
-    get_yaml
-)
+from everyday_wechat.utils.common import get_yaml
 from everyday_wechat.utils.data_collection import (
     get_bot_info,
     get_weather_info,
