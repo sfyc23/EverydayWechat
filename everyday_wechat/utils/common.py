@@ -13,6 +13,8 @@ SPIDER_HEADERS = {
                   'Chrome/67.0.3396.87 Safari/537.36',
 }
 
+yamlSetting = None
+
 class YamlSetting(object):
     __instance = None
 
@@ -30,36 +32,21 @@ class YamlSetting(object):
         :return: s  字典
         """
         path = os.path.join(os.path.dirname(os.path.dirname(__file__)), '_config.yaml')
-
         try:
             with open(path, 'r', encoding='utf-8') as file:
                 config = yaml.load(file, Loader=yaml.Loader)
-
             return config
         except Exception as error:
             print(error)
             print('你的 _config.yaml 文件配置出错...')
         return None
 
-def get_yaml():
-    return YamlSetting().yaml_setting
 
-# def get_yaml():
-#     """
-#     解析 yaml
-#     :return: s  字典
-#     """
-#     path = os.path.join(os.path.dirname(os.path.dirname(__file__)), '_config.yaml')
-#
-#     try:
-#         with open(path, 'r', encoding='utf-8') as file:
-#             config = yaml.load(file, Loader=yaml.Loader)
-#
-#         return config
-#     except Exception as error:
-#         print(error)
-#         print('你的 _config.yaml 文件配置出错...')
-#     return None
+def get_yaml():
+    global yamlSetting
+    if not yamlSetting:
+        yamlSetting = YamlSetting()
+    return yamlSetting.yaml_setting
 
 
 def is_json(resp):
@@ -81,4 +68,6 @@ def md5_encode(text):
     return encodedStr
 
 if __name__ == '__main__':
-    print(get_yaml())
+    for _ in range(5):
+        print(get_yaml())
+    # print (md5_encode('0'))

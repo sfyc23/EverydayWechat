@@ -10,7 +10,6 @@ from everyday_wechat.utils.common import SPIDER_HEADERS
 import requests
 from bs4 import BeautifulSoup
 
-
 XZW_BASE_URL = "https://www.xzw.com/fortune/"
 constellation_dict = {
     "白羊座": "aries",
@@ -27,12 +26,17 @@ constellation_dict = {
     "双鱼座": "pisces",
 }
 
+
 def get_constellation(month, day):
     m = 0
     n = ('摩羯座', '水瓶座', '双鱼座', '白羊座', '金牛座', '双子座', '巨蟹座', '狮子座', '处女座', '天秤座', '天蝎座', '射手座')
     d = ((1, 20), (2, 19), (3, 21), (4, 21), (5, 21), (6, 22), (7, 23), (8, 23), (9, 23), (10, 23), (11, 23), (12, 23))
-    for i in filter(lambda y: y <= (month, day), d): m += 1
+
+    for i in filter(lambda y: y <= (month, day), d):
+        print(i)
+        m += 1
     return n[m % 12]
+
 
 def get_xzw_data_list(constellation_name):
     ret = []
@@ -101,9 +105,5 @@ def get_xzw_text(birthday_str):
     return resp
 
 
-
 if __name__ == '__main__':
-    print(get_xzw_text("01-22"))
-
-
-
+    print(get_xzw_text("03-18"))

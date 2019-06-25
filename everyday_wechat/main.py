@@ -36,7 +36,7 @@ def run():
     set_system_notice('登录成功')
     if conf.get('is_auto_relay'):
         print('已开启图灵自动回复...')
-    init_alarm()  # 初始化定时任务
+
 
 
 def is_online(auto_login=False):
@@ -71,10 +71,10 @@ def is_online(auto_login=False):
             # 命令行显示登录二维码。
             itchat.auto_login(enableCmdQR=2, hotReload=hotReload, loginCallback=loginCallback,
                               exitCallback=exitCallback)
-            itchat.run(blockThread=False)
+            itchat.run(blockThread=True)
         else:
             itchat.auto_login(hotReload=hotReload, loginCallback=loginCallback, exitCallback=exitCallback)
-            itchat.run(blockThread=False)
+            itchat.run(blockThread=True)
         if _online():
             print('登录成功')
             return True
@@ -99,7 +99,7 @@ def init_wechat():
         else:
             print('自动回复中的好友昵称『{}』有误。'.format(name))
     # print(reply_userNames)
-
+    init_alarm()  # 初始化定时任务
 
 def init_alarm():
     """ 初始化定时提醒 """
@@ -128,11 +128,11 @@ def init_alarm():
     # 定时任务
     scheduler = BlockingScheduler()
     # 每天9：30左右给女朋友发送每日一句
-    scheduler.add_job(send_alarm_msg, 'cron', hour=hour,
-                      minute=minute, misfire_grace_time=15 * 60)
+    # scheduler.add_job(send_alarm_msg, 'cron', hour=hour,
+    #                   minute=minute, misfire_grace_time=15 * 60)
 
     # 每隔 30 秒发送一条数据用于测试。
-    # scheduler.add_job(send_alarm_msg, 'interval', seconds=30)
+    scheduler.add_job(send_alarm_msg, 'interval', seconds=30)
 
     print('已开启定时发送提醒功能...')
     scheduler.start()
@@ -142,6 +142,8 @@ def init_alarm():
 def text_reply(msg):
     """ 监听用户消息，用于自动回复 """
     try:
+        if not get_yaml().get('is_auto_relay'):
+            return
         # print(json.dumps(msg, ensure_ascii=False))
         # print(reply_userNames)
         # 获取发送者的用户id
