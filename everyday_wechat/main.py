@@ -128,11 +128,11 @@ def init_alarm():
     # 定时任务
     scheduler = BlockingScheduler()
     # 每天9：30左右给女朋友发送每日一句
-    # scheduler.add_job(send_alarm_msg, 'cron', hour=hour,
-    #                   minute=minute, misfire_grace_time=15 * 60)
+    scheduler.add_job(send_alarm_msg, 'cron', hour=hour,
+                      minute=minute, misfire_grace_time=15 * 60)
 
-    # 每隔 30 秒发送一条数据用于测试。
-    scheduler.add_job(send_alarm_msg, 'interval', seconds=30)
+    # # 每隔 30 秒发送一条数据用于测试。
+    # scheduler.add_job(send_alarm_msg, 'interval', seconds=30)
 
     print('已开启定时发送提醒功能...')
     scheduler.start()
