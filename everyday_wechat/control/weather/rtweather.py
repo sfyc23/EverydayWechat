@@ -37,12 +37,12 @@ def get_rttodayweather(cityname):
                 return return_text
             else:
                 print('获取天气失败:{}'.format( resp.json()['msg']))
-                return None
+                # return None
         print('获取天气失败。')
     except Exception as exception:
         print(exception)
-        return None
-    return None
+        # return None
+    # return None
 
 
 get_today_weather = get_rttodayweather

@@ -6,7 +6,8 @@
 """
 import os
 import time
-from apscheduler.schedulers.blocking import BlockingScheduler
+# from apscheduler.schedulers.blocking import BlockingScheduler
+from apscheduler.schedulers.background import BackgroundScheduler
 import itchat
 import random
 from itchat.content import *
@@ -33,9 +34,7 @@ def run():
     # 判断是否登录，如果没有登录则自动登录，返回 False 表示登录失败
     if not is_online(auto_login=True):
         return
-    set_system_notice('登录成功')
-    if conf.get('is_auto_relay'):
-        print('已开启图灵自动回复...')
+
 
 
 
@@ -85,6 +84,8 @@ def is_online(auto_login=False):
 
 def init_wechat():
     """ 初始化微信所需数据 """
+    set_system_notice('登录成功')
+
     conf = get_yaml()
     itchat.get_friends(update=True)  # 更新好友数据。
     itchat.get_chatrooms(update=True)  # 更新群聊数据。
@@ -99,6 +100,11 @@ def init_wechat():
         else:
             print('自动回复中的好友昵称『{}』有误。'.format(name))
     # print(reply_userNames)
+
+
+    if conf.get('is_auto_relay'):
+        print('已开启图灵自动回复...')
+
     init_alarm()  # 初始化定时任务
 
 def init_alarm():
@@ -126,7 +132,7 @@ def init_alarm():
                   '(注意：必须要把需要的群聊保存到通讯录)'.format(group_name))
 
     # 定时任务
-    scheduler = BlockingScheduler()
+    scheduler = BackgroundScheduler()
     # 每天9：30左右给女朋友发送每日一句
     scheduler.add_job(send_alarm_msg, 'cron', hour=hour,
                       minute=minute, misfire_grace_time=15 * 60)

@@ -523,35 +523,36 @@ def get_sojson_weather(city_name):
     weather_url = 'http://t.weather.sojson.com/api/weather/city/{}'.format(city_code)
     try:
         resp = requests.get(url=weather_url)
-        weather_dict = resp.json()
-        # 今日天气
-        # {
-        # "sunrise": "04:45",
-        # "high": "高温 34.0℃",
-        # "low": "低温 25.0℃",
-        # "sunset": "19:37",
-        # "aqi": 145,
-        # "ymd": "2019-06-12",
-        # "week": "星期三",
-        # "fx": "西南风",
-        # "fl": "3-4级",
-        # "type": "多云",
-        # "notice": "阴晴之间，谨防紫外线侵扰"
-        # }
-        today_weather = weather_dict.get('data').get('forecast')[0]
+        if resp.status_code == 200:
+            weather_dict = resp.json()
+            # 今日天气
+            # {
+            # "sunrise": "04:45",
+            # "high": "高温 34.0℃",
+            # "low": "低温 25.0℃",
+            # "sunset": "19:37",
+            # "aqi": 145,
+            # "ymd": "2019-06-12",
+            # "week": "星期三",
+            # "fx": "西南风",
+            # "fl": "3-4级",
+            # "type": "多云",
+            # "notice": "阴晴之间，谨防紫外线侵扰"
+            # }
+            today_weather = weather_dict.get('data').get('forecast')[0]
 
-        # display = ['ymd', 'week', 'type', 'fx', 'fl', 'high', 'low', 'notice']
-        # weather_info = ' '.join(today_weather[p] for p in display if today_weather.get(p, None))
-        # print(weather_info)
+            # display = ['ymd', 'week', 'type', 'fx', 'fl', 'high', 'low', 'notice']
+            # weather_info = ' '.join(today_weather[p] for p in display if today_weather.get(p, None))
+            # print(weather_info)
 
-        weather_info = city_name + '天气预报\n'
-        weather_info = weather_info + today_weather['ymd'] + '，' + today_weather['week'] + '\n'
-        weather_info = weather_info + '【天气预报】' + today_weather['type'] + '\n'
-        weather_info = weather_info + '【今日温度】' + today_weather['low'] + '，' + today_weather['high'] + '\n'
-        weather_info = weather_info + '【今日风速】' + today_weather['fx'] + today_weather['fl'] + '\n'
-        weather_info = weather_info + '【出行提示】' + today_weather['notice']
+            weather_info = city_name + '天气预报\n'
+            weather_info = weather_info + today_weather['ymd'] + '，' + today_weather['week'] + '\n'
+            weather_info = weather_info + '【天气预报】' + today_weather['type'] + '\n'
+            weather_info = weather_info + '【今日温度】' + today_weather['low'] + '，' + today_weather['high'] + '\n'
+            weather_info = weather_info + '【今日风速】' + today_weather['fx'] + today_weather['fl'] + '\n'
+            weather_info = weather_info + '【出行提示】' + today_weather['notice']
 
-        return weather_info
+            return weather_info
 
     except Exception as exception:
         print(exception)
