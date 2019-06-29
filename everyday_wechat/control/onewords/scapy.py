@@ -8,8 +8,6 @@ import random
 from requests_html import HTMLSession
 
 
-
-
 def get_zsh_info():
     """
     句子迷：（https://www.juzimi.com/）
@@ -33,6 +31,7 @@ def get_zsh_info():
         resp = HTMLSession().get(url)
 
         if resp.status_code == 200:
+            # print(resp.html)
             results = resp.html.find('a.xlistju')
             if results:
                 re_text = random.choice(results).text
@@ -50,5 +49,4 @@ if __name__ == '__main__':
     for _ in range(15):
         ow = get_one_words()
         print(ow)
-        print()
 
