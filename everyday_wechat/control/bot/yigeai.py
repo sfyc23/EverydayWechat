@@ -10,6 +10,8 @@ from everyday_wechat.utils.common import (
     md5_encode,
 )
 
+from everyday_wechat.utils import config
+
 # 一个AI错误集合
 TULING_ERROR_CODE_LIST = ['501', '502', '503', '504', '507', '510']
 
@@ -21,14 +23,16 @@ def get_yigeai(text, userid):
     :userid:str,机器唯一标识
     :return:str
     """
-    conf = get_yaml()
-    token = conf['yigeai_conf']['client_token']
-    if not token:
-        print('错误 .一个「AI」token 为空')
-        return None
-    session_id = md5_encode(userid)
     try:
-        # print('发出消息:{}'.format(text))
+        # config.init()
+        info = config.get('auto_relay_info')['yigeai_conf']
+        token = info['client_token']
+        if not token:
+            print('一个「AI」token 为空,请求出错')
+            return None
+        session_id = md5_encode(userid if userid else '250')
+
+        # print('发出的消息:{}'.format(text))
         resp = requests.post('http://www.yige.ai/v1/query',
                              data={'token': token, 'query': text, 'session_id': session_id})
         if resp.status_code == 200 and is_json(resp):

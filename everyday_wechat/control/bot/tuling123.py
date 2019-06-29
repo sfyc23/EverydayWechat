@@ -8,10 +8,10 @@ apiKey,userid 需要去官网申请。
 
 import requests
 from everyday_wechat.utils.common import (
-    get_yaml,
     is_json,
     md5_encode
 )
+from everyday_wechat.utils import config
 
 # 图灵机器人错误码集合
 TULING_ERROR_CODE_LIST = [
@@ -30,26 +30,27 @@ def get_tuling123(text, userId):
     :param userId: 用户唯一标识（最好用微信好友uuid）
     :return: 对白
     """
-    info = get_yaml()['turing_conf']
-    apiKey = info['apiKey']
-
-    if not apiKey:
-        print('图灵机器人 apikey 为空，请求出错')
-        return None
-    userId = md5_encode(userId if userId else '250')
-
-    content = {
-        'perception': {
-            'inputText': {
-                'text': text
-            }
-        },
-        'userInfo': {
-            'apiKey': apiKey,
-            'userId': userId
-        }
-    }
     try:
+        # config.init()
+        info = config.get('auto_relay_info')['turing_conf']
+        apiKey = info['apiKey']
+
+        if not apiKey:
+            print('图灵机器人 apikey 为空，请求出错')
+            return None
+        userId = md5_encode(userId if userId else '250')
+
+        content = {
+            'perception': {
+                'inputText': {
+                    'text': text
+                }
+            },
+            'userInfo': {
+                'apiKey': apiKey,
+                'userId': userId
+            }
+        }
         # print('发出消息:{}'.format(text))
         resp = requests.post(URL, json=content)
         if resp.status_code == 200 and is_json(resp):
