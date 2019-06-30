@@ -14,8 +14,8 @@ from everyday_wechat.utils.common import (
 def get_sojson_calendar(date=''):
     """
     获取指定日期的节假日及万年历信息
-     https://github.com/MZCretin/RollToolsApi#指定日期的节假日及万年历信息
-    :param data: str 日期 格式 yyyyMMdd
+     https://www.sojson.com/api/lunar.html
+    :param data: str 日期 格式 %Y-%m-%d
     :rtype str
     """
     date = date or datetime.now().strftime('%Y-%m-%d')
