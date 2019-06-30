@@ -7,7 +7,6 @@ from datetime import datetime
 from everyday_wechat.control.weather.rtweather import get_today_weather
 from everyday_wechat.control.weather.sojson import get_sojson_weather
 from everyday_wechat.utils.common import (
-    get_yaml,
     WEEK_DICT,
     get_constellation_name,
 )
@@ -16,7 +15,7 @@ from everyday_wechat.utils import config
 from everyday_wechat.control.horoscope.xzw_horescope import get_today_horoscope
 from everyday_wechat.control.calendar.sojson_calendar import get_sojson_calendar
 
-DICTUM_NAME_DICT = {1: 'wufazhuce', 2: 'acib', 3: 'lovelive', 4: 'hitokoto', 5: 'rtjokes', 6: 'scapy'}
+DICTUM_NAME_DICT = {1: 'wufazhuce', 2: 'acib', 3: 'lovelive', 4: 'hitokoto', 5: 'rtjokes', 6: 'juzimi', 7: 'caihongpi'}
 BOT_NAME_DICT = {1: 'tuling123', 2: 'yigeai', 3: 'qingyunke'}
 # 用于星座的正则
 BIRTHDAY_COMPILE = re.compile(r'\-?(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$')
@@ -57,7 +56,7 @@ def get_bot_info(message, userId=''):
     :param message:str, 发送的话
     :return:str, 回复的话
     """
-    channel = config.get('bot_channel',3)
+    channel = config.get('bot_channel', 3)
     # channel = get_yaml().get('', 3)
     source = BOT_NAME_DICT.get(channel, 'qingyunke')
     if source:
