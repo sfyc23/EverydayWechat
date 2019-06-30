@@ -1,5 +1,7 @@
 # coding=utf-8
-
+"""
+从土味情话中获取每日一句。
+ """
 import requests
 
 def get_lovelive_info():
