@@ -134,8 +134,8 @@ def get_xzw_horoscope(name):
         resp = requests.get(req_url, headers=SPIDER_HEADERS)
         if resp.status_code == 200:
             html = resp.text
-            lucky_color = re.findall(r'<label>幸运数字：</label>(.*?)</li>', html)[0]
-            lucky_num = re.findall(r'<label>幸运颜色：</label>(.*?)</li>', html)[0]
+            lucky_num = re.findall(r'<label>幸运数字：</label>(.*?)</li>', html)[0]
+            lucky_color = re.findall(r'<label>幸运颜色：</label>(.*?)</li>', html)[0]
             detail_horoscope = re.findall(r'<p><strong class="p1">.*?</strong><span>(.*?)</span></p>', html)[0]
             return_text = '{name}今日运势\n【幸运颜色】{color}\n【幸运数字】{num}\n【综合运势】{horoscope}'.format(
                 name=name,
