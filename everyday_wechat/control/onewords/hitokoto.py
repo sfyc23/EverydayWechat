@@ -15,7 +15,7 @@ def get_hitokoto_info():
         print('一言获取失败。')
     except requests.exceptions.RequestException as exception:
         print(exception)
-        return None
-    return None
+        # return None
+    # return None
 
 get_one_words = get_hitokoto_info
