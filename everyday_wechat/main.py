@@ -75,7 +75,7 @@ def is_online(auto_login=False):
             itchat.run(blockThread=True)
         else:
             # 命令行显示登录二维码。
-            itchat.auto_login(enableCmdQR=2, hotReload=hotReload, loginCallback=loginCallback,
+            itchat.auto_login(enableCmdQR=1, hotReload=hotReload, loginCallback=loginCallback,
                               exitCallback=exitCallback)
             itchat.run(blockThread=True)
         if _online():
