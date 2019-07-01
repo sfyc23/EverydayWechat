@@ -239,7 +239,7 @@ def text_reply(msg):
                 time.sleep(random.randint(1, 2))  # 休眠一秒，保安全。想更快的，可以直接注释。
                 reply_text = reply_text if not uuid == FILEHELPER else '机器人回复：' + reply_text
                 itchat.send(reply_text, toUserName=uuid)
-                print('回复{}：{}\n'.format(nickName, reply_text))
+                print('回复{}：{}'.format(nickName, reply_text))
             else:
                 print('自动回复失败\n')
     except Exception as e:

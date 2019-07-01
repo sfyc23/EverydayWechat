@@ -16,8 +16,8 @@ from everyday_wechat.control.horoscope.xzw_horescope import get_today_horoscope
 from everyday_wechat.control.calendar.sojson_calendar import get_sojson_calendar
 
 DICTUM_NAME_DICT = {1: 'wufazhuce', 2: 'acib', 3: 'lovelive', 4: 'hitokoto', 5: 'rtjokes', 6: 'juzimi', 7: 'caihongpi'}
-BOT_NAME_DICT = {1: 'tuling123', 2: 'yigeai', 3: 'qingyunke'}
-# 用于星座的正则
+BOT_NAME_DICT = {1: 'tuling123', 2: 'yigeai', 3: 'qingyunke', 4: 'qq_nlpchat', 5: 'tian_robot'}
+# 用于星座的正则表达式
 BIRTHDAY_COMPILE = re.compile(r'\-?(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$')
 
 

@@ -10,14 +10,26 @@ auto_relay_info:
   # 是否开启自动回复
   is_auto_relay: True
 
-  # 机器人渠道（1: 图灵机器人，2: 一个AI ,3 : 青云客)
+  # 机器人渠道（1: 图灵机器人，2: 一个AI ,3 : 青云客，4 腾讯智能闲聊，5:天行机器人)
   bot_channel: 3
 
   #图灵机器人(http://www.tuling123.com/)实名后的用户每天免费可用 100 条。
   turing_conf:
     apiKey: '你申请的apikey'
 
-  # 一个 Al (http://www.yige.ai/),这个功能挺多的，朋友们自行申请训练。
+  # 智能闲聊（腾讯）https://ai.qq.com/product/nlpchat.shtml。免费且无限量
+  qqnlpchat_conf:
+    app_id: '你申请的api_id'
+    app_key: '你申请的app_key'
+
+  # 天行机器人 ( https://www.tianapi.com/apiview/47 )。做完任务大概能免费用7万条，收费：1万条/1块钱
+  txapi_conf:
+    app_key: '个人中心中的key'
+    reply_name: '宝宝' # 回复的人的名字(可空)（也可在个人中心->机器人管理 修改）
+    bot_name: '老公' # 机器人的名字（可空）
+
+
+  # 一个 Al (http://www.yige.ai/)（已长时间无人维护）
   yigeai_conf:
     client_token: '你申请的token'
 
@@ -47,7 +59,7 @@ alarm_info:
       #女友所在城市，用于发送天气。（可空）
       city_name: '桂林'
       # 格言渠道（1 : ONE●一个，2 : 词霸（每日英语，双语）3: 土味情话 4 : 一言，5：笑话，6 民国情书,7彩虹屁)(可空)
-      dictum_channel : 7
+      dictum_channel: 7
       # 从哪天开始勾搭的（可空），配合 start_date_msg 使用。
       start_date: '2017-10-10'
       # 自定义方案（可空）， {}表示用于占位，代表天数，与 start_date 一起使用。单填无意义
@@ -64,14 +76,14 @@ alarm_info:
         - "23:03"
         - "23:00"
 
-  #  如果你需要另一套方案，如下面复制即可
-  #  如不需要，则删除或注解下面所有的数据
+    #  如果你需要另一套方案，如下面复制即可
+    #  如不需要，则删除或注解下面所有的数据
     - group_name: 'EverydayWechat 交流群'
       wechat_name: '古典'
       city_name: '漳州'
       start_date: '2011-11-11'
       start_date_msg: '分手后的第{}天'
-      dictum_channel : 6
+      dictum_channel: 6
       sweet_words: '名字写在水上的人'
       alarm_timed: "23:02"
 #---------------------------------------定时提醒功能设置--------------------------------------end
