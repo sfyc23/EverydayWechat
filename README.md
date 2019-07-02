@@ -256,4 +256,9 @@ python run.py
 [MIT License](https://github.com/sfyc23/EverydayWechat/blob/master/LICENSE)
 
 
- 
+## 微信交流群
+因为人数已超 100 人，请加 wx: **sfyc1314** 为好友，备注：「github」，好友会自动通过。  
+通过后回复：「加群」，会自动拉你入群。  
+机器人二维码：  
+
+![sfyc1314](https://raw.githubusercontent.com/sfyc23/image/master/vlog/20190614125724.png)
