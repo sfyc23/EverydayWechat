@@ -7,7 +7,9 @@ Introduction: 天行机器人 申请地址( https://www.tianapi.com/apiview/47 )
 """
 import requests
 from everyday_wechat.utils import config
-
+from everyday_wechat.utils.common import (
+    md5_encode
+)
 
 def get_tianapi_robot(text, userid):
     """
@@ -25,11 +27,11 @@ def get_tianapi_robot(text, userid):
             return
         reply_name = info.get('reply_name', '')
         bot_name = info.get('bot_name', '')
-        # print(app_key)
+
         params = {
             'key': app_key,
             'question': text,
-            'userid': userid,
+            'userid': md5_encode(userid),
             'limit': 10,  # 机器人分析系数，取值1-10
             'mode': 1,  # 图文返回数量，取值1-10
             'datatype': '0',  # 返回类型，文本0[默认]、语音1
@@ -47,7 +49,7 @@ def get_tianapi_robot(text, userid):
                 else:
                     return '我不太懂你在说什么'
             else:
-                print('获取数据失败:{}'.format(content_dict['msg']))
+                print('天行机器人获取数据失败:{}'.format(content_dict['msg']))
 
         print('获取数据失败')
         return None

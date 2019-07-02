@@ -14,6 +14,9 @@ import time
 import random
 import string
 import requests
+from everyday_wechat.utils.common import (
+    md5_encode
+)
 
 URL = 'https://api.ai.qq.com/fcgi-bin/nlp/nlp_textchat'
 
@@ -44,7 +47,7 @@ def get_nlp_textchat(text, userId):
             'app_id': app_id, # 应用标识
             'time_stamp': time_stamp, # 请求时间戳（秒级）
             'nonce_str': nonce_str, # 随机字符串
-            'session': userId, # 会话标识
+            'session': md5_encode(userId), # 会话标识
             'question': text  # 用户输入的聊天内容
         }
         # 签名信息
@@ -57,7 +60,7 @@ def get_nlp_textchat(text, userId):
                 data_dict = content_dict['data']
                 return data_dict['answer']
             else:
-                print('获取数据失败:{}'.format(content_dict['msg']))
+                print('智能闲聊 获取数据失败:{}'.format(content_dict['msg']))
     except Exception as exception:
         print(str(exception))
 
