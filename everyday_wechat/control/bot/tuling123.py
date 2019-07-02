@@ -14,11 +14,11 @@ from everyday_wechat.utils.common import (
 from everyday_wechat.utils import config
 
 # 图灵机器人错误码集合
-TULING_ERROR_CODE_LIST = [
+TULING_ERROR_CODE_LIST = (
     5000, 6000, 4000, 4001, 4002,
     4003, 4005, 4007, 4100, 4200,
     4300, 4400, 4500, 4600, 4602,
-    7002, 8008, 0]
+    7002, 8008, 0)
 URL = "http://openapi.tuling123.com/openapi/api/v2"
 
 
