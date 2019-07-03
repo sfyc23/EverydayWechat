@@ -1,4 +1,7 @@
 # coding=utf-8
+"""
+获取一言信息<https://hitokoto.cn/>
+"""
 
 import requests
 

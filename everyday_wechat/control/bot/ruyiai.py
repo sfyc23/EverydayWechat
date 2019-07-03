@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*- 
+# -*- coding: utf-8 -*-
 """
 Project: HelloWorldPython
 Creator: DoubleThunder
@@ -48,10 +48,10 @@ def get_ruyiai_bot(text, userId):
 
 
 get_auto_reply = get_ruyiai_bot
-bot_code = 6
 
 if __name__ == '__main__':
-    text = '我要飞的更高'
-    userid = '250'
-    from_text = get_auto_reply(text, userid)
-    print(from_text)
+    # text = '我要飞的更高'
+    # userid = '250'
+    # from_text = get_auto_reply(text, userid)
+    # print(from_text)
+    pass

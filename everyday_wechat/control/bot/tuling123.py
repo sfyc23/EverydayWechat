@@ -59,20 +59,21 @@ def get_tuling123(text, userId):
             if re_data['intent']['code'] not in TULING_ERROR_CODE_LIST:
                 return_text = re_data['results'][0]['values']['text']
                 return return_text
-            else:
-                error_text = re_data['results'][0]['values']['text']
-                print('图灵机器人错误信息：{}'.format(error_text))
+
+            error_text = re_data['results'][0]['values']['text']
+            print('图灵机器人错误信息：{}'.format(error_text))
+            return None
 
         print('图灵机器人获取数据失败')
-    except Exception as e:
-        print(e)
+    except Exception as exception:
+        print(str(exception))
         print('图灵机器人获取数据失败')
 
 
 get_auto_reply = get_tuling123
 
 if __name__ == '__main__':
-    text = '雷军 are you ok?'
-    reply = get_auto_reply(text,'WE……………………………………')
-    print(reply)
+    # text = '雷军 are you ok?'
+    # reply = get_auto_reply(text, 'WE')
+    # print(reply)
     pass

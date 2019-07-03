@@ -26,5 +26,6 @@ def get_acib_info():
         print('没有获取到格言数据。')
     except requests.exceptions.RequestException as exception:
         print(exception)
+    return None
 
 get_one_words = get_acib_info

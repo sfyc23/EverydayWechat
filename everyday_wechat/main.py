@@ -6,13 +6,15 @@
 """
 import re
 import time
-import json
-# from apscheduler.schedulers.blocking import BlockingScheduler
-from apscheduler.schedulers.background import BackgroundScheduler
+# import json
 import platform
 import random
+# from apscheduler.schedulers.blocking import BlockingScheduler
+from apscheduler.schedulers.background import BackgroundScheduler
 import itchat
-from itchat.content import *
+from itchat.content import (
+    TEXT
+)
 from everyday_wechat.utils.common import md5_encode
 from everyday_wechat.utils.data_collection import (
     get_bot_info,
@@ -27,7 +29,7 @@ from everyday_wechat.utils import config
 reply_userNames = []
 FILEHELPER_MARK = ['文件传输助手', 'filehelper']  # 文件传输助手标识
 FILEHELPER = 'filehelper'
-timeCompile = re.compile('^\s*([01]?[0-9]|2[0-3])\s*[：:\-]\s*([0-5]?[0-9])\s*$')
+TIME_COMPILE = re.compile(r'^\s*([01]?[0-9]|2[0-3])\s*[：:\-]\s*([0-5]?[0-9])\s*$')
 
 
 def run():
@@ -157,7 +159,7 @@ def init_wechat():
                 ats = [ats]
             if isinstance(ats, list):
                 for at in ats:
-                    times = timeCompile.findall(at)
+                    times = TIME_COMPILE.findall(at)
                     if not times:
                         print('时间{}格式出错'.format(at))
                         continue
@@ -242,15 +244,14 @@ def text_reply(msg):
                 print('回复{}：{}'.format(nickName, reply_text))
             else:
                 print('自动回复失败\n')
-    except Exception as e:
-        print(str(e))
+    except Exception as exception:
+        print(str(exception))
 
 
 def set_system_notice(text):
     """
     给文件传输助手发送系统日志。
-    :param text:日志内容
-    :return:None
+    :param text:str 日志内容
     """
     if text:
         text = '系统通知：' + text
@@ -258,15 +259,16 @@ def set_system_notice(text):
 
 
 def exit_msg():
+    """ 项目中止提醒 """
     set_system_notice('项目已断开连接')
 
 
 def get_group(gruop_name, update=False):
     """
     根据群组名获取群组数据
-    :param wechat_name: 群组名
-    :param update: 强制更新群组数据
-    :return: msg
+    :param wechat_name:str, 群组名
+    :param update: bool 强制更新群组数据
+    :return: obj 单个群组信息
     """
     if update: itchat.get_chatrooms(update=True)
     if not gruop_name: return None
@@ -278,9 +280,9 @@ def get_group(gruop_name, update=False):
 def get_friend(wechat_name, update=False):
     """
     根据用户名获取用户数据
-    :param wechat_name: 用户名
-    :param update: 强制更新用户数据
-    :return: msg
+    :param wechat_name: str 用户名
+    :param update: bool 强制更新用户数据
+    :return: obj 单个好友信息
     """
     if update: itchat.get_friends(update=True)
     if not wechat_name: return None
@@ -291,6 +293,6 @@ def get_friend(wechat_name, update=False):
 
 if __name__ == '__main__':
     run()
-    pass
+    # pass
     # config.init()
     # init_wechat()

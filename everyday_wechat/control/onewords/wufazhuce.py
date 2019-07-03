@@ -1,9 +1,10 @@
 # coding=utf-8
-
+"""
+从「一个」获取每日一言
+"""
 import requests
 from bs4 import BeautifulSoup
 from everyday_wechat.utils.common import SPIDER_HEADERS
-
 
 def get_wufazhuce_info():
     """
@@ -16,17 +17,14 @@ def get_wufazhuce_info():
         resp = requests.get(user_url, headers=SPIDER_HEADERS)
         if resp.status_code == 200:
             soup_texts = BeautifulSoup(resp.text, 'lxml')
-
             # 『one -个』 中的每日一句
-            # every_msg = soup_texts.find_all('div', class_='fp-one-cita')[0].find('a').text
             every_msg = soup_texts.find('div', class_='fp-one-cita').text #只取当天的这句
             return every_msg
         print('获取 ONE 失败。')
     except Exception as exception:
-        print(exception)
+        print(str(exception))
         return None
     return None
 
 
 get_one_words = get_wufazhuce_info
-

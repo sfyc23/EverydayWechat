@@ -1,13 +1,22 @@
+# coding=utf-8
+"""
+用于管理缓存的配置数据
+使用前必须先调用 init() 。
+"""
 import os
-import yaml
 import copy as mycopy
-
+import yaml
 
 def init():
+    """
+    将 yaml 里的配置文件导入到 config.py 中
+    :return: bool ，true 表示数据导入成功。
+    """
     global opts
     opts = get_yaml()
     if opts:
         return True
+    return False
 
 def get_yaml():
     """
@@ -19,27 +28,28 @@ def get_yaml():
         with open(path, 'r', encoding='utf-8') as file:
             config = yaml.load(file, Loader=yaml.Loader)
         return config
-    except Exception as error:
-        print(error)
+    except Exception as exception:
+        print(str(exception))
         print('你的 _config.yaml 文件配置出错...')
     return None
 
-
-def get(key, default=None):
-    return opts.get(key, default)
-
-
-def copy():
-    return mycopy.deepcopy(opts)
-
-
 def set(key, value):
+    """ 通过 key 设置某一项值 """
     opts[key] = value
 
+def get(key, default=None):
+    """ 通过 key 获取值 """
+    return opts.get(key, default)
+
+def copy():
+    """ 复制配置 """
+    return mycopy.deepcopy(opts)
 
 def update(new_opts):
+    """ 全部替换配置 """
     opts.update(new_opts)
 
 if __name__ == '__main__':
     # init()
-    get('is_forced_switch')
+    # get('is_forced_switch')
+    pass

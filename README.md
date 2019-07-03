@@ -4,6 +4,7 @@
 可以定时给朋友或者群聊发送每日天气、提醒、每日一句，也可以智能自动回复好友信息。  
 操作简单，小白用户也可快速上手。
 
+[版本更新日志](https://github.com/sfyc23/EverydayWechat/blob/master/hostory.md)
 
 **禁止将本工具用于商业用途**，如产生法律纠纷与本人无关。
 
@@ -12,8 +13,6 @@
 > 
 
  [![GitHub stars](https://img.shields.io/github/stars/sfyc23/EverydayWechat.svg?style=social)](https://github.com/sfyc23/EverydayWechat/stargazers)     [![GitHub forks](https://img.shields.io/github/forks/sfyc23/EverydayWechat.svg?style=social)](https://github.com/sfyc23/EverydayWechat/network/members)  `请点击页面顶部靠右 star 与 fork`
-
-
 
 
 
@@ -256,6 +255,7 @@ python run.py
 - [wechatBot](https://github.com/gengchen528/wechatBot) —— 微信每日说，每日自动发送微信消息（Node + Wechaty）。  
 - [NodeMail](https://github.com/Vincedream/NodeMail) —— 用 Node 写一个爬虫脚本每天定时给女朋友发一封暖心邮件。  
 - [wechat-assistant](https://github.com/gengchen528/wechat-assistant) —— koa+wechaty实现的微信个人秘书，把你闲置的微信号利用起来做个个人秘书。
+- [WechatRobot](https://github.com/scorego/WechatRobot) ——个人微信号自动回复、陪聊、查天气（Java）
 - <https://github.com/likaixiang/EverydayWechat>
 - <https://github.com/0xHJK/music-dl>
 

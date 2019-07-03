@@ -2,21 +2,20 @@
 """
 工具类
 """
-
-import os
-import yaml
 import re
-from simplejson import JSONDecodeError
 import hashlib
-
+from simplejson import JSONDecodeError
 
 SPIDER_HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) '
                   'Chrome/67.0.3396.87 Safari/537.36',
 }
 
-WEEK_DICT = {'Monday': '星期一', 'Tuesday': '星期二', 'Wednesday': '星期三', 'Thursday': '星期四', 'Friday': '星期五',
-             'Saturday': '星期六', 'Sunday': '星期日'}
+WEEK_DICT = {
+    'Monday': '星期一', 'Tuesday': '星期二', 'Wednesday': '星期三',
+    'Thursday': '星期四', 'Friday': '星期五', 'Saturday': '星期六',
+    'Sunday': '星期日'
+}
 
 BIRTHDAY_COMPILE = re.compile(r'[\-\s]?(0?[1-9]|1[012])[\-\/\s]+(0?[1-9]|[12][0-9]|3[01])$')
 CONSTELLATION_NAME_LIST = (
@@ -39,44 +38,6 @@ CONSTELLATION_DATE_DICT = {
     (12, 23): '射手座',
     (12, 32): '摩羯座',
 }
-
-
-yamlSetting = None
-
-class YamlSetting(object):
-    __instance = None
-
-    def __new__(cls, *args, **kwargs):
-        if not cls.__instance:
-            cls.__instance = object.__new__(cls)
-        return cls.__instance
-
-    def __init__(self):
-        self.yaml_setting = self.get_yaml()
-
-    def get_yaml(self):
-        """
-        解析 yaml
-        :return: s  字典
-        """
-        path = os.path.join(os.path.dirname(os.path.dirname(__file__)), '_config.yaml')
-        try:
-            with open(path, 'r', encoding='utf-8') as file:
-                config = yaml.load(file, Loader=yaml.Loader)
-            return config
-        except Exception as error:
-            print(error)
-            print('你的 _config.yaml 文件配置出错...')
-        return None
-
-
-def get_yaml():
-    global yamlSetting
-    if not yamlSetting:
-        yamlSetting = YamlSetting()
-    return yamlSetting.yaml_setting
-
-
 def is_json(resp):
     """
     判断数据是否能被 Json 化。 True 能，False 否。
@@ -89,12 +50,14 @@ def is_json(resp):
     except JSONDecodeError:
         return False
 
+
 def md5_encode(text):
     """ 把數據 md5 化 """
     md5 = hashlib.md5()
     md5.update(text.encode('utf-8'))
     encodedStr = md5.hexdigest().upper()
     return encodedStr
+
 
 def get_constellation_name(date):
     '''
@@ -115,10 +78,8 @@ def get_constellation_name(date):
             if k > (month, day):
                 # print(v)
                 return v
-
-
+    return None
 
 if __name__ == '__main__':
-    for _ in range(5):
-        print(get_yaml())
     # print (md5_encode('0'))
+    pass

@@ -18,7 +18,6 @@ def get_zsh_info():
     """
     print('正在获取民国情话...')
     try:
-
         name = [
             ['writer/朱生豪', 38,],
             ['article/爱你就像爱生命', 22],
@@ -26,27 +25,28 @@ def get_zsh_info():
                 ]
         apdix = random.choice(name)
         # page 从零开始计数的。
-        url = 'https://www.juzimi.com/{}?page={}'.format(apdix[0], random.randint(1, apdix[1]))
+        url = 'https://www.juzimi.com/{}?page={}'.format(
+            apdix[0], random.randint(1, apdix[1]))
         # print(url)
         resp = HTMLSession().get(url)
-
         if resp.status_code == 200:
             # print(resp.html)
             results = resp.html.find('a.xlistju')
             if results:
                 re_text = random.choice(results).text
-                if re_text and '\n' in re_text:
+                if re_text and '\n\n' in re_text:
                     re_text = re_text.replace('\n\n','\n')
                 return re_text
         print('获取民国情话失败..')
     except Exception as exception:
         print(exception)
+    return None
 
 
 get_one_words = get_zsh_info
 
 if __name__ == '__main__':
-    for _ in range(15):
-        ow = get_one_words()
-        print(ow)
-
+    # for _ in range(15):
+    #     ow = get_one_words()
+    #     print(ow)
+    pass
