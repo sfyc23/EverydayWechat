@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*- 
+# -*- coding: utf-8 -*-
 """
 Project: EverydayWechat-Github
 Creator: DoubleThunder

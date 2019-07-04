@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*- 
+# -*- coding: utf-8 -*-
 """
 Project: HelloWorldPython
 Creator: DoubleThunder
@@ -40,7 +40,8 @@ def get_nlp_textchat(text, userId):
             return
 
         # 产生随机字符串
-        nonce_str = ''.join(random.sample(string.ascii_letters + string.digits, random.randint(10, 16)))
+        nonce_str = ''.join(random.sample(
+            string.ascii_letters + string.digits, random.randint(10, 16)))
         time_stamp = int(time.time())  # 时间戳
         params = {
             'app_id': app_id, # 应用标识
@@ -58,8 +59,9 @@ def get_nlp_textchat(text, userId):
             if content_dict['ret'] == 0:
                 data_dict = content_dict['data']
                 return data_dict['answer']
-            else:
-                print('智能闲聊 获取数据失败:{}'.format(content_dict['msg']))
+
+            print('智能闲聊 获取数据失败:{}'.format(content_dict['msg']))
+            return None
     except Exception as exception:
         print(str(exception))
 
