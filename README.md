@@ -131,7 +131,7 @@ qqnlpchat_conf:
     app_key: '你申请的app_key'
 ```
 
-######  配置「一个AI」
+#####  配置「一个AI」
 打开图灵机器人官网：[http://www.yige.ai](http://www.yige.ai) 进行注册。    
 创建应用，得到「API密钥」中的 「客户端访问令牌」  
 将填入到 **_config.yaml** 文件中的：  
