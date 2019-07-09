@@ -30,6 +30,8 @@ def run():
         no_modules = re.findall(r"named '(.*?)'$", str(error))
         if no_modules:
             print('当前环境缺少 {} 库'.format(no_modules[0]))
+        else:
+            print('当前环境库不完整')
         return
 
     main.run()
