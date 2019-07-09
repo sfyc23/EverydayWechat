@@ -4,11 +4,11 @@
 """
 import re
 import hashlib
-from simplejson import JSONDecodeError
+import json
 
 SPIDER_HEADERS = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) '
-                  'Chrome/67.0.3396.87 Safari/537.36',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; '
+                  'WOW64; rv:60.0) Gecko/20100101 Firefox/60.0',
 }
 
 WEEK_DICT = {
@@ -44,11 +44,12 @@ def is_json(resp):
     :param resp: request.
     :return: bool, True 数据可 Json 化；False 不能 JOSN 化。
     """
-    try:
-        resp.json()
+    try :
+        json.loads(resp.text)
         return True
-    except JSONDecodeError:
+    except AttributeError as error:
         return False
+    return False
 
 
 def md5_encode(text):

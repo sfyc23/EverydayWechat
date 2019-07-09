@@ -184,7 +184,7 @@ def init_alarm(alarm_dict):
     scheduler = BackgroundScheduler()
     for key, value in alarm_dict.items():
         scheduler.add_job(send_alarm_msg, 'cron', [key], hour=value['hour'],
-                          minute=value['minute'], id=key, misfire_grace_time=10 * 60)
+                          minute=value['minute'], id=key, misfire_grace_time=600)
     scheduler.start()
     print('已开启定时发送提醒功能...')
     # print(scheduler.get_jobs())
