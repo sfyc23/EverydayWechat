@@ -286,9 +286,6 @@ python run.py
 -  <https://github.com/likaixiang/EverydayWechat>   
 -  <https://github.com/0xHJK/music-dl>  
 
-## LICENSE
-[MIT License](https://github.com/sfyc23/EverydayWechat/blob/master/LICENSE)
-
 
 ## 微信交流群
 因为人数已超 100 人，请加 wx: **sfyc1314** 机器人为好友，验证信息写填写：「github」！！！，机器人会自动通过。  
@@ -296,3 +293,20 @@ python run.py
 机器人二维码： 
 
 ![微信交流群](https://raw.githubusercontent.com/sfyc23/image/master/vlog/20190614125724.png)
+
+
+## 捐助
+
+
+如果您认为这个项目有帮助，如果经济条件允许的话，不妨为它捐助一点钱？  
+
+不管钱有多少，您的捐助将会激励作者持续开发新功能！  �
+
+感谢您的支持！
+
+捐助方法如下：
+
+![](http://vlog.sfyc23.xyz/wechat_everyday/donation_wechat.png?imageView2/0/w/400/h/400)![](http://vlog.sfyc23.xyz/wechat_everyday/donation_alipay.png?imageView2/0/w/400/h/400)
+
+## LICENSE
+[MIT License](https://github.com/sfyc23/EverydayWechat/blob/master/LICENSE)
