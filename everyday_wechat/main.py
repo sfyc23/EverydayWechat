@@ -263,7 +263,7 @@ def exit_msg():
     set_system_notice('项目已断开连接')
 
 
-def get_group(gruop_name, update=False):
+def get_group(group_name, update=False):
     """
     根据群组名获取群组数据
     :param wechat_name:str, 群组名
@@ -271,8 +271,8 @@ def get_group(gruop_name, update=False):
     :return: obj 单个群组信息
     """
     if update: itchat.get_chatrooms(update=True)
-    if not gruop_name: return None
-    groups = itchat.search_chatrooms(name=gruop_name)
+    if not group_name: return None
+    groups = itchat.search_chatrooms(name=group_name)
     if not groups: return None
     return groups[0]
 
