@@ -19,15 +19,15 @@ def get_rttodayweather(cityname):
     """
     print('获取 {} 的天气...'.format(cityname))
     try:
-        resp = requests.get('https://www.mxnzp.com/api/weather/current/{}'.format(cityname))
-        # print(resp.text)
+        # forecast
+        resp = requests.get('https://www.mxnzp.com/api/weather/forecast/{}'.format(cityname))
+        print(resp.text)
         if resp.status_code == 200:
             content_dict = resp.json()
             if content_dict['code'] == 1:
                 data_dict = content_dict['data']
                 address = data_dict['address'].strip()
-                if ' ' in address:
-                    address = address.split(' ')[-1]
+
                 report_time = data_dict['reportTime'].strip()
                 report_time = report_time.split(' ')[0]
                 return_text = ' '.join(
@@ -50,7 +50,7 @@ def get_rttodayweather(cityname):
 get_today_weather = get_rttodayweather
 
 if __name__ == '__main__':
-    # cityname = '香港'
-    # weather = get_today_weather(cityname)
+    cityname = '香港'
+    weather = get_today_weather(cityname)
     # print(weather)
     pass

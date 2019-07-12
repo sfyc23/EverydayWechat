@@ -20,7 +20,7 @@ def get_tianapi_robot(text, userid):
     """
     try:
         # config.init()
-        info = config.get('auto_relay_info')['txapi_conf']
+        info = config.get('auto_reply_info')['txapi_conf']
         app_key = info['app_key']
         if not app_key:
             print('天行机器人 app_key 为空，请求失败')

@@ -39,14 +39,15 @@ def get_rtcalendar(date=''):
             content_dict = resp.json()
             if content_dict['code'] == 1:
                 data_dict = content_dict['data']
-                solar_terms = data_dict['solarTerms']
-                solar_terms = ' ' + solar_terms if solar_terms in STFT else ''
+                solar_terms = data_dict.get('solarTerms','')
+                if solar_terms not in STFT:
+                    solar_terms = ''
 
                 suit = data_dict['suit']
                 suit = suit if suit else '无'
                 avoid = data_dict['avoid']
                 avoid = avoid if avoid else '无'
-                return_text = '{data} {week} 农历{lunarCalendar}{solarTerms}\n【宜】{suit}\n【忌】{avoid}'.format(
+                return_text = '{data} {week} 农历{lunarCalendar} {solarTerms}\n【宜】{suit}\n【忌】{avoid}'.format(
                     data=data_dict['date'],
                     week=WEEK_DICT[data_dict['weekDay']],
                     lunarCalendar=data_dict['lunarCalendar'],
@@ -68,7 +69,8 @@ def get_rtcalendar(date=''):
 get_calendar = get_rtcalendar
 
 if __name__ == '__main__':
-    # date = datetime.now().strftime('%Y%m%d')
-    # content = get_calendar('20190615')
+
+    # date = (datetime.now() + timedelta(days=1)).strftime('%Y%m%d')
+    # content = get_calendar(date)
     # print(content)
     pass
