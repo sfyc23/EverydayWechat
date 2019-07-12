@@ -7,6 +7,9 @@ import re
 
 from everyday_wechat import main
 
+
+
+
 def run():
     """ 主程序入口"""
 

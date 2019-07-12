@@ -306,7 +306,7 @@ python run.py
 
 捐助方法如下：
 
-![](http://vlog.sfyc23.xyz/wechat_everyday/donation_wechat.png?imageView2/0/w/400/h/400)![](http://vlog.sfyc23.xyz/wechat_everyday/donation_alipay.png?imageView2/0/w/400/h/400)
+![](http://vlog.sfyc23.xyz/wechat_everyday/donation_wechat.png?imageView2/0/w/300/h/300)![](http://vlog.sfyc23.xyz/wechat_everyday/donation_alipay.png?imageView2/0/w/300/h/300)
 
 ## LICENSE
 [MIT License](https://github.com/sfyc23/EverydayWechat/blob/master/LICENSE)

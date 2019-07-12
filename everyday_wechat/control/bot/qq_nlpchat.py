@@ -32,7 +32,7 @@ def get_nlp_textchat(text, userId):
     try:
 
         # config.init()
-        info = config.get('auto_relay_info')['qqnlpchat_conf']
+        info = config.get('auto_reply_info')['qqnlpchat_conf']
         app_id = info['app_id']
         app_key = info['app_key']
         if not app_id or not app_key:

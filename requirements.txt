@@ -3,6 +3,7 @@ requests
 beautifulsoup4
 apscheduler
 requests-html
+pymongo
 pyyaml
 lxml
 
