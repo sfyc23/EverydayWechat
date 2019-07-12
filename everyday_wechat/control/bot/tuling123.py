@@ -32,7 +32,7 @@ def get_tuling123(text, userId):
     """
     try:
         # config.init()
-        info = config.get('auto_relay_info')['turing_conf']
+        info = config.get('auto_reply_info')['turing_conf']
         apiKey = info['apiKey']
 
         if not apiKey:
