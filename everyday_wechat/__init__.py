@@ -5,4 +5,4 @@
 
 
 script_name = 'EverydayWechat'
-__version__ = '0.1.013'
+__version__ = '0.3.01'
