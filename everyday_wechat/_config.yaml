@@ -6,16 +6,21 @@
 is_forced_switch: False
 
 #---------------------------------------自动回复功能设置--------------------------------------start
-auto_relay_info:
+auto_reply_info:
   # 是否开启自动回复
-  is_auto_relay: True
+  is_auto_reply: True
 
-  # 指定自动回复的好友名单。（填：文件传输助手，可回复自己，测试效果）
-  # - '好友1'
-  # - '好友2'
-  auto_reply_names:
-    - '诗风'
+  # 是否自动回复所有好友(慎重启动！),开启后，仅仅有黑名单的成员才不会自动回复
+  is_auto_reply_all: False
+
+  # 白名单，is_auto_reply_all: False 生效。此名单的用户才可自动回复。（填：文件传输助手，可回复自己，测试效果）
+  auto_reply_white_list:
+    - 'happy'
     - '文件传输助手'
+
+  # 黑名单，is_auto_reply_all:True 生效。此名单不会自动回复。
+  auto_reply_black_list:
+    - '小号'
 
   # 机器人渠道（1: 图灵机器人，2: 一个AI ,3 : 青云客，4 腾讯智能闲聊，5:天行机器人,6 海知智能)
   bot_channel: 3
@@ -81,29 +86,49 @@ alarm_info:
       horescope: "处女座"
       # 落款（可空），落款参考：['厌物', '你脚下的蚂蚁', '专说骗人的诳话者', '黄天霸', 'cxk', '魔鬼的叔父', '哺乳类脊椎动物之一', '名字写在水上的人', 'BIG BAD WOLF', '你的兄弟']
       sweet_words: '你脚下的蚂蚁'
-
+      is_tomorrow: False
 
     #  如果你需要另一套方案，如下面复制即可
     #  如不需要，则删除或注解下面所有的数据
-#    - group_name: 'EverydayWechat 交流群'
-#      wechat_name: '古典'
-#      city_name: '漳州'
-#      start_date: '2011-11-11'
-#      start_date_msg: '分手后的第{}天'
-#      dictum_channel: 6
-#      sweet_words: '名字写在水上的人'
-#      alarm_timed: "23:02"
+    - group_name: 'EverydayWechat 交流群'
+      wechat_name: '古典'
+      city_name: '漳州'
+      start_date: '2011-11-11'
+      start_date_msg: '分手后的第{}天'
+      dictum_channel: 4
+      sweet_words: '名字写在水上的人'
+      alarm_timed: "23:02"
+      is_tomorrow: True
 #---------------------------------------定时提醒功能设置--------------------------------------end
 
 
 #---------------------------群聊助手设置（已完成，正在整理。下个版本发布）--------------------------start
-auto_reply_group_conf:
+group_helper_conf:
   is_open: True # 开启群助手
-  # 白名单群
-  group_names:
+  is_all: False # 是否对所有群开启。当开启时，只有黑名单的名单才不受影响（慎重开启！）
+
+  # 白名单用户。当 is_all：Fase。只处理这个群里的消息
+  group_name_white_list:
+    - '蕉群'
+    - '群机器人测试群'
+
+  # 黑名单用户。当 is_all ：True 。这个群里的用户不受影响。
+  group_name_black_list:
     - 'EverydayWechat 交流群'
-  # 艾特标记，只有艾特自己，才发送对应消息。
-  is_at: True # 艾特标记
-  weather: True # 是否开启天气查询功能
+
+  is_at: True # 艾特标记。只有当别人艾特机器人，才会处理消息（慎重关闭！）
+  is_auto_reply: False # 开启群自动回复（慎重开启！）
+  is_weather: True # 是否开启天气查询功能
+  is_calendar: True # 是否开启万历年
+  is_rubbish: True # 是否开启垃圾查询（待定TODO）
+
 #---------------------------群聊助手设置（已完成，正在整理。下个版本发布）--------------------------end
 
+
+# start ----------------------------------- 数据库设置 ----------------------------------- start
+db_config: # 请安装 mongodb 数据库
+  is_open_db: True # 是否开启数据库功能
+  mongodb_conf:
+    'host': 'localhost'
+    'port': 27017
+#   end ----------------------------------- 数据库设置 ----------------------------------- end

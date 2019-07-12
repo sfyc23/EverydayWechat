@@ -4,3 +4,5 @@
 # Author: snow
 
 
+script_name = 'EverydayWechat'
+__version__ = '0.1.013'

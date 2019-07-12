@@ -22,7 +22,7 @@ def get_ruyiai_bot(text, userId):
     """
     try:
         # config.init()
-        info = config.get('auto_relay_info')['ruyi_conf']
+        info = config.get('auto_reply_info')['ruyi_conf']
         app_key = info['app_key']
         if not app_key:
             print('海知智能 api_key 为空，请求失败')

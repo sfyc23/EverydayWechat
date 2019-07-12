@@ -7,6 +7,7 @@ import os
 import copy as mycopy
 import yaml
 
+
 def init():
     """
     将 yaml 里的配置文件导入到 config.py 中
@@ -25,6 +26,7 @@ def get_yaml():
     """
     path = os.path.join(os.path.dirname(os.path.dirname(__file__)), '_config.yaml')
     try:
+
         with open(path, 'r', encoding='utf-8') as file:
             config = yaml.safe_load(file)
             # config = yaml.load(file, Loader=yaml.Loader)
@@ -33,6 +35,8 @@ def get_yaml():
         print(str(exception))
         print('你的 _config.yaml 文件配置出错...')
     return None
+
+opts = get_yaml()
 
 def set(key, value):
     """ 通过 key 设置某一项值 """
@@ -50,7 +54,12 @@ def update(new_opts):
     """ 全部替换配置 """
     opts.update(new_opts)
 
+def _print():
+    print(opts)
+
 if __name__ == '__main__':
-    # init()
+    init()
+    you = get('is_forced_switch')
+    print(you)
     # print(copy())
     pass

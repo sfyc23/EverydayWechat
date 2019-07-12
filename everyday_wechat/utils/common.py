@@ -6,6 +6,9 @@ import re
 import hashlib
 import json
 
+FILEHELPER_MARK = ['文件传输助手', 'filehelper']  # 文件传输助手标识
+FILEHELPER = 'filehelper'
+
 SPIDER_HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; '
                   'WOW64; rv:60.0) Gecko/20100101 Firefox/60.0',
@@ -54,6 +57,8 @@ def is_json(resp):
 
 def md5_encode(text):
     """ 把數據 md5 化 """
+    if not isinstance(text,str):
+        text = str(text)
     md5 = hashlib.md5()
     md5.update(text.encode('utf-8'))
     encodedStr = md5.hexdigest().upper()
@@ -82,5 +87,5 @@ def get_constellation_name(date):
     return None
 
 if __name__ == '__main__':
-    # print (md5_encode('0'))
+    print (md5_encode('aeryou'))
     pass

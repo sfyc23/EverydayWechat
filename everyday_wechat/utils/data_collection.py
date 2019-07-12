@@ -5,6 +5,7 @@
 import importlib
 import re
 from datetime import datetime
+from datetime import timedelta
 
 # from everyday_wechat.control.weather.rtweather import get_today_weather
 from everyday_wechat.control.weather.sojson import get_sojson_weather
@@ -14,7 +15,8 @@ from everyday_wechat.utils.common import (
 )
 from everyday_wechat.utils import config
 from everyday_wechat.control.horoscope.xzw_horescope import get_today_horoscope
-from everyday_wechat.control.calendar.sojson_calendar import get_sojson_calendar
+# from everyday_wechat.control.calendar.sojson_calendar import get_sojson_calendar
+from everyday_wechat.control.calendar.rt_calendar import get_rtcalendar
 
 DICTUM_NAME_DICT = {
     1: 'wufazhuce', 2: 'acib', 3: 'lovelive', 4: 'hitokoto',
@@ -44,7 +46,7 @@ def get_dictum_info(channel):
     return None
 
 
-def get_weather_info(cityname):
+def get_weather_info(cityname, is_tomorrow=False):
     """
     获取天气
     :param cityname:str,城市名称
@@ -53,7 +55,7 @@ def get_weather_info(cityname):
     if not cityname:
         return
     # return get_today_weather(cityname)
-    return get_sojson_weather(cityname)
+    return get_sojson_weather(cityname, is_tomorrow)
 
 
 def get_bot_info(message, userId=''):
@@ -64,7 +66,8 @@ def get_bot_info(message, userId=''):
     :param userId: str, 好友的uid，作为请求的唯一标识。
     :return:str, 机器人回复的话。
     """
-    channel = config.get('auto_relay_info').get('bot_channel', 3)
+
+    channel = config.get('auto_reply_info').get('bot_channel', 3)
     source = BOT_NAME_DICT.get(channel, 'qingyunke')
     # print(source)
     if source:
@@ -101,7 +104,7 @@ def get_diff_time(start_date, start_msg=''):
     return delta_msg
 
 
-def get_constellation_info(birthday_str):
+def get_constellation_info(birthday_str, is_tomorrow=False):
     """
     获取星座运势
     :param birthday_str:  "10-12" 或  "1980-01-08" 或 星座名
@@ -113,23 +116,29 @@ def get_constellation_info(birthday_str):
     if not const_name:
         print('星座名填写错误')
         return
-    return get_today_horoscope(const_name)
+    return get_today_horoscope(const_name, is_tomorrow)
 
 
-def get_calendar_info(alldata=True):
+def get_calendar_info(calendar=True, is_tomorrow=False, _date=''):
     """ 获取万年历 """
-    if alldata:
-        date = datetime.now().strftime('%Y-%m-%d')
-        return get_sojson_calendar(date)
+    if not calendar:
+        return None
+    if not is_tomorrow:
+        date = datetime.now().strftime('%Y%m%d')
     else:
-        time_now = datetime.now()
-        week = WEEK_DICT[time_now.strftime('%A')]
-        date = time_now.strftime('%Y-%m-%d')
-        return '{} {}'.format(date, week)
+        date = (datetime.now() + timedelta(days=1)).strftime('%Y%m%d')
+    return get_rtcalendar(date)
+
+    # else:
+    #     time_now = datetime.now()
+    #     week = WEEK_DICT[time_now.strftime('%A')]
+    #     date = time_now.strftime('%Y-%m-%d')
+    #     return '{} {}'.format(date, week)
 
 
 if __name__ == '__main__':
-    # text = 'are you ok'
-    # reply_msg = get_bot_info(text)
-    # print(reply_msg)
+    config.init()
+    text = 'are you ok'
+    reply_msg = get_bot_info(text)
+    print(reply_msg)
     pass
