@@ -6,4 +6,3 @@ requests-html
 pymongo
 pyyaml
 lxml
-
