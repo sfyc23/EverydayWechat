@@ -25,7 +25,7 @@ def get_yigeai(text, userid):
     """
     try:
         # config.init()
-        info = config.get('auto_relay_info')['yigeai_conf']
+        info = config.get('auto_reply_info')['yigeai_conf']
         token = info['client_token']
         if not token:
             print('一个「AI」token 为空,请求出错')
