@@ -16,34 +16,52 @@ from everyday_wechat.utils.data_collection import (
     get_bot_info,
     get_calendar_info,
 )
+from everyday_wechat.control.rubbish.atoolbox_rubbish import (
+    get_atoolbox_rubbish
+)
+
 from everyday_wechat.utils.db_helper import (
     find_perpetual_calendar,
     find_user_city,
     find_weather,
     udpate_user_city,
     udpate_weather,
-    update_perpetual_calendar
+    update_perpetual_calendar,
+    find_rubbish,
+    update_rubbish
 )
-# import pysnooper
 
-at_compile = re.compile(r'(@.*?\s{1}).*?')
+
+
+at_compile = r'(@.*?\s{1,}).*?'
 tomorrow_compile = r'明[日天]'
-calendar_complie = r'\s*(?:日|万年)历\s*'
-weather_compile = r'^(?:\s*天气\s*(\S+?)|\s*(\S*?)\s*天气\s*)$'
-help_complie = r'^(?:帮忙|帮助|help)\s*$'
-punct_complie = r'[^a-zA-z\u4e00-\u9fa5]+$' #去除句子最后面的标点
 
-common_msg = '@{ated_name}\u2005 {text}'
-weather_error_msg = '@{ated_name}\u2005\n未找到『{city}』城市的相关信息'
+punct_complie = r'[^a-zA-z0-9\u4e00-\u9fa5]+$'  # 去除句子最后面的标点
+help_complie = r'^(?:0|帮忙|帮助|help)\s*$'
 
+weather_compile = r'^(?:\s*(?:1|天气|weather).*?|.*?(?:天气|weather)\s*)$'
+weather_clean_compile = r'天气|1|weather|\s'
+calendar_complie = r'^\s*(?:2|日历|万年历)'
+calendar_date_compile = r'^\s*(19|2[01]\d{2})[\-\s年]+(0?[1-9]|1[012])[\-\/\s月]+(0?[1-9]|[12][0-9]|3[01])[\s日]*$'
+rubbish_complie = r'^\s*(?:3|垃圾|rubbish)'
 
-help_group_content = """
+common_msg = '@{ated_name}\u2005\n{text}'
+weather_error_msg = '@{ated_name}\u2005\n未找到『{city}』城市的天气信息'
+
+rubbish_normal = '@{ated_name}\u2005\n【查询结果】：『{name}』属于{_type}'
+rubbish_other = '@{ated_name}\u2005\n【查询结果】：『{name}』无记录\n【推荐查询】：{other}'
+rubbish_nothing = '@{ated_name}\u2005\n【查询结果】：『{name}』无记录'
+
+help_group_content = """@{ated_name}
 群助手功能：
-1.输入：天气+城市名；
-2.输入：万年历；
+1.输入：天气+城市名（可空）。例如：天气北京
+2.输入：日历+日期(格式:yyyy-MM-dd 可空)。例如：日历2019-07-03
+3.输入：垃圾+名称。例如：3猫粮
 更多功能：请输入 help/帮助。
 """
 
+
+# import pysnooper
 # @pysnooper.snoop()
 def handle_group_helper(msg):
     """
@@ -51,6 +69,7 @@ def handle_group_helper(msg):
     :param msg:
     :return:
     """
+
     conf = config.get('group_helper_conf')
     if not conf.get('is_open'):
         return
@@ -60,9 +79,9 @@ def handle_group_helper(msg):
     if conf.get('is_at') and not msg.isAt:
         return
 
-    uuid = msg.fromUserName # 群 uid
-    ated_uuid = msg.actualUserName # 艾特你的用户的uuid
-    ated_name = msg.actualNickName # 艾特你的人的群里的名称
+    uuid = msg.fromUserName  # 群 uid
+    ated_uuid = msg.actualUserName  # 艾特你的用户的uuid
+    ated_name = msg.actualNickName  # 艾特你的人的群里的名称
 
     is_all = conf.get('is_all', False)
     user_uuids = conf.get('group_black_uuids') if is_all else conf.get('group_white_uuids')
@@ -74,12 +93,13 @@ def handle_group_helper(msg):
     if not is_all and uuid not in user_uuids:
         return
     # 去掉 at 标记
-    text = at_compile.sub('', text)
+    text = re.sub(at_compile, '', text)
 
     # 如果是帮助
-    helps = re.findall(help_complie,text,re.I)
+    helps = re.findall(help_complie, text, re.I)
     if helps:
-        itchat.send(help_group_content, uuid)
+        retext = help_group_content.format(ated_name=ated_name)
+        itchat.send(retext, uuid)
         return
 
     # 是否是明天，用于日历，天气，星座查询
@@ -91,74 +111,117 @@ def handle_group_helper(msg):
         is_tomorrow = False
         htext = text
 
-    htext = re.sub(punct_complie, '', htext) # 去句末的标点
+    htext = re.sub(punct_complie, '', htext)  # 去句末的标点
 
     # 已开启天气查询，并包括天气关键词
     if conf.get('is_weather'):
-        citys = re.findall(weather_compile, htext)
-        if citys:
-            for x in citys[0]:
-                city = x
-                if city:
-                    break
-            else:
+        if re.findall(weather_compile, htext, re.I):
+            city = re.sub(weather_clean_compile, '', text)
+
+            if not city:  # 如果只是输入城市名
+                # 从缓存数据库找最后一次查询的城市名
                 city = find_user_city(ated_uuid)
-                if not city:
-                    city = get_city_by_uuid(ated_uuid)
-            if city:
-                _date = datetime.now().strftime('%Y-%m-%d')
-                weather_info = find_weather(_date, city)
-                if weather_info:
-                    retext = common_msg.format(ated_name=ated_name, text=weather_info)
-                    itchat.send(retext, uuid)
-                    return
+            if not city:  # 缓存数据库没有保存，通过用户的资料查城市
+                city = get_city_by_uuid(ated_uuid)
+            if not city:
+                retext = '请输入城市名'
+                itchat.send(retext, uuid)
+                return
 
-                weather_info = get_weather_info(city)
-                if weather_info:
-                    # print(ated_name, city, retext)
-                    retext = common_msg.format(ated_name=ated_name, text=weather_info)
-                    itchat.send(retext, uuid)
+            _date = datetime.now().strftime('%Y-%m-%d')
+            weather_info = find_weather(_date, city)
+            if weather_info:
+                retext = common_msg.format(ated_name=ated_name, text=weather_info)
+                itchat.send(retext, uuid)
+                return
 
-                    data = {
-                        '_date': _date,
-                        'city_name': city,
-                        'weather_info': weather_info,
-                        'userid': ated_uuid,
-                        'last_time': datetime.now()
-                    }
-                    udpate_weather(data)
-                    # userid,city_name,last_time,group_name udpate_weather_city
-                    data2 = {
-                        'userid': ated_uuid,
-                        'city_name': city,
-                        'last_time': datetime.now()
-                    }
-                    udpate_user_city(data2)
-                    return
-                else:
-                    weather_error_msg = '@{ated_name}\u2005\n未找到『{city}』城市的相关信息'
-                    retext = weather_error_msg.format(ated_name=ated_name, city=city)
-                    itchat.send(retext, uuid)
-                    return
+            weather_info = get_weather_info(city)
+            if weather_info:
+                # print(ated_name, city, retext)
+                retext = common_msg.format(ated_name=ated_name, text=weather_info)
+                itchat.send(retext, uuid)
+
+                data = {
+                    '_date': _date,
+                    'city_name': city,
+                    'weather_info': weather_info,
+                    'userid': ated_uuid,
+                    'last_time': datetime.now()
+                }
+                udpate_weather(data)
+                # userid,city_name,last_time,group_name udpate_weather_city
+                data2 = {
+                    'userid': ated_uuid,
+                    'city_name': city,
+                    'last_time': datetime.now()
+                }
+                udpate_user_city(data2)
+                return
+            else:
+                retext = weather_error_msg.format(ated_name=ated_name, city=city)
+                itchat.send(retext, uuid)
+                return
             return
 
     # 已开启日历，并包含日历
     if conf.get('is_calendar'):
-        if re.findall(calendar_complie, htext):
-            _date = datetime.now().strftime('%Y-%m-%d')
+        if re.findall(calendar_complie, htext, re.I):
+
+            calendar_text = re.sub(calendar_complie, '', htext)
+            if calendar_text:  # 日历后面填上日期了
+                dates = re.findall(calendar_date_compile, calendar_text)
+                if not dates:
+                    retext = '请输入正确的日期'
+                    itchat.send(retext, uuid)
+                    return
+
+                _date = '{}-{:0>2}-{:0>2}'.format(*dates[0])  # 用于保存数据库
+                rt_date = '{}{:0>2}{:0>2}'.format(*dates[0])  # 用于查询日历
+            else:  # 日历 后面没有日期，则默认使用今日。
+                _date = datetime.now().strftime('%Y-%m-%d')
+                rt_date = datetime.now().strftime('%Y%m%d')
+
+            # 从 数据库缓存中记取内容
             cale_info = find_perpetual_calendar(_date)
             if cale_info:
                 retext = common_msg.format(ated_name=ated_name, text=cale_info)
                 itchat.send(retext, uuid)
                 return
 
-            rt_date = datetime.now().strftime('%Y%m%d')
+            # 取网络数据
             cale_info = get_rtcalendar(rt_date)
             if cale_info:
                 retext = common_msg.format(ated_name=ated_name, text=cale_info)
                 itchat.send(retext, uuid)
-                update_perpetual_calendar(_date, cale_info)
+                update_perpetual_calendar(_date, cale_info)  # 保存数据到数据库
                 return
+            return
+
+    if conf.get('is_rubbish'):
+        if re.findall(rubbish_complie, htext, re.I):
+            key = re.sub(rubbish_complie, '', htext).strip()
+            if not key:
+                retext = '请填写垃圾名称'
+                itchat.send(retext, uuid)
+                return
+
+            _type = find_rubbish(key)
+            if _type:
+                retext = rubbish_normal.format(ated_name=ated_name, name=key, _type=_type)
+                itchat.send(retext, uuid)
+                return
+            _type, return_list, other = get_atoolbox_rubbish(key)
+            if _type:
+                retext = rubbish_normal.format(ated_name=ated_name, name=key, _type=_type)
+                itchat.send_msg(retext, uuid)
+            elif other:
+                retext = rubbish_other.format(ated_name=ated_name, name=key, other=other)
+                itchat.send_msg(retext, uuid)
+            else:
+                retext = rubbish_nothing.format(ated_name=ated_name, name=key)
+                itchat.send_msg(retext, uuid)
+            if return_list:
+                update_rubbish(return_list)
             return
 
     # 其他结果都没有匹配到，走自动回复的路
