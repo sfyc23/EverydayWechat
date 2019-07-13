@@ -2,11 +2,18 @@
 """
 程序运行入口
 """
+
 import sys
 import re
 
-from everyday_wechat import main
-
+try:
+    from everyday_wechat import main
+    from everyday_wechat import __version__
+except Exception as ex:
+    print(ex)
+    print('请将脚本放在项目根目录中运行')
+    print('请检查项目根目录中的 everyday_wechat 文件夹是否存在')
+    exit(1)
 
 
 
@@ -23,11 +30,13 @@ def run():
         import itchat
         import apscheduler
         import requests
-        import requests_html
+        # import requests_html
         from bs4 import BeautifulSoup
         if itchat.__version__ != '1.3.10':
             print('请将 itchat 的版本升级至 1.3.10！')
             return
+        print('EverydayWechat 程序版本号：{}'.format(__version__))
+
     except (ModuleNotFoundError) as error:
         # No module named 'teim'
         no_modules = re.findall(r"named '(.*?)'$", str(error))
