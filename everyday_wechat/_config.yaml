@@ -71,6 +71,7 @@ alarm_info:
         - "16:28"
         - "16:29"
         - "16:30"
+      is_tomorrow: False # 是否发送明日信息（如天气，星座，万年历）
       #女友所在城市，用于发送天气。（可空）
       city_name: '桂林'
       # 格言渠道（1 : ONE●一个，2 : 词霸（每日英语，双语）3: 土味情话 4 : 一言，5：笑话，6 民国情书,7彩虹屁)(可空)
@@ -86,7 +87,7 @@ alarm_info:
       horescope: "处女座"
       # 落款（可空），落款参考：['厌物', '你脚下的蚂蚁', '专说骗人的诳话者', '黄天霸', 'cxk', '魔鬼的叔父', '哺乳类脊椎动物之一', '名字写在水上的人', 'BIG BAD WOLF', '你的兄弟']
       sweet_words: '你脚下的蚂蚁'
-      is_tomorrow: False
+
 
     #  如果你需要另一套方案，如下面复制即可
     #  如不需要，则删除或注解下面所有的数据
@@ -117,10 +118,10 @@ group_helper_conf:
     - 'EverydayWechat 交流群'
 
   is_at: True # 艾特标记。只有当别人艾特机器人，才会处理消息（慎重关闭！）
-  is_auto_reply: False # 开启群自动回复（慎重开启！）
-  is_weather: True # 是否开启天气查询功能
-  is_calendar: True # 是否开启万历年
-  is_rubbish: True # 是否开启垃圾查询（待定TODO）
+  is_auto_reply: True # 开启群自动回复（慎重开启！）
+  is_weather: True # 是否开启天气查询
+  is_calendar: True # 是否开启万历年查询
+  is_rubbish: True  # 是否开启垃圾查询（待定TODO）
 
 #---------------------------群聊助手设置（已完成，正在整理。下个版本发布）--------------------------end
 

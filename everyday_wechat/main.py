@@ -8,7 +8,6 @@ import re
 import time
 # import json
 import platform
-import random
 # from apscheduler.schedulers.blocking import BlockingScheduler
 from apscheduler.schedulers.background import BackgroundScheduler
 import itchat
