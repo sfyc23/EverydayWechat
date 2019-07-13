@@ -12,7 +12,7 @@ from datetime import datetime
 
 # config.init()
 
-cache_valid_time = 4 * 60 * 60 # 缓存有效时间
+cache_valid_time = 4 * 60 * 60  # 缓存有效时间
 
 is_open_db = config.get('db_config')['is_open_db']
 if is_open_db:
@@ -28,6 +28,7 @@ if is_open_db:
         weather_db = wechat_helper_db['weather']
         user_city_db = wechat_helper_db['user_city']
         perpetual_calendar_db = wechat_helper_db['perpetual_calendar']
+        rubbish_db = wechat_helper_db['rubbish_assort']
 
     except pymongo.errors.ServerSelectionTimeoutError as err:
         print(str(err))
@@ -37,6 +38,7 @@ if is_open_db:
 
 def db_flag():
     """ 用于数据库操作的 flag 没开启就不进行数据库操作"""
+
     def _db_flag(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
@@ -44,6 +46,7 @@ def db_flag():
                 return func(*args, **kwargs)
             else:
                 return None
+
         return wrapper
 
     return _db_flag
@@ -98,6 +101,7 @@ def find_weather(date, cityname):
             return data['weather_info']
     return None
 
+
 @db_flag()
 def update_perpetual_calendar(_date, info):
     """
@@ -110,9 +114,10 @@ def update_perpetual_calendar(_date, info):
     data = {
         '_date': _date,
         'info': info,
-        'last_time':datetime.now()
+        'last_time': datetime.now()
     }
-    perpetual_calendar_db.update_one(key, {"$set":data}, upsert=True)
+    perpetual_calendar_db.update_one(key, {"$set": data}, upsert=True)
+
 
 @db_flag()
 def find_perpetual_calendar(_date):
@@ -126,6 +131,36 @@ def find_perpetual_calendar(_date):
     if data:
         return data['info']
 
+
+@db_flag()
+def find_rubbish(name):
+    """
+    从数据库里查询获取内容
+    {'name': '爱群主', 'type': '什么垃圾'}
+    """
+    key = {'name': name}
+    one = rubbish_db.find_one(key, {"_id": 0, "name": 1, "type": 1})
+    if one:
+        return one['type']
+    return None
+
+
+# 保存进数据库
+# 如果有数据，则更新类别
+@db_flag()
+def update_rubbish(data):
+    """
+    将垃圾保存数据库
+    :param data:
+    :return:
+    """
+    if isinstance(data, str):
+        data = [data]
+    if isinstance(data, list):
+        for d in data:
+            key = {'name': d['name']}
+            value = {"$set": {"type": d['type']}}
+            rubbish_db.update_one(key, value, upsert=True)
 
 # if __name__ == '__main__':
 #     uuid = 'uuid'
