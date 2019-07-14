@@ -112,13 +112,15 @@ group_helper_conf:
   group_name_white_list:
     - '蕉群'
     - '群机器人测试群'
+    - '吹水专用'
+    - 'EverydayWechat 交流群'
 
   # 黑名单用户。当 is_all ：True 。这个群里的用户不受影响。
   group_name_black_list:
     - 'EverydayWechat 交流群'
 
-  is_at: True # 艾特标记。只有当别人艾特机器人，才会处理消息（慎重关闭！）
-  is_auto_reply: True # 开启群自动回复（慎重开启！）
+  is_at: False # 艾特标记。只有当别人艾特机器人，才会处理消息（慎重关闭！）
+  is_auto_reply: False # 开启群自动回复（慎重开启！）
   is_weather: True # 是否开启天气查询
   is_calendar: True # 是否开启万历年查询
   is_rubbish: True  # 是否开启垃圾查询（待定TODO）

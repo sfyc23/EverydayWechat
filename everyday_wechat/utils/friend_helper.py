@@ -37,14 +37,14 @@ def handle_friend(msg):
 
         receive_text = msg.text  # 好友发送来的消息内容
         # 好友叫啥，用于打印
-        nickName = FILEHELPER if uuid == FILEHELPER else msg.user.nickName
-        print('\n{}发来信息：{}'.format(nickName, receive_text))
+        nick_name = FILEHELPER if uuid == FILEHELPER else msg.user.nickName
+        print('\n{}发来信息：{}'.format(nick_name, receive_text))
         reply_text = get_bot_info(receive_text, uuid)  # 获取自动回复
         if reply_text:  # 如内容不为空，回复消息
             time.sleep(random.randint(1, 2))  # 休眠一秒，保安全。想更快的，可以直接注释。
             reply_text = reply_text if not uuid == FILEHELPER else '机器人回复：' + reply_text
             itchat.send(reply_text, toUserName=uuid)
-            print('回复{}：{}'.format(nickName, reply_text))
+            print('回复{}：{}'.format(nick_name, reply_text))
         else:
             print('自动回复失败\n')
     except Exception as exception:

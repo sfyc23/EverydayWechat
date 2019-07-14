@@ -31,8 +31,8 @@ if is_open_db:
         rubbish_db = wechat_helper_db['rubbish_assort']
 
     except pymongo.errors.ServerSelectionTimeoutError as err:
-        print(str(err))
-        print('数据库连接失败\n')
+        # print(str(err))
+        # print('数据库连接失败')
         is_open_db = False  # 把数据库设为不可用
 
 

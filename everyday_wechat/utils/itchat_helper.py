@@ -20,7 +20,7 @@ TIME_COMPILE = re.compile(r'^\s*([01]?[0-9]|2[0-3])\s*[：:\-]\s*([0-5]?[0-9])\s
 
 def init_wechat_config():
     """ 初始化微信所需数据 """
-    print('初始化微信所需数据开始..')
+    # print('初始化微信所需数据开始..')
     # 从config copy ，用于保存新的接口内容。
     myset = config.copy()
     # start---------------------------处理自动回复好友---------------------------start
@@ -125,10 +125,10 @@ def init_wechat_config():
         #   end---------------------------定时处理---------------------------end
         alarm['alarm_dict'] = alarm_dict
 
-    # 将解析的数据保存于config中。
+    # 将解析的数据保存于 config 中。
     config.update(myset)
     # print(json.dumps(alarm_dict, ensure_ascii=False))
-    print('初始化微信所需数据结束..')
+    # print('初始化微信所需数据结束..')
 
 
 def set_system_notice(text):

@@ -5,16 +5,17 @@ Creator: DoubleThunder
 Create time: 2019-07-11 12:55
 Introduction: 群消息处理
 """
-import itchat
+
 import re
 from datetime import datetime
+import itchat
 
 from everyday_wechat.utils import config
 from everyday_wechat.control.calendar.rt_calendar import get_rtcalendar
 from everyday_wechat.utils.data_collection import (
     get_weather_info,
     get_bot_info,
-    get_calendar_info,
+    # get_calendar_info,
 )
 from everyday_wechat.control.rubbish.atoolbox_rubbish import (
     get_atoolbox_rubbish
@@ -31,26 +32,29 @@ from everyday_wechat.utils.db_helper import (
     update_rubbish
 )
 
-
-
 at_compile = r'(@.*?\s{1,}).*?'
 tomorrow_compile = r'明[日天]'
 
 punct_complie = r'[^a-zA-z0-9\u4e00-\u9fa5]+$'  # 去除句子最后面的标点
 help_complie = r'^(?:0|帮忙|帮助|help)\s*$'
 
-weather_compile = r'^(?:\s*(?:1|天气|weather).*?|.*?(?:天气|weather)\s*)$'
-weather_clean_compile = r'天气|1|weather|\s'
-calendar_complie = r'^\s*(?:2|日历|万年历)'
-calendar_date_compile = r'^\s*(19|2[01]\d{2})[\-\s年]+(0?[1-9]|1[012])[\-\/\s月]+(0?[1-9]|[12][0-9]|3[01])[\s日]*$'
-rubbish_complie = r'^\s*(?:3|垃圾|rubbish)'
+weather_compile = r'^(?:\s*(?:1|天气|weather)(?!\d).*?|.*?(?:天气|weather)\s*)$'
+weather_clean_compile = r'1|天气|weather|\s'
+calendar_complie = r'^\s*(?:2|日历|万年历|calendar)(?=19|2[01]\d{2}|\s|$)'
+calendar_date_compile = r'^\s*(19|2[01]\d{2})[\-\/—\s年]*(0?[1-9]|1[012])[\-\/—\s月]*(0?[1-9]|[12][0-9]|3[01])[\s日号]*$'
+rubbish_complie = r'^\s*(?:3|垃圾|rubbish)(?!\d)'
 
 common_msg = '@{ated_name}\u2005\n{text}'
 weather_error_msg = '@{ated_name}\u2005\n未找到『{city}』城市的天气信息'
+weather_null_msg = '@{ated_name}\u2005\n 请输入城市名'
 
-rubbish_normal = '@{ated_name}\u2005\n【查询结果】：『{name}』属于{_type}'
-rubbish_other = '@{ated_name}\u2005\n【查询结果】：『{name}』无记录\n【推荐查询】：{other}'
-rubbish_nothing = '@{ated_name}\u2005\n【查询结果】：『{name}』无记录'
+calendar_error_msg = '@{ated_name}\u2005日期格式不对'
+calendar_no_result_msg = '@{ated_name}\u2005未找到{_date}的数据'
+
+rubbish_normal_msg = '@{ated_name}\u2005\n【查询结果】：『{name}』属于{_type}'
+rubbish_other_msg = '@{ated_name}\u2005\n【查询结果】：『{name}』无记录\n【推荐查询】：{other}'
+rubbish_nothing_msg = '@{ated_name}\u2005\n【查询结果】：『{name}』无记录'
+rubbish_null_msg = '@{ated_name}\u2005 请输入垃圾名称'
 
 help_group_content = """@{ated_name}
 群助手功能：
@@ -116,7 +120,7 @@ def handle_group_helper(msg):
     # 已开启天气查询，并包括天气关键词
     if conf.get('is_weather'):
         if re.findall(weather_compile, htext, re.I):
-            city = re.sub(weather_clean_compile, '', text)
+            city = re.sub(weather_clean_compile, '', text, flags=re.IGNORECASE).strip()
 
             if not city:  # 如果只是输入城市名
                 # 从缓存数据库找最后一次查询的城市名
@@ -124,7 +128,7 @@ def handle_group_helper(msg):
             if not city:  # 缓存数据库没有保存，通过用户的资料查城市
                 city = get_city_by_uuid(ated_uuid)
             if not city:
-                retext = '请输入城市名'
+                retext = weather_null_msg.format(ated_name=ated_name)
                 itchat.send(retext, uuid)
                 return
 
@@ -165,13 +169,13 @@ def handle_group_helper(msg):
 
     # 已开启日历，并包含日历
     if conf.get('is_calendar'):
-        if re.findall(calendar_complie, htext, re.I):
+        if re.findall(calendar_complie, htext, flags=re.IGNORECASE):
 
-            calendar_text = re.sub(calendar_complie, '', htext)
+            calendar_text = re.sub(calendar_complie, '', htext).strip()
             if calendar_text:  # 日历后面填上日期了
                 dates = re.findall(calendar_date_compile, calendar_text)
                 if not dates:
-                    retext = '请输入正确的日期'
+                    retext = calendar_error_msg.format(ated_name=ated_name)
                     itchat.send(retext, uuid)
                     return
 
@@ -181,7 +185,7 @@ def handle_group_helper(msg):
                 _date = datetime.now().strftime('%Y-%m-%d')
                 rt_date = datetime.now().strftime('%Y%m%d')
 
-            # 从 数据库缓存中记取内容
+            # 从数据库缓存中记取内容
             cale_info = find_perpetual_calendar(_date)
             if cale_info:
                 retext = common_msg.format(ated_name=ated_name, text=cale_info)
@@ -195,33 +199,36 @@ def handle_group_helper(msg):
                 itchat.send(retext, uuid)
                 update_perpetual_calendar(_date, cale_info)  # 保存数据到数据库
                 return
+            else: # 查询无结果
+                retext = calendar_no_result_msg.format(ated_name=ated_name, _date=_date)
+                itchat.send(retext, uuid)
             return
 
     if conf.get('is_rubbish'):
         if re.findall(rubbish_complie, htext, re.I):
-            key = re.sub(rubbish_complie, '', htext).strip()
+            key = re.sub(rubbish_complie, '', htext, flags=re.IGNORECASE).strip()
             if not key:
-                retext = '请填写垃圾名称'
+                retext = rubbish_null_msg.format(ated_name=ated_name)
                 itchat.send(retext, uuid)
                 return
 
             _type = find_rubbish(key)
             if _type:
-                retext = rubbish_normal.format(ated_name=ated_name, name=key, _type=_type)
+                retext = rubbish_normal_msg.format(ated_name=ated_name, name=key, _type=_type)
                 itchat.send(retext, uuid)
                 return
             _type, return_list, other = get_atoolbox_rubbish(key)
             if _type:
-                retext = rubbish_normal.format(ated_name=ated_name, name=key, _type=_type)
+                retext = rubbish_normal_msg.format(ated_name=ated_name, name=key, _type=_type)
                 itchat.send_msg(retext, uuid)
             elif other:
-                retext = rubbish_other.format(ated_name=ated_name, name=key, other=other)
+                retext = rubbish_other_msg.format(ated_name=ated_name, name=key, other=other)
                 itchat.send_msg(retext, uuid)
             else:
-                retext = rubbish_nothing.format(ated_name=ated_name, name=key)
+                retext = rubbish_nothing_msg.format(ated_name=ated_name, name=key)
                 itchat.send_msg(retext, uuid)
             if return_list:
-                update_rubbish(return_list)
+                update_rubbish(return_list) # 保存数据库
             return
 
     # 其他结果都没有匹配到，走自动回复的路

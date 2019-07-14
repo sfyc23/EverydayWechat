@@ -4,7 +4,7 @@
 每天定时给多个女友发给微信暖心话
 核心代码。
 """
-import re
+
 import time
 # import json
 import platform
@@ -16,7 +16,6 @@ from itchat.content import (
 )
 
 from everyday_wechat.utils.data_collection import (
-    get_bot_info,
     get_weather_info,
     get_dictum_info,
     get_diff_time,
@@ -35,18 +34,9 @@ from everyday_wechat.utils.friend_helper import (
     handle_friend
 )
 
-FILEHELPER_MARK = ['文件传输助手', 'filehelper']  # 文件传输助手标识
-FILEHELPER = 'filehelper'
-TIME_COMPILE = re.compile(r'^\s*([01]?[0-9]|2[0-3])\s*[：:\-]\s*([0-5]?[0-9])\s*$')
-
 
 def run():
     """ 主运行入口 """
-    conf = config.init()
-    # conf = get_yaml()
-    if not conf:  # 如果 conf，表示配置文件出错。
-        print('程序中止...')
-        return
     # 判断是否登录，如果没有登录则自动登录，返回 False 表示登录失败
     if not is_online(auto_login=True):
         return
@@ -58,6 +48,8 @@ def is_online(auto_login=False):
     :param auto_login: bool,当为 Ture 则自动重连(默认为 False)。
     :return: bool,当返回为 True 时，在线；False 已断开连接。
     """
+
+    # print('i am here..')
 
     def _online():
         """
@@ -81,7 +73,8 @@ def is_online(auto_login=False):
     exitCallback = exit_msg
     for _ in range(2):  # 尝试登录 2 次。
         if platform.system() in ('Windows', 'Darwin'):
-            itchat.auto_login(hotReload=hotReload, loginCallback=loginCallback, exitCallback=exitCallback)
+            itchat.auto_login(hotReload=hotReload,
+                              loginCallback=loginCallback, exitCallback=exitCallback)
             itchat.run(blockThread=True)
         else:
             # 命令行显示登录二维码。
@@ -139,7 +132,8 @@ def send_alarm_msg(key):
     dictum = get_dictum_info(gf.get('dictum_channel'))
     diff_time = get_diff_time(gf.get('start_date'), gf.get('start_date_msg'))
     sweet_words = gf.get('sweet_words')
-    send_msg = '\n'.join(x for x in [calendar_info, weather, horoscope, dictum, diff_time, sweet_words] if x)
+    send_msg = '\n'.join(
+        x for x in [calendar_info, weather, horoscope, dictum, diff_time, sweet_words] if x)
     # print('\n' + send_msg + '\n')
     if not send_msg or not is_online(): return
     uuid_list = gf.get('uuid_list')
@@ -169,7 +163,7 @@ def exit_msg():
 
 
 if __name__ == '__main__':
-    run()
-    # pass
+    # run()
+    pass
     # config.init()
     # init_wechat()

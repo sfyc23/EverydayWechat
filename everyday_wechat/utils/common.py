@@ -41,13 +41,15 @@ CONSTELLATION_DATE_DICT = {
     (12, 23): '射手座',
     (12, 32): '摩羯座',
 }
+
+
 def is_json(resp):
     """
     判断数据是否能被 Json 化。 True 能，False 否。
     :param resp: request.
     :return: bool, True 数据可 Json 化；False 不能 JOSN 化。
     """
-    try :
+    try:
         json.loads(resp.text)
         return True
     except AttributeError as error:
@@ -57,7 +59,7 @@ def is_json(resp):
 
 def md5_encode(text):
     """ 把數據 md5 化 """
-    if not isinstance(text,str):
+    if not isinstance(text, str):
         text = str(text)
     md5 = hashlib.md5()
     md5.update(text.encode('utf-8'))
@@ -86,6 +88,7 @@ def get_constellation_name(date):
                 return v
     return None
 
+
 if __name__ == '__main__':
-    print (md5_encode('aeryou'))
+    print(md5_encode('aeryou'))
     pass
