@@ -6,6 +6,9 @@ import requests
 from bs4 import BeautifulSoup
 from everyday_wechat.utils.common import SPIDER_HEADERS
 
+
+__all__ = ['get_wufazhuce_info']
+
 def get_wufazhuce_info():
     """
     获取格言信息（从『一个。one』获取信息 http://wufazhuce.com/）

@@ -11,6 +11,8 @@ from everyday_wechat.utils.common import (
     md5_encode
 )
 
+__all__ = ['get_tianapi_robot']
+
 def get_tianapi_robot(text, userid):
     """
     从天行机器人获取自动回复,接口地址:<https://www.tianapi.com/apiview/47>

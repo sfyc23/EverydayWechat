@@ -13,6 +13,8 @@ from everyday_wechat.utils.common import (
 )
 from everyday_wechat.utils import config
 
+__all__ = ['get_tuling123']
+
 # 图灵机器人错误码集合
 TULING_ERROR_CODE_LIST = (
     5000, 6000, 4000, 4001, 4002,

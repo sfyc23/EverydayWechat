@@ -34,6 +34,7 @@ from everyday_wechat.utils.friend_helper import (
     handle_friend
 )
 
+__all__ = ['run']
 
 def run():
     """ 主运行入口 """

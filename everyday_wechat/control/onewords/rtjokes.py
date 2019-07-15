@@ -5,6 +5,8 @@ https://github.com/MZCretin/RollToolsApi#随机获取笑话段子列表
 """
 import requests
 
+__all__ = ['get_rtjokes_info']
+
 def get_rtjokes_info():
     """
     随机获取笑话段子列表(https://github.com/MZCretin/RollToolsApi#随机获取笑话段子列表)

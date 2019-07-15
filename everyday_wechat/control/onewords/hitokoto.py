@@ -5,6 +5,8 @@
 
 import requests
 
+__all__ = ['get_hitokoto_info']
+
 def get_hitokoto_info():
     """
     从『一言』获取信息。(官网：https://hitokoto.cn/)

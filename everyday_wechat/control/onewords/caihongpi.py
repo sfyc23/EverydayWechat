@@ -5,6 +5,8 @@ https://chp.shadiao.app/?from_nmsl
  """
 import requests
 
+__all__ = ['get_caihongpi_info']
+
 def get_caihongpi_info():
     """
     彩虹屁生成器

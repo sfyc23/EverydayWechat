@@ -11,6 +11,8 @@ from everyday_wechat.utils.common import (
     md5_encode
 )
 
+__all__ = ['get_ruyiai_bot']
+
 URL = 'http://api.ruyi.ai/v1/message'
 
 def get_ruyiai_bot(text, userId):

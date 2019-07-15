@@ -9,6 +9,8 @@ from everyday_wechat.utils.common import (
     is_json
 )
 
+__all__ = ['get_acib_info']
+
 def get_acib_info():
     """
     从词霸中获取每日一句，带英文。

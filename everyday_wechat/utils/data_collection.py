@@ -18,6 +18,11 @@ from everyday_wechat.control.horoscope.xzw_horescope import get_today_horoscope
 # from everyday_wechat.control.calendar.sojson_calendar import get_sojson_calendar
 from everyday_wechat.control.calendar.rt_calendar import get_rtcalendar
 
+__all__ = [
+    'get_dictum_info', 'get_weather_info', 'get_bot_info',
+    'get_diff_time', 'get_constellation_info', 'get_calendar_info'
+]
+
 DICTUM_NAME_DICT = {
     1: 'wufazhuce', 2: 'acib', 3: 'lovelive', 4: 'hitokoto',
     5: 'rtjokes', 6: 'juzimi', 7: 'caihongpi'

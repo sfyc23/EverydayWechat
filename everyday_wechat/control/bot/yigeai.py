@@ -11,6 +11,8 @@ from everyday_wechat.utils.common import (
 
 from everyday_wechat.utils import config
 
+__all__ = ['get_yigeai']
+
 # 一个AI错误集合
 TULING_ERROR_CODE_LIST = ('501', '502', '503', '504', '507', '510')
 

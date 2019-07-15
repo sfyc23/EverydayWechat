@@ -7,7 +7,10 @@ http://api.qingyunke.com/
 """
 import requests
 
+__all__ = ['get_qingyunke']
+
 URL = 'http://api.qingyunke.com/api.php?key=free&appid=0&msg={}'
+
 
 def get_qingyunke(text, userid=''):
     """

@@ -17,6 +17,8 @@ from everyday_wechat.utils.common import (
     FILEHELPER,
 )
 
+__all__ = ['handle_friend']
+
 def handle_friend(msg):
     """ 处理好友信息 """
     try:

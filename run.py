@@ -5,10 +5,13 @@
 
 import sys
 import re
+from datetime import datetime
 
 try:
     from everyday_wechat import __version__
     print('EverydayWechat 程序版本号：{}'.format(__version__))
+    _date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    print('当前时间：{}'.format(_date))
 except Exception as exception:
     print(str(exception))
     print('请将脚本放在项目根目录中运行')

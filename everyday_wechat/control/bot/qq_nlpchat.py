@@ -19,6 +19,8 @@ from everyday_wechat.utils.common import (
 )
 from everyday_wechat.utils import config
 
+__all__ = ['get_nlp_textchat']
+
 URL = 'https://api.ai.qq.com/fcgi-bin/nlp/nlp_textchat'
 
 def get_nlp_textchat(text, userId):

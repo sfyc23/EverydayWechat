@@ -6,6 +6,11 @@ import re
 import hashlib
 import json
 
+__all__ = [
+    'FILEHELPER_MARK', 'FILEHELPER', 'SPIDER_HEADERS', 'WEEK_DICT',
+    'BIRTHDAY_COMPILE', 'CONSTELLATION_NAME_LIST', 'CONSTELLATION_DATE_DICT',
+    'is_json', 'md5_encode', 'get_constellation_name']
+
 FILEHELPER_MARK = ['文件传输助手', 'filehelper']  # 文件传输助手标识
 FILEHELPER = 'filehelper'
 
@@ -84,7 +89,6 @@ def get_constellation_name(date):
         month, day = int(times[0][0]), int(times[0][1])
         for k, v in CONSTELLATION_DATE_DICT.items():
             if k > (month, day):
-                # print(v)
                 return v
     return None
 

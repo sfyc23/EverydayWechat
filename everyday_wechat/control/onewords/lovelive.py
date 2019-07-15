@@ -4,6 +4,8 @@
  """
 import requests
 
+__all__ = ['get_lovelive_info']
+
 def get_lovelive_info():
     """
     从土味情话中获取每日一句。

@@ -10,6 +10,8 @@ import requests
 from bs4 import BeautifulSoup
 from everyday_wechat.utils.common import SPIDER_HEADERS
 
+__all__ = ['get_xzw_horoscope', 'get_today_horoscope']
+
 XZW_BASE_URL_TODAY = "https://www.xzw.com/fortune/{}"
 XZW_BASE_URL_TOMORROW = "https://www.xzw.com/fortune/{}/1.html"
 CONSTELLATION_DICT = {

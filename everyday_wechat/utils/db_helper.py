@@ -5,12 +5,17 @@ Creator: DoubleThunder
 Create time: 2019-07-12 18:37
 Introduction:
 """
+
 import pymongo
 from everyday_wechat.utils import config
 from functools import wraps
 from datetime import datetime
 
-# config.init()
+__all__ = [
+    'is_open_db', 'udpate_weather', 'udpate_user_city', 'find_user_city',
+    'find_weather', 'update_perpetual_calendar', 'find_perpetual_calendar',
+    'find_rubbish', 'update_rubbish'
+]
 
 cache_valid_time = 4 * 60 * 60  # 缓存有效时间
 

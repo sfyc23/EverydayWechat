@@ -5,6 +5,7 @@ https://github.com/MZCretin/RollToolsApi#获取特定城市今日天气
 """
 import requests
 
+__all__ = ['get_rttodayweather']
 
 # {"code":1,"msg":"数据返回成功","data":{"address":"广西壮族自治区 桂林市 全州县",
 # "cityCode":"450324","temp":"26℃","weather":"晴","windDirection":"东北","windPower":"≤3级",

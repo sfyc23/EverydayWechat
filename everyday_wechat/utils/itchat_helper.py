@@ -16,7 +16,10 @@ from everyday_wechat.utils.common import (
     FILEHELPER,
 )
 
+__all__ = ['init_wechat_config', 'set_system_notice', 'get_group', 'get_friend']
+
 TIME_COMPILE = re.compile(r'^\s*([01]?[0-9]|2[0-3])\s*[：:\-]\s*([0-5]?[0-9])\s*$')
+
 
 def init_wechat_config():
     """ 初始化微信所需数据 """

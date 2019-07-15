@@ -32,6 +32,8 @@ from everyday_wechat.utils.db_helper import (
     update_rubbish
 )
 
+__all__ = ['handle_group_helper']
+
 at_compile = r'(@.*?\s{1,}).*?'
 tomorrow_compile = r'明[日天]'
 
