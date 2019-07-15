@@ -19,6 +19,7 @@ from everyday_wechat.utils.common import (
 
 __all__ = ['handle_friend']
 
+
 def handle_friend(msg):
     """ 处理好友信息 """
     try:
@@ -51,4 +52,3 @@ def handle_friend(msg):
             print('自动回复失败\n')
     except Exception as exception:
         print(str(exception))
-

@@ -36,7 +36,6 @@ def get_rtcalendar(date=''):
 
     date_ = date or datetime.now().strftime('%Y%m%d')
 
-
     print('获取 {} 的日历...'.format(date_))
     try:
         resp = requests.get('https://www.mxnzp.com/api/holiday/single/{}'.format(date_))

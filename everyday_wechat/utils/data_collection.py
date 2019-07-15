@@ -10,7 +10,6 @@ from datetime import timedelta
 # from everyday_wechat.control.weather.rtweather import get_today_weather
 from everyday_wechat.control.weather.sojson import get_sojson_weather
 from everyday_wechat.utils.common import (
-    WEEK_DICT,
     get_constellation_name,
 )
 from everyday_wechat.utils import config

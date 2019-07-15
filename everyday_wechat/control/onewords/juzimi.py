@@ -6,6 +6,8 @@ Author: ClaireYiu(https://github.com/ClaireYiu)
 """
 import random
 import requests
+
+
 # from requests_html import HTMLSession
 
 
@@ -20,10 +22,10 @@ def get_zsh_info():
     print('正在获取民国情话...')
     try:
         name = [
-            ['writer/朱生豪', 38,],
+            ['writer/朱生豪', 38, ],
             ['article/爱你就像爱生命', 22],
             ['article/25637', 55],
-                ]
+        ]
         apdix = random.choice(name)
         # page 从零开始计数的。
         url = 'https://www.juzimi.com/{}?page={}'.format(

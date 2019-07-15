@@ -7,6 +7,7 @@ import requests
 
 __all__ = ['get_rttodayweather']
 
+
 # {"code":1,"msg":"数据返回成功","data":{"address":"广西壮族自治区 桂林市 全州县",
 # "cityCode":"450324","temp":"26℃","weather":"晴","windDirection":"东北","windPower":"≤3级",
 # "humidity":"58%","reportTime":"2019-06-14 10:49:37"}}

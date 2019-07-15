@@ -13,6 +13,7 @@ from everyday_wechat.utils.common import (
 
 __all__ = ['get_tianapi_robot']
 
+
 def get_tianapi_robot(text, userid):
     """
     从天行机器人获取自动回复,接口地址:<https://www.tianapi.com/apiview/47>
@@ -38,7 +39,8 @@ def get_tianapi_robot(text, userid):
             'mode': 1,  # 图文返回数量，取值1-10
             'datatype': '0',  # 返回类型，文本0[默认]、语音1
         }
-        resp = requests.get('https://api.tianapi.com/txapi/robot/', params=params)
+        url = 'https://api.tianapi.com/txapi/robot/'
+        resp = requests.get(url, params=params)
         if resp.status_code == 200:
             # print(resp.text)
             content_dict = resp.json()
@@ -46,7 +48,8 @@ def get_tianapi_robot(text, userid):
                 if content_dict['datatype'] == 'text':
                     data_dict = content_dict['newslist']
                     reply_text = data_dict[0]['reply']
-                    reply_text.replace('{robotname}', bot_name).replace('{appellation}', reply_name)
+                    reply_text.replace('{robotname}', bot_name)\
+                        .replace('{appellation}', reply_name)
                     return reply_text
                 else:
                     return '我不太懂你在说什么'

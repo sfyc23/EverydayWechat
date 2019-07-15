@@ -11,6 +11,7 @@ from everyday_wechat.utils.common import SPIDER_HEADERS
 
 __all__ = ['get_atoolbox_rubbish']
 
+
 def get_atoolbox_rubbish(key):
     """
     # http://www.atoolbox.net/Tool.php?Id=804

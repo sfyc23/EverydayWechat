@@ -15,6 +15,7 @@ __all__ = ['get_ruyiai_bot']
 
 URL = 'http://api.ruyi.ai/v1/message'
 
+
 def get_ruyiai_bot(text, userId):
     """
     海知智能 文档说明：<http://docs.ruyi.ai/502931>
@@ -31,7 +32,8 @@ def get_ruyiai_bot(text, userId):
             return
 
         params = {'q': text, 'user_id': md5_encode(userId), 'app_key': app_key}
-        resp = requests.get(URL, headers={'Content-Type': 'application/json'}, params=params)
+        headers = {'Content-Type': 'application/json'}
+        resp = requests.get(URL, headers=headers, params=params)
         if resp.status_code == 200:
             # print(resp.text)
             content_dict = resp.json()

@@ -35,8 +35,8 @@ def get_yigeai(text, userid):
         session_id = md5_encode(userid if userid else '250')
 
         # print('发出的消息:{}'.format(text))
-        resp = requests.post('http://www.yige.ai/v1/query',
-                             data={'token': token, 'query': text, 'session_id': session_id})
+        data = {'token': token, 'query': text, 'session_id': session_id}
+        resp = requests.post('http://www.yige.ai/v1/query', data=data)
         if resp.status_code == 200 and is_json(resp):
             # print(resp.text)
             re_data = resp.json()

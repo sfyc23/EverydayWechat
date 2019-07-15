@@ -23,6 +23,7 @@ __all__ = ['get_nlp_textchat']
 
 URL = 'https://api.ai.qq.com/fcgi-bin/nlp/nlp_textchat'
 
+
 def get_nlp_textchat(text, userId):
     """
     智能闲聊（腾讯）<https://ai.qq.com/product/nlpchat.shtml>
@@ -46,10 +47,10 @@ def get_nlp_textchat(text, userId):
             string.ascii_letters + string.digits, random.randint(10, 16)))
         time_stamp = int(time.time())  # 时间戳
         params = {
-            'app_id': app_id, # 应用标识
-            'time_stamp': time_stamp, # 请求时间戳（秒级）
-            'nonce_str': nonce_str, # 随机字符串
-            'session': md5_encode(userId), # 会话标识
+            'app_id': app_id,  # 应用标识
+            'time_stamp': time_stamp,  # 请求时间戳（秒级）
+            'nonce_str': nonce_str,  # 随机字符串
+            'session': md5_encode(userId),  # 会话标识
             'question': text  # 用户输入的聊天内容
         }
         # 签名信息
@@ -86,6 +87,7 @@ def getReqSign(parser, app_key):
     # print('sign =', sign_str.strip())
     hash_md5 = hashlib.md5(sign_str.encode("UTF-8"))
     return hash_md5.hexdigest().upper()
+
 
 get_auto_reply = get_nlp_textchat
 

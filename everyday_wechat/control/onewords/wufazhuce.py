@@ -6,8 +6,8 @@ import requests
 from bs4 import BeautifulSoup
 from everyday_wechat.utils.common import SPIDER_HEADERS
 
-
 __all__ = ['get_wufazhuce_info']
+
 
 def get_wufazhuce_info():
     """
@@ -21,7 +21,7 @@ def get_wufazhuce_info():
         if resp.status_code == 200:
             soup_texts = BeautifulSoup(resp.text, 'lxml')
             # 『one -个』 中的每日一句
-            every_msg = soup_texts.find('div', class_='fp-one-cita').text #只取当天的这句
+            every_msg = soup_texts.find('div', class_='fp-one-cita').text  # 只取当天的这句
             return every_msg
         print('获取 ONE 失败。')
     except Exception as exception:

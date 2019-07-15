@@ -201,7 +201,7 @@ def handle_group_helper(msg):
                 itchat.send(retext, uuid)
                 update_perpetual_calendar(_date, cale_info)  # 保存数据到数据库
                 return
-            else: # 查询无结果
+            else:  # 查询无结果
                 retext = calendar_no_result_msg.format(ated_name=ated_name, _date=_date)
                 itchat.send(retext, uuid)
             return
@@ -230,7 +230,7 @@ def handle_group_helper(msg):
                 retext = rubbish_nothing_msg.format(ated_name=ated_name, name=key)
                 itchat.send_msg(retext, uuid)
             if return_list:
-                update_rubbish(return_list) # 保存数据库
+                update_rubbish(return_list)  # 保存数据库
             return
 
     # 其他结果都没有匹配到，走自动回复的路

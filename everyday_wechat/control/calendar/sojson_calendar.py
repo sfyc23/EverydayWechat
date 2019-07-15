@@ -12,6 +12,7 @@ from everyday_wechat.utils.common import (
 
 __all__ = ['get_sojson_calendar']
 
+
 def get_sojson_calendar(date=''):
     """
     获取指定日期的节假日及万年历信息
