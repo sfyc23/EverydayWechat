@@ -51,7 +51,7 @@ def get_sojson_weather(city_name, is_tomorrow=False):
             # }
             if weather_dict.get('status') == 200:
 
-                today_weather = weather_dict.get('data').get('forecast')[1]
+                today_weather = weather_dict.get('data').get('forecast')[0]
 
                 weather_info = MSG_TODAY.format(
                     city_name=city_name,
@@ -89,6 +89,7 @@ def get_sojson_weather_tomorrow(city_name):
     weather_url = 'http://t.weather.sojson.com/api/weather/city/{}'.format(city_code)
     try:
         resp = requests.get(url=weather_url)
+        # print(resp.text)
         if resp.status_code == 200:
             weather_dict = resp.json()
             if weather_dict.get('status') == 200:

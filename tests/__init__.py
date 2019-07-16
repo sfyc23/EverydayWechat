@@ -12,4 +12,5 @@ here_dir = os.path.dirname(__file__)
 
 class BaseTestCase(TestCase):
     def setUp(self):
-        config.init()
+        # config.init()
+        pass

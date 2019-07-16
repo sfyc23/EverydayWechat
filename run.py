@@ -49,17 +49,18 @@ def run():
             print(str(error))
         return
 
+    # 用于判断数据库功能是否开启
     try:
         from everyday_wechat.utils import config
         from everyday_wechat.utils.db_helper import is_open_db
-        from everyday_wechat import main
         db_text = '已开启数据库功能' if is_open_db else '数据库未开启或启动失败'
         print(db_text)
     except Exception as exception:
         print(str(exception))
         return
 
-    # main.run()
+    from everyday_wechat import main
+    main.run()
 
 
 if __name__ == '__main__':
