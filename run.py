@@ -33,7 +33,7 @@ def run():
         import itchat
         import apscheduler
         import requests
-        from bs4 import BeautifulSoups
+        from bs4 import BeautifulSoup
         if itchat.__version__ != '1.3.10':
             print('请将 itchat 的版本升级至 1.3.10！')
             return
