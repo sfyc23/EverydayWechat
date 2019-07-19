@@ -11,9 +11,7 @@ import platform
 # from apscheduler.schedulers.blocking import BlockingScheduler
 from apscheduler.schedulers.background import BackgroundScheduler
 import itchat
-from itchat.content import (
-    TEXT
-)
+from itchat.content import *
 
 from everyday_wechat.utils.data_collection import (
     get_weather_info,
@@ -31,7 +29,8 @@ from everyday_wechat.utils.group_helper import (
     handle_group_helper
 )
 from everyday_wechat.utils.friend_helper import (
-    handle_friend
+    handle_friend,
+    handle_picture
 )
 
 __all__ = ['run']
@@ -157,6 +156,11 @@ def text_group(msg):
     """ 监听用户消息，用于自动回复 """
     handle_group_helper(msg)
 
+@itchat.msg_register([PICTURE, RECORDING, ATTACHMENT, VIDEO])
+def download_files(msg):
+    """ 监听用户消息，用于自动回复 """
+    """ 简单处理：接收到图片之类，假定接收到的信息是图片名字， 以此作为回复"""
+    handle_picture(msg)
 
 def exit_msg():
     """ 退出通知 """
