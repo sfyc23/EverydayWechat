@@ -10,6 +10,7 @@ import time
 import platform
 # from apscheduler.schedulers.blocking import BlockingScheduler
 from apscheduler.schedulers.background import BackgroundScheduler
+from datetime import datetime as dt, timedelta
 import itchat
 from itchat.content import (
     TEXT
@@ -103,6 +104,18 @@ def init_data():
     if alarm_dict:
         init_alarm(alarm_dict)  # 初始化定时任务
 
+def set_daily_alarm(alarm_dict):
+    """
+    设置每天随机发送消息时间
+    :param alarm_dict: 定时相关内容
+    """
+    sched = BackgroundScheduler()
+    for key, value in alarm_dict.items():
+        start = dt.strptime(value['start'], '%H:%M').replace(year=dt.now().year, month=dt.now().month, day=dt.now().day)
+        end = dt.strptime(value['end'], '%H:%M').replace(year=dt.now().year, month=dt.now().month, day=dt.now().day)
+        run_time = start + timedelta(seconds=random.randint(0, int((end - start).total_seconds())),)
+        sched.add_job(send_alarm_msg, 'date', [key], run_date = run_time, id=key, misfire_grace_time=600)
+    sched.start()
 
 def init_alarm(alarm_dict):
     """
@@ -111,9 +124,8 @@ def init_alarm(alarm_dict):
     """
     # 定时任务
     scheduler = BackgroundScheduler()
-    for key, value in alarm_dict.items():
-        scheduler.add_job(send_alarm_msg, 'cron', [key], hour=value['hour'],
-                          minute=value['minute'], id=key, misfire_grace_time=600)
+    set_daily_alarm(alarm_dict)
+    scheduler.add_job(set_daily_alarm, 'cron', [alarm_dict], hour = 0, id='set_daily_alarm')
     scheduler.start()
     print('已开启定时发送提醒功能...')
     # print(scheduler.get_jobs())

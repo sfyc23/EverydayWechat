@@ -117,12 +117,13 @@ def init_wechat_config():
                 ats = [ats]
             if isinstance(ats, list):
                 for at in ats:
-                    times = TIME_COMPILE.findall(at)
-                    if not times:
+                    at = at.replace('－','-').replace('：',':')
+                    start = at.split('-')[0].strip()
+                    end = at.split('-')[1].strip() if len(at.split('-')) == 2 else start
+                    if not (TIME_COMPILE.findall(start) and TIME_COMPILE.findall(end)):
                         print('时间{}格式出错'.format(at))
                         continue
-                    hour, minute = int(times[0][0]), int(times[0][1])
-                    temp_dict = {'hour': hour, 'minute': minute, 'uuid_list': uuid_list}
+                    temp_dict = {'start': start, 'end': end, 'uuid_list': uuid_list}
                     temp_dict.update(gi)
                     alarm_dict[md5_encode(str(temp_dict))] = temp_dict
         #   end---------------------------定时处理---------------------------end
