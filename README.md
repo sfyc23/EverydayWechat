@@ -10,6 +10,8 @@
 
 [版本更新日志](https://github.com/sfyc23/EverydayWechat/blob/master/hostory.md)
 
+最近搞了一个类似，但功能不一样的项目:[微信加群助手](https://github.com/sfyc23/WechatAddGroupHelper)。欢迎大家 star。
+
 **禁止将本工具用于商业用途**，如产生法律纠纷与本人无关。  
 
 > 注意：如果给女朋友添加图灵机器人回复，请慎重考虑！！！！  
@@ -334,7 +336,8 @@ python run.py
 
 ## 微信交流群
 因为人数已超 100 人，请加 wx: **sfyc1314** 机器人为好友，验证信息写填写：「github」！！！，机器人会自动通过。  
-通过后回复：「加群」，会自动拉你入群。  
+通过后回复：「加群」，会自动拉你入群。
+加群助手也已开源，地址：[https://github.com/sfyc23/WechatAddGroupHelper](https://github.com/sfyc23/WechatAddGroupHelper)，欢迎大家 star。  
 机器人二维码： 
 
 ![微信交流群](https://raw.githubusercontent.com/sfyc23/image/master/vlog/20190614125724.png)

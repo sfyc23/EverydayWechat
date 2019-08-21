@@ -27,4 +27,4 @@ class TestJobModel(BaseTestCase):
             sweet_words = gf.get('sweet_words')
             send_msg = '\n'.join(x for x in [calendar_info, weather, horoscope, dictum, diff_time, sweet_words] if x)
             print(send_msg)
-            print('-'*50)
+            print('\n' + '-' * 50 + '\n')
