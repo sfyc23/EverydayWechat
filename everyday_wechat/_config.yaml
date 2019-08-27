@@ -20,8 +20,7 @@ auto_reply_info:
 
   # 黑名单，is_auto_reply_all:True 生效。此名单不会自动回复。
   auto_reply_black_list:
-    - '小号'
-
+    - '贴心小秘书'
 
   # 机器人渠道（1: 图灵机器人，2: 一个AI ,3 : 青云客，4 腾讯智能闲聊，5:天行机器人,6：海知智能，7：思知机器人)
   bot_channel: 7
@@ -97,7 +96,7 @@ alarm_info:
     #  如果你需要另一套方案，如下面复制即可
     #  如不需要，则删除或注解下面所有的数据
     - group_name: 'EverydayWechat 交流1群'
-      wechat_name: '古典'
+      wechat_name: '贴心小秘书'
       city_name: '漳州'
       start_date: '2011-11-11'
       start_date_msg: '分手后的第{}天'
@@ -117,6 +116,7 @@ group_helper_conf:
   group_name_white_list:
     - '群机器人测试群'
     - 'EverydayWechat 交流1群'
+    - 'EverydayWechat 交流2群'
 
   # 黑名单用户。当 is_all ：True 。这个群里的用户不受影响。
   group_name_black_list:
@@ -127,7 +127,7 @@ group_helper_conf:
   is_auto_reply: True # 开启群自动回复（慎重开启！）
   is_weather: True # 是否开启天气查询
   is_calendar: True # 是否开启万历年查询
-  is_rubbish: True  # 是否开启垃圾查询（待定TODO）
+  is_rubbish: True  # 是否开启垃圾查询
 
 #--------------------------- 群聊助手设置 --------------------------end
 
