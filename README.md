@@ -4,9 +4,11 @@
 可以定时给朋友或者群聊发送每日天气、提醒、每日一句，也可以智能自动回复好友信息。还有群助手功能，让你在好友群中装 X。
 操作简单，小白用户也可快速上手。  
 
-**itchat 依赖于网页版微信进行开发，所以首先得确定你的微信能登录网页版微信**：<https://wx.qq.com/>。  
-**itchat 依赖于网页版微信进行开发，所以首先得确定你的微信能登录网页版微信**：<https://wx.qq.com/>。  
-**itchat 依赖于网页版微信进行开发，所以首先得确定你的微信能登录网页版微信**：<https://wx.qq.com/>。  
+**itchat 本项目依赖于网页版微信进行开发，如不能登录网页版微信，则无法使用此项目**：<https://wx.qq.com/>。  
+**itchat 本项目依赖于网页版微信进行开发，如不能登录网页版微信，则无法使用此项目**：<https://wx.qq.com/>。  
+**itchat 本项目依赖于网页版微信进行开发，如不能登录网页版微信，则无法使用此项目**：<https://wx.qq.com/>。  
+
+
 
 [版本更新日志](https://github.com/sfyc23/EverydayWechat/blob/master/hostory.md)
 
@@ -42,18 +44,19 @@
 -  金山词霸 ● 每日一句（双语）：<http://open.iciba.com/?c=api>  
 -  一言 ：<https://hitokoto.cn/>  
 -  土味情话： <https://www.v2ex.com/t/569853> (土)  
--  句子迷-民国情书: <https://www.juzimi.com/> (高雅)  
+-  句子迷-民国情书: <https://www.juzimi.com/> (高雅，但最近不可用)  
 -  RollToolsApi: [随机获取笑话段子列表](https://github.com/MZCretin/RollToolsApi#%E9%9A%8F%E6%9C%BA%E8%8E%B7%E5%8F%96%E7%AC%91%E8%AF%9D%E6%AE%B5%E5%AD%90%E5%88%97%E8%A1%A8)      
 -  彩虹屁: <https://chp.shadiao.app>  
 
 ### 人工智能机器人
 
--  图灵机器人：<http://www.turingapi.com/>（需求实名制认证，并每天免费数量只有100条）  
--  一个AI：<http://www.yige.ai/>（免费且无数量限制。可自定义回复、对话、场景。但高级功能使用比较复杂。但已长时间没人维护）    
+-  图灵机器人：<http://www.turingapi.com/>（需求实名制认证，并每天免费数量只有 100 条）  
 -  青云客智能聊天机器人：<http://api.qingyunke.com/>（无须申请，无数量限制，但有点智障，分手神器。分手神器，慎用）  
--  智能闲聊（腾讯）<https://ai.qq.com/product/nlpchat.shtml> ( 申请使用，免费且无限量。大厂靠谱。)  
--  天行机器人 <https://www.tianapi.com/apiview/47> (认证后有 7 万条免费使用。之后收费：1 万条/1 块钱)  
--  海知智能 <https://ruyi.ai/> （功能很强大，不仅仅用于聊天。需申请 key，免费） 
+-  智能闲聊（腾讯）：<https://ai.qq.com/product/nlpchat.shtml> ( 申请使用，免费且无限量。大厂靠谱。)  
+-  天行机器人 ：<https://www.tianapi.com/apiview/47> (认证后有 7 万条免费使用。之后收费：1 万条/1 块钱)  
+-  海知智能 ：<https://ruyi.ai/> （功能很强大，不仅仅用于聊天。需申请 key，免费） 
+-  思知对话机器人：<https://www.ownthink.com/> (免费，可不申请 appid)
+-  一个AI：<http://www.yige.ai/>（免费且无数量限制。可自定义回复、对话、场景。但高级功能使用比较复杂。但已长时间没人维护） 
 
 ### 星座运势
 -  星座屋 ：<https://www.xzw.com/> (基于爬虫获取数据)  
@@ -77,11 +80,11 @@
 #### 2.选择渠道
 
 ```
-机器人渠道（1: 图灵机器人，2: 一个AI ,3 : 青云客，4 腾讯智能闲聊，5:天行机器人，6 海知智能)
-bot_channel: 3
+机器人渠道（1: 图灵机器人，2: 一个AI ,3 : 青云客，4 腾讯智能闲聊，5:天行机器人，6：海知智能，7：思知机器人)
+bot_channel: 7
 ```
 
-> 默认为青云客，但请注意这个回复机器人比较智障。。
+> 默认为思知机器人，可不申请 key 的情况下，最智能的了。。
 
 #### 3. 指定自动回复的好友名单
 
@@ -111,7 +114,7 @@ auto_reply_black_list:
 
 除了青云客之外，其他的机器人都需要去对应的官网，注册并获取相应的 key。需要哪个就配置哪个。
 
-##### 图灵机器人
+##### I.图灵机器人
 
 - 打开图灵机器人官网：[http://www.turingapi.com](http://www.turingapi.com/) 进行注册。 
 - 创建机器人，得到 apikey。将填入到 **_config.yaml** 文件中的：  
@@ -124,7 +127,7 @@ turing_conf:
 ```
 > 图灵机器人必须认证后才能使用，免费版用户，每天可使用 100 条信息，且用且珍惜。
 
-##### 天行机器人 
+##### II.天行机器人 
 
 - 打开天行数据注册页面：[https://www.tianapi.com/signup.html](https://www.tianapi.com/signup.html?source=sf4243841) 进行注册。  
 - 在个人中心的第一行，即可得到 apikey。  
@@ -136,7 +139,7 @@ txapi_conf:
   bot_name: '老公' # 机器人的名字（可空）
 ```
 
-##### 智能闲聊（腾讯）
+##### III.智能闲聊（腾讯）
 
 - 打开 https://ai.qq.com/product/nlpchat.shtml 并登录。  
 - 点击免费使用 -> 接入能力 -> 创建应用 -> 创建成功后，会显示出 app_id ,app_key 。  
@@ -149,7 +152,7 @@ qqnlpchat_conf:
     app_key: '你申请的app_key'
 ```
 
-#####  配置「一个AI」
+#####  IV.配置「一个AI」
 打开图灵机器人官网：[http://www.yige.ai](http://www.yige.ai) 进行注册。    
 创建应用，得到「API密钥」中的 「客户端访问令牌」  
 将填入到 **_config.yaml** 文件中的：  
@@ -159,12 +162,21 @@ yigeai_conf:
   client_token: '客户访问令牌'
 ```
 
+#####  V.配置「思知机器人」
+
+打开思知官网：[https://www.ownthink.com/](https://www.ownthink.com/) 进行注册。  
+创建机器人，得到 appid。  
+将填入到 **_config.yaml** 文件中的：  
+```
+ownthink_conf:
+    app_key: '你申请的api_id'
+```
+
+
 关于自动回复，目前可以公开的情报：  
 1. 只能自动回复文字类消息；  
-3. 群消息自动回复还未现实（已完成）；  
-4. 如果消息发送太频繁，微信会限制登录网页端登录。放心，并不会封号；  
-5. 并不是对所有人自动回复，只是回复 **auto_reply_names** 中的人；  
-6. 好友里可以填入名称『文件传输助手』，这样你就可以在文件传输助手，发送消息，查看自动回复消息效果。  
+2. 如果消息发送太频繁，微信会限制登录网页端登录。放心，并不会封号；  
+3. 好友里可以填入名称『文件传输助手』，这样你就可以在文件传输助手，发送消息，查看自动回复消息效果。  
 
 ### 配置定时提醒
 

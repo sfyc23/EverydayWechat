@@ -28,7 +28,7 @@ DICTUM_NAME_DICT = {
 }
 BOT_NAME_DICT = {
     1: 'tuling123', 2: 'yigeai', 3: 'qingyunke', 4: 'qq_nlpchat',
-    5: 'tian_robot', 6: 'ruyiai'
+    5: 'tian_robot', 6: 'ruyiai', 7: 'ownthink_robot'
 }
 # 用于星座的正则表达式
 BIRTHDAY_COMPILE = re.compile(r'\-?(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$')

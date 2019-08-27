@@ -22,8 +22,9 @@ auto_reply_info:
   auto_reply_black_list:
     - '小号'
 
-  # 机器人渠道（1: 图灵机器人，2: 一个AI ,3 : 青云客，4 腾讯智能闲聊，5:天行机器人,6 海知智能)
-  bot_channel: 3
+
+  # 机器人渠道（1: 图灵机器人，2: 一个AI ,3 : 青云客，4 腾讯智能闲聊，5:天行机器人,6：海知智能，7：思知机器人)
+  bot_channel: 7
 
   #图灵机器人(http://www.tuling123.com/) 实名后的用户每天免费可用 100 条。
   turing_conf:
@@ -43,6 +44,10 @@ auto_reply_info:
   # 海知智能 <https://ruyi.ai/> 功能很强大，不仅仅用于聊天。需申请 key，免费
   ruyi_conf:
     app_key: '你申请的key'
+
+  # 思知机器人 <https://www.ownthink.com/> 免费，如果只是简单使用 app_key 可不申请。
+  ownthink_conf:
+    app_key: ''
 
   # 一个 Al (http://www.yige.ai/)（已长时间无人维护）
   yigeai_conf:
@@ -91,7 +96,7 @@ alarm_info:
 
     #  如果你需要另一套方案，如下面复制即可
     #  如不需要，则删除或注解下面所有的数据
-    - group_name: 'EverydayWechat 交流群'
+    - group_name: 'EverydayWechat 交流1群'
       wechat_name: '古典'
       city_name: '漳州'
       start_date: '2011-11-11'
@@ -103,32 +108,32 @@ alarm_info:
 #---------------------------------------定时提醒功能设置--------------------------------------end
 
 
-#---------------------------群聊助手设置（已完成，正在整理。下个版本发布）--------------------------start
+#---------------------------群聊助手设置--------------------------start
 group_helper_conf:
   is_open: True # 开启群助手
   is_all: False # 是否对所有群开启。当开启时，只有黑名单的名单才不受影响（慎重开启！）
 
   # 白名单用户。当 is_all：Fase。只处理这个群里的消息
   group_name_white_list:
-    - '蕉群'
     - '群机器人测试群'
-    - '吹水专用'
-    - 'EverydayWechat 交流群'
+    - 'EverydayWechat 交流1群'
 
   # 黑名单用户。当 is_all ：True 。这个群里的用户不受影响。
   group_name_black_list:
-    - 'EverydayWechat 交流群'
+    - 'EverydayWechat 交流1群'
+    - 'EverydayWechat 交流2群'
 
-  is_at: False # 艾特标记。只有当别人艾特机器人，才会处理消息（慎重关闭！）
-  is_auto_reply: False # 开启群自动回复（慎重开启！）
+  is_at: True # 艾特标记。只有当别人艾特机器人，才会处理消息（慎重关闭！）
+  is_auto_reply: True # 开启群自动回复（慎重开启！）
   is_weather: True # 是否开启天气查询
   is_calendar: True # 是否开启万历年查询
   is_rubbish: True  # 是否开启垃圾查询（待定TODO）
 
-#---------------------------群聊助手设置（已完成，正在整理。下个版本发布）--------------------------end
+#--------------------------- 群聊助手设置 --------------------------end
 
 
 # start ----------------------------------- 数据库设置 ----------------------------------- start
+# 可不安装与设置数据库内容，数据库主要用于群助手功能中，查询数据的缓存。
 db_config: # 请安装 mongodb 数据库
   is_open_db: True # 是否开启数据库功能
   mongodb_conf:
