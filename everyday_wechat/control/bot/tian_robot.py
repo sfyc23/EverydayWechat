@@ -11,7 +11,9 @@ from everyday_wechat.utils.common import (
     md5_encode
 )
 
-__all__ = ['get_auto_reply', 'get_tianapi_robot']
+__all__ = ['get_auto_reply', 'BOT_INDEX', 'BOT_NAME']
+BOT_INDEX = 5
+BOT_NAME = '天行机器人'
 
 
 def get_tianapi_robot(text, userid):

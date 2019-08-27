@@ -53,8 +53,8 @@ def run():
     try:
         from everyday_wechat.utils import config
         from everyday_wechat.utils.db_helper import is_open_db
-        db_text = '已开启数据库功能' if is_open_db else '数据库未开启或启动失败'
-        print(db_text)
+        if not is_open_db:
+            print('数据库未开启或启动失败')
     except Exception as exception:
         print(str(exception))
         return

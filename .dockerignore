@@ -1,0 +1,6 @@
+.git
+.idea
+.tests
+__pycache__
+itchat.pkl
+QR.png

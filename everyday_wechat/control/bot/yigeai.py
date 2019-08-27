@@ -11,7 +11,9 @@ from everyday_wechat.utils.common import (
 
 from everyday_wechat.utils import config
 
-__all__ = ['get_auto_reply', 'get_yigeai']
+__all__ = ['get_auto_reply', 'BOT_INDEX', 'BOT_NAME']
+BOT_INDEX = 2
+BOT_NAME = '一个 AI 机器人'
 
 # 一个AI错误集合
 TULING_ERROR_CODE_LIST = ('501', '502', '503', '504', '507', '510')

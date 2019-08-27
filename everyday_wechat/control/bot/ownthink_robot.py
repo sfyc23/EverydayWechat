@@ -12,7 +12,9 @@ from everyday_wechat.utils.common import (
     md5_encode
 )
 
-__all__ = ['get_auto_reply', 'get_ownthink_robot']
+__all__ = ['get_auto_reply', 'BOT_INDEX', 'BOT_NAME']
+BOT_INDEX = 7
+BOT_NAME = '思知机器人'
 
 
 def get_ownthink_robot(text, userid):
@@ -27,7 +29,7 @@ def get_ownthink_robot(text, userid):
         # config.init()
         info = config.get('auto_reply_info')['txapi_conf']
         app_key = info.get('app_key', '')
-        if not re.findall(r'^[0-9a-z]{20,}$', app_key):  # 验证 app_key 是否有效果
+        if not re.findall(r'^[0-9a-z]{20,}$', app_key):  # 验证 app_key 是否有效
             app_key = ''
 
         params = {

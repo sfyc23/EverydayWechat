@@ -7,7 +7,9 @@ http://api.qingyunke.com/
 """
 import requests
 
-__all__ = ['get_auto_reply', 'get_qingyunke']
+__all__ = ['get_auto_reply', 'BOT_INDEX', 'BOT_NAME']
+BOT_INDEX = 3
+BOT_NAME = '青云客机器人'
 
 URL = 'http://api.qingyunke.com/api.php?key=free&appid=0&msg={}'
 
