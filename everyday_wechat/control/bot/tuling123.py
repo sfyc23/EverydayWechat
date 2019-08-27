@@ -13,7 +13,7 @@ from everyday_wechat.utils.common import (
 )
 from everyday_wechat.utils import config
 
-__all__ = ['get_tuling123']
+__all__ = ['get_auto_reply', 'get_tuling123']
 
 # 图灵机器人错误码集合
 TULING_ERROR_CODE_LIST = (

@@ -11,7 +11,7 @@ from everyday_wechat.utils.common import (
     md5_encode
 )
 
-__all__ = ['get_ruyiai_bot']
+__all__ = ['get_auto_reply', 'get_ruyiai_bot']
 
 URL = 'http://api.ruyi.ai/v1/message'
 

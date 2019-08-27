@@ -7,7 +7,7 @@ http://api.qingyunke.com/
 """
 import requests
 
-__all__ = ['get_qingyunke']
+__all__ = ['get_auto_reply', 'get_qingyunke']
 
 URL = 'http://api.qingyunke.com/api.php?key=free&appid=0&msg={}'
 

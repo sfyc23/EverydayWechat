@@ -19,7 +19,7 @@ from everyday_wechat.utils.common import (
 )
 from everyday_wechat.utils import config
 
-__all__ = ['get_nlp_textchat']
+__all__ = ['get_auto_reply', 'get_nlp_textchat']
 
 URL = 'https://api.ai.qq.com/fcgi-bin/nlp/nlp_textchat'
 
