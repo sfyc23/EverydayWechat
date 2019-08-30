@@ -264,6 +264,8 @@ def log_all_config():
                 print('已开启日志查询功能，具体使用方法请输入：“help” 查看。')
             if helper.get('is_rubbish'):
                 print('已开启垃圾分类查询功能，具体使用方法请输入：“help” 查看。')
+            if helper.get('is_moviebox'):
+                print('已开启票房查询功能，具体使用方法请输入：“help” 查看。')
 
     print('=' * 80)
 
@@ -276,7 +278,7 @@ def log_all_config():
         alarm_dict = alarm.get('alarm_dict')
         for value in alarm_dict.values():
             nickname_list = value.get('nickname_list')
-            nns = ','.join(nickname_list)
+            nns = '，'.join(nickname_list)
             # temp_dict = {'hour': hour, 'minute': minute, 'uuid_list': uuid_list, 'nickname_list': nickname_list}
             hour = value.get('hour')
             minute = value.get('minute')

@@ -72,10 +72,9 @@ alarm_info:
         - '萌萌哒'
         - '蕉群'
       alarm_timed:
-        - "16:28"
-        - "16:29"
-        - "16:30"
-      is_tomorrow: False # 是否发送明日信息（如天气，星座，万年历）
+        - "21:32"
+        - "21:33"
+      is_tomorrow: True # 是否发送明日信息（如天气，星座，万年历）
       #女友所在城市，用于发送天气。（可空）
       city_name: '桂林'
       # 格言渠道（1 : ONE●一个，2 : 词霸（每日英语，双语）3: 土味情话 4 : 一言，5：笑话，6 民国情书,7彩虹屁)(可空)
@@ -115,6 +114,7 @@ group_helper_conf:
   # 白名单用户。当 is_all：Fase。只处理这个群里的消息
   group_name_white_list:
     - '群机器人测试群'
+    - '测试群'
     - 'EverydayWechat 交流1群'
     - 'EverydayWechat 交流2群'
 
@@ -128,7 +128,7 @@ group_helper_conf:
   is_weather: True # 是否开启天气查询
   is_calendar: True # 是否开启万历年查询
   is_rubbish: True  # 是否开启垃圾查询
-
+  is_moviebox: True # 是否开启电影票房。
 #--------------------------- 群聊助手设置 --------------------------end
 
 

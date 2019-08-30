@@ -20,6 +20,9 @@ from everyday_wechat.utils.data_collection import (
 from everyday_wechat.control.rubbish.atoolbox_rubbish import (
     get_atoolbox_rubbish
 )
+from everyday_wechat.control.moviebox.maoyan_movie_box import (
+    get_maoyan_movie_box
+)
 
 from everyday_wechat.utils.db_helper import (
     find_perpetual_calendar,
@@ -29,7 +32,9 @@ from everyday_wechat.utils.db_helper import (
     udpate_weather,
     update_perpetual_calendar,
     find_rubbish,
-    update_rubbish
+    update_rubbish,
+    find_movie_box,
+    update_movie_box,
 )
 
 __all__ = ['handle_group_helper']
@@ -45,24 +50,28 @@ weather_clean_compile = r'1|天气|weather|\s'
 calendar_complie = r'^\s*(?:2|日历|万年历|calendar)(?=19|2[01]\d{2}|\s|$)'
 calendar_date_compile = r'^\s*(19|2[01]\d{2})[\-\/—\s年]*(0?[1-9]|1[012])[\-\/—\s月]*(0?[1-9]|[12][0-9]|3[01])[\s日号]*$'
 rubbish_complie = r'^\s*(?:3|垃圾|rubbish)(?!\d)'
+moviebox_complie = r'^\s*(?:4|票房|moviebox)(?=19|2[01]\d{2}|\s|$)'
 
 common_msg = '@{ated_name}\u2005\n{text}'
 weather_error_msg = '@{ated_name}\u2005\n未找到『{city}』城市的天气信息'
 weather_null_msg = '@{ated_name}\u2005\n 请输入城市名'
 
 calendar_error_msg = '@{ated_name}\u2005日期格式不对'
-calendar_no_result_msg = '@{ated_name}\u2005未找到{_date}的数据'
+calendar_no_result_msg = '@{ated_name}\u2005未找到{_date}的日历数据'
 
 rubbish_normal_msg = '@{ated_name}\u2005\n【查询结果】：『{name}』属于{_type}'
 rubbish_other_msg = '@{ated_name}\u2005\n【查询结果】：『{name}』无记录\n【推荐查询】：{other}'
 rubbish_nothing_msg = '@{ated_name}\u2005\n【查询结果】：『{name}』无记录'
 rubbish_null_msg = '@{ated_name}\u2005 请输入垃圾名称'
 
+moiebox_no_result_msg = '@{ated_name}\u2005未找到{_date}的票房数据'
+
 help_group_content = """@{ated_name}
 群助手功能：
-1.输入：天气+城市名（可空）。例如：天气北京
-2.输入：日历+日期(格式:yyyy-MM-dd 可空)。例如：日历2019-07-03
-3.输入：垃圾+名称。例如：3猫粮
+1.输入：天气(weather)+城市名（可空）。例如：天气北京
+2.输入：日历(calendar)+日期(格式:yyyy-MM-dd 可空)。例如：日历2019-07-03
+3.输入：垃圾(rubbish)+名称。例如：3猫粮
+4.输入：票房(moviebox)+日期。例如：票房
 更多功能：请输入 help/帮助。
 """
 
@@ -75,7 +84,6 @@ def handle_group_helper(msg):
     :param msg:
     :return:
     """
-
     conf = config.get('group_helper_conf')
     if not conf.get('is_open'):
         return
@@ -206,6 +214,7 @@ def handle_group_helper(msg):
                 itchat.send(retext, uuid)
             return
 
+    # 垃圾分类查询
     if conf.get('is_rubbish'):
         if re.findall(rubbish_complie, htext, re.I):
             key = re.sub(rubbish_complie, '', htext, flags=re.IGNORECASE).strip()
@@ -231,6 +240,44 @@ def handle_group_helper(msg):
                 itchat.send_msg(retext, uuid)
             if return_list:
                 update_rubbish(return_list)  # 保存数据库
+            return
+
+    if conf.get('is_moviebox'):
+        if re.findall(moviebox_complie, htext, re.I):
+            moviebox_text = re.sub(moviebox_complie, '', htext).strip()
+            if moviebox_text:  # 日历后面填上日期了
+                dates = re.findall(calendar_date_compile, moviebox_text)
+                if not dates:
+                    retext = calendar_error_msg.format(ated_name=ated_name)
+                    itchat.send(retext, uuid)
+                    return
+                _date = '{}{:0>2}{:0>2}'.format(*dates[0])
+            else:  # 日历 后面没有日期，则默认使用今日。
+                _date = datetime.now().strftime('%Y%m%d')
+            # 从数据库缓存中记取内容
+            mb_info = find_movie_box(_date)
+            if mb_info:
+                retext = common_msg.format(ated_name=ated_name, text=mb_info)
+                itchat.send(retext, uuid)
+                return
+
+            is_expired = False
+            cur_date = datetime.now().date()
+            query_date = datetime.strptime(_date, '%Y%m%d').date()
+
+            if query_date < cur_date:
+                is_expired = True
+
+            # 取网络数据
+            mb_info = get_maoyan_movie_box(_date, is_expired)
+            if mb_info:
+                retext = common_msg.format(ated_name=ated_name, text=mb_info)
+                itchat.send(retext, uuid)
+                update_movie_box(_date, mb_info, is_expired)  # 保存数据到数据库
+                return
+            else:  # 查询无结果
+                retext = moiebox_no_result_msg.format(ated_name=ated_name, _date=_date)
+                itchat.send(retext, uuid)
             return
 
     # 其他结果都没有匹配到，走自动回复的路

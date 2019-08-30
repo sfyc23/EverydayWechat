@@ -14,7 +14,7 @@ from datetime import datetime
 __all__ = [
     'is_open_db', 'udpate_weather', 'udpate_user_city', 'find_user_city',
     'find_weather', 'update_perpetual_calendar', 'find_perpetual_calendar',
-    'find_rubbish', 'update_rubbish'
+    'find_rubbish', 'update_rubbish', 'find_movie_box', 'update_movie_box'
 ]
 
 cache_valid_time = 4 * 60 * 60  # 缓存有效时间
@@ -34,6 +34,7 @@ if is_open_db:
         user_city_db = wechat_helper_db['user_city']
         perpetual_calendar_db = wechat_helper_db['perpetual_calendar']
         rubbish_db = wechat_helper_db['rubbish_assort']
+        movie_box_db = wechat_helper_db['movie_box']  # 电影票房
 
     except pymongo.errors.ServerSelectionTimeoutError as err:
         # print(str(err))
@@ -93,7 +94,7 @@ def find_user_city(uuid):
 @db_flag()
 def find_weather(date, cityname):
     """
-    根据日期与城市名获取天气信息，天气信息有效期为4小时
+    根据日期与城市名获取天气信息，天气信息有效期为 4 小时
     :param date: 日期(yyyy-mm-dd)
     :param cityname: 城市名
     :return: 天气信息
@@ -166,6 +167,45 @@ def update_rubbish(data):
             key = {'name': d['name']}
             value = {"$set": {"type": d['type']}}
             rubbish_db.update_one(key, value, upsert=True)
+
+
+@db_flag()
+def find_movie_box(date):
+    """
+    根据日期与城市名获取天气信息，天气信息有效期为 5 小时
+    :param date: 日期(yyyy-mm-dd)
+    :param cityname: 城市名
+    :return: 天气信息
+    """
+    key = {'_date': date}
+    data = movie_box_db.find_one(key)
+    if data:
+        is_expired = data['is_expired']
+        if is_expired:
+            return data['info']
+        diff_second = (datetime.now() - data['last_time']).seconds
+        if diff_second <= 5 * 60:
+            return data['info']
+    return None
+
+
+@db_flag()
+def update_movie_box(date, info, is_expired=False):
+    """
+    保存实时票房
+    :param date: 日期 yyyyDDmm 格式
+    :param info: 票房内容
+    :param is_today: 是否是今日实时票房
+    :return: None
+    """
+    key = {'_date': date}
+    data = {
+        '_date': date,
+        'info': info,
+        'last_time': datetime.now(),
+        'is_expired': is_expired
+    }
+    movie_box_db.update_one(key, {"$set": data}, upsert=True)
 
 # if __name__ == '__main__':
 #     uuid = 'uuid'
