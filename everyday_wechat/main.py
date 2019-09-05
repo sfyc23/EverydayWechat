@@ -40,6 +40,7 @@ __all__ = ['run']
 def run():
     """ 主运行入口 """
     # 判断是否登录，如果没有登录则自动登录，返回 False 表示登录失败
+    print('开始登录...')
     if not is_online(auto_login=True):
         return
 

@@ -13,7 +13,7 @@
 
 [版本更新日志](https://github.com/sfyc23/EverydayWechat/blob/master/hostory.md)
 
-最近搞了一个类似，但功能不一样的项目:[微信加群助手](https://github.com/sfyc23/WechatAddGroupHelper)。欢迎大家 star。
+最近开源了一个类似，但功能不一样的项目：[微信加群助手](https://github.com/sfyc23/WechatAddGroupHelper)。欢迎大家 star。
 
 **禁止将本工具用于商业用途**，如产生法律纠纷与本人无关。  
 
@@ -72,6 +72,8 @@
 ### 垃圾分类查询：
 - atoolbox 垃圾分类查询：<http://www.atoolbox.net/Tool.php?Id=804>
 
+### 快递物流查询：
+- 快递鸟 ：<http://www.kdniao.com/>
 
 ## 项目配置
 目前项目所有的配置都是在 **[_config.yaml](https://github.com/sfyc23/EverydayWechat/blob/master/_config.yaml)** 文件中。    

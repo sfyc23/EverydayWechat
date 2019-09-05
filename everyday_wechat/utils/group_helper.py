@@ -23,6 +23,9 @@ from everyday_wechat.control.rubbish.atoolbox_rubbish import (
 from everyday_wechat.control.moviebox.maoyan_movie_box import (
     get_maoyan_movie_box
 )
+from everyday_wechat.control.express.kdniao_express import (
+    get_express_info
+)
 
 from everyday_wechat.utils.db_helper import (
     find_perpetual_calendar,
@@ -35,6 +38,8 @@ from everyday_wechat.utils.db_helper import (
     update_rubbish,
     find_movie_box,
     update_movie_box,
+    find_express,
+    update_express,
 )
 
 __all__ = ['handle_group_helper']
@@ -51,6 +56,7 @@ calendar_complie = r'^\s*(?:2|日历|万年历|calendar)(?=19|2[01]\d{2}|\s|$)'
 calendar_date_compile = r'^\s*(19|2[01]\d{2})[\-\/—\s年]*(0?[1-9]|1[012])[\-\/—\s月]*(0?[1-9]|[12][0-9]|3[01])[\s日号]*$'
 rubbish_complie = r'^\s*(?:3|垃圾|rubbish)(?!\d)'
 moviebox_complie = r'^\s*(?:4|票房|moviebox)(?=19|2[01]\d{2}|\s|$)'
+express_complie = r'^\s*(?:5|快递[单号]?|express)\s*([0-9a-zA-Z]+)'
 
 common_msg = '@{ated_name}\u2005\n{text}'
 weather_error_msg = '@{ated_name}\u2005\n未找到『{city}』城市的天气信息'
@@ -72,7 +78,8 @@ help_group_content = """@{ated_name}
 2.输入：日历(calendar)+日期(格式:yyyy-MM-dd 可空)。例如：日历2019-07-03
 3.输入：垃圾(rubbish)+名称。例如：3猫粮
 4.输入：票房(moviebox)+日期。例如：票房
-更多功能：请输入 help/帮助。
+5.输入：快递(express)+ 快递订单号。例如: 快递 1231231231 
+更多功能：请输入 0|help|帮助，查看。
 """
 
 
@@ -279,6 +286,37 @@ def handle_group_helper(msg):
                 retext = moiebox_no_result_msg.format(ated_name=ated_name, _date=_date)
                 itchat.send(retext, uuid)
             return
+
+    # 处理订单号
+    if conf.get('is_express'):
+        express_list = re.findall(express_complie, htext, re.I)
+        if express_list:
+            express_code = express_list[0]
+            db_data = find_express(express_code, uuid)
+            shipper_code, shipper_name = '', ''
+            if db_data:
+                if not db_data['is_forced_update']:
+                    info = db_data['info']
+                    retext = common_msg.format(ated_name=ated_name, text=info)
+                    itchat.send(retext, uuid)
+                    return
+                shipper_code = db_data['shipper_code']
+                shipper_name = db_data['shipper_name']
+
+            data = get_express_info(
+                express_code,
+                shipper_name=shipper_name,
+                shipper_code=shipper_code)
+            if data:
+                info = data['info']
+                retext = common_msg.format(ated_name=ated_name, text=info)
+                itchat.send(retext, uuid)
+                update_express(data, uuid)
+                return
+            else:
+                print('未查询到此订单号的快递物流轨迹。')
+                return
+
 
     # 其他结果都没有匹配到，走自动回复的路
     if conf.get('is_auto_reply'):

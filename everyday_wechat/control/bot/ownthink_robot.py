@@ -40,7 +40,7 @@ def get_ownthink_robot(text, userid):
         url = 'https://api.ownthink.com/bot'
         resp = requests.get(url, params=params)
         if resp.status_code == 200:
-            print(resp.text)
+            # print(resp.text)
             content_dict = resp.json()
             if content_dict['message'] == 'success':
                 data = content_dict['data']

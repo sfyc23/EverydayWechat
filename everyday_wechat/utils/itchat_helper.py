@@ -198,8 +198,8 @@ def log_all_config():
     print('自动回复机器人渠道：{}'.format(bot_name))
 
     # start ----------------------------------- 微信好友自动回复的功能日志 ----------------------------------- start
-    reply = config.get('auto_reply_info')
-    if not reply.get('is_auto_reply'):
+    reply = config.get('auto_reply_info',None)
+    if not reply or not reply.get('is_auto_reply'):
         print('未开启微信好友自动回复。')
     else:
         if reply.get('is_auto_reply_all'):
@@ -231,7 +231,7 @@ def log_all_config():
 
     # start ----------------------------------- 群功能日志说明 ----------------------------------- start
     helper = config.get('group_helper_conf')
-    if not helper.get('is_open'):
+    if not helper or not helper.get('is_open'):
         print('未开启群助手功能。')
     else:
         if helper.get('is_all'):
@@ -271,7 +271,7 @@ def log_all_config():
 
     # start ----------------------------------- 提醒功能的日志说明 ----------------------------------- start
     alarm = config.get('alarm_info')
-    if not alarm.get('is_alarm'):
+    if not alarm or not alarm.get('is_alarm'):
         print('未开启每日提醒功能。')
     else:
         print('已开启定时发送提醒功能。')

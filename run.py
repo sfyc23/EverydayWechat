@@ -56,11 +56,12 @@ def run():
         from everyday_wechat.utils import config
         from everyday_wechat.utils.db_helper import is_open_db
         if not is_open_db:
-            print('数据库未开启或启动失败！但数据库功能不会影响项目正常运行，主要用于群助手查询缓存。')
+            print('数据库未开启或启动失败！但数据库功能不会影响项目正常运行，主要用于群助手查询数据缓存。')
     except Exception as exception:
         print(str(exception))
         return
 
+    print('所有环境配置 OK ..')
     from everyday_wechat import main
     main.run()
 
