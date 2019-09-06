@@ -35,7 +35,9 @@ def run():
         import requests
         from bs4 import BeautifulSoup
         if itchat.__version__ != '1.3.10':
-            print('请将 itchat 的版本升级至 1.3.10！')
+            print('当前 itchat 版本为：{} ，本项目需要 itchat 的版本为 1.3.10。请升级至最新版本！\n'
+                  '升级方法 1：pip install itchat --upgrade \n'
+                  '或者方法 2: pip install -U itchat'.format(itchat.__version__))
             return
 
     except (ModuleNotFoundError, ImportError) as error:
@@ -53,12 +55,13 @@ def run():
     try:
         from everyday_wechat.utils import config
         from everyday_wechat.utils.db_helper import is_open_db
-        db_text = '已开启数据库功能' if is_open_db else '数据库未开启或启动失败'
-        print(db_text)
+        if not is_open_db:
+            print('数据库未开启或启动失败！但数据库功能不会影响项目正常运行，主要用于群助手查询数据缓存。')
     except Exception as exception:
         print(str(exception))
         return
 
+    print('所有环境配置 OK ..')
     from everyday_wechat import main
     main.run()
 

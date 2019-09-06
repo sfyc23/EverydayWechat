@@ -11,7 +11,9 @@ from everyday_wechat.utils.common import (
     md5_encode
 )
 
-__all__ = ['get_tianapi_robot']
+__all__ = ['get_auto_reply', 'BOT_INDEX', 'BOT_NAME']
+BOT_INDEX = 5
+BOT_NAME = '天行机器人'
 
 
 def get_tianapi_robot(text, userid):
@@ -48,7 +50,7 @@ def get_tianapi_robot(text, userid):
                 if content_dict['datatype'] == 'text':
                     data_dict = content_dict['newslist']
                     reply_text = data_dict[0]['reply']
-                    reply_text.replace('{robotname}', bot_name)\
+                    reply_text.replace('{robotname}', bot_name) \
                         .replace('{appellation}', reply_name)
                     return reply_text
                 else:

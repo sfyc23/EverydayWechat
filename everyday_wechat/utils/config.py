@@ -38,9 +38,7 @@ def get_yaml():
         print('你的 _config.yaml 文件配置出错...')
     return None
 
-
 opts = get_yaml()
-
 
 def set(key, value):
     """ 通过 key 设置某一项值 """
@@ -69,5 +67,3 @@ def _print():
 if __name__ == '__main__':
     you = get('is_forced_switch')
     print(you)
-    # print(copy())
-    pass

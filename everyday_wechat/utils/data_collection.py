@@ -19,7 +19,8 @@ from everyday_wechat.control.calendar.rt_calendar import get_rtcalendar
 
 __all__ = [
     'get_dictum_info', 'get_weather_info', 'get_bot_info',
-    'get_diff_time', 'get_constellation_info', 'get_calendar_info'
+    'get_diff_time', 'get_constellation_info', 'get_calendar_info',
+    'DICTUM_NAME_DICT', 'BOT_NAME_DICT'
 ]
 
 DICTUM_NAME_DICT = {
@@ -28,7 +29,7 @@ DICTUM_NAME_DICT = {
 }
 BOT_NAME_DICT = {
     1: 'tuling123', 2: 'yigeai', 3: 'qingyunke', 4: 'qq_nlpchat',
-    5: 'tian_robot', 6: 'ruyiai'
+    5: 'tian_robot', 6: 'ruyiai', 7: 'ownthink_robot'
 }
 # 用于星座的正则表达式
 BIRTHDAY_COMPILE = re.compile(r'\-?(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$')
@@ -71,8 +72,8 @@ def get_bot_info(message, userId=''):
     :return:str, 机器人回复的话。
     """
 
-    channel = config.get('auto_reply_info').get('bot_channel', 3)
-    source = BOT_NAME_DICT.get(channel, 'qingyunke')
+    channel = config.get('auto_reply_info').get('bot_channel', 7)
+    source = BOT_NAME_DICT.get(channel, 'ownthink_robot')
     # print(source)
     if source:
         addon = importlib.import_module('everyday_wechat.control.bot.' + source, __package__)
