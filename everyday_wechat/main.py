@@ -8,6 +8,7 @@
 import time
 # import json
 import platform
+import os
 # from apscheduler.schedulers.blocking import BlockingScheduler
 from apscheduler.schedulers.background import BackgroundScheduler
 import itchat
@@ -34,7 +35,7 @@ from everyday_wechat.utils.friend_helper import (
     handle_friend
 )
 
-__all__ = ['run']
+__all__ = ['run', 'delete_cache']
 
 
 def run():
@@ -42,6 +43,7 @@ def run():
     # 判断是否登录，如果没有登录则自动登录，返回 False 表示登录失败
     print('开始登录...')
     if not is_online(auto_login=True):
+        print('程序已退出...')
         return
 
 
@@ -72,22 +74,38 @@ def is_online(auto_login=False):
     hotReload = not config.get('is_forced_switch', False)  # 切换微信号，重新扫码。
     loginCallback = init_data
     exitCallback = exit_msg
-    for _ in range(2):  # 尝试登录 2 次。
-        if platform.system() in ('Windows', 'Darwin'):
-            itchat.auto_login(hotReload=hotReload,
-                              loginCallback=loginCallback, exitCallback=exitCallback)
-            itchat.run(blockThread=True)
+    try:
+        for _ in range(2):  # 尝试登录 2 次。
+            if platform.system() in ('Windows', 'Darwin'):
+                itchat.auto_login(hotReload=hotReload,
+                                  loginCallback=loginCallback, exitCallback=exitCallback)
+                itchat.run(blockThread=True)
+            else:
+                # 命令行显示登录二维码。
+                itchat.auto_login(enableCmdQR=2, hotReload=hotReload, loginCallback=loginCallback,
+                                  exitCallback=exitCallback)
+                itchat.run(blockThread=True)
+            if _online():
+                print('登录成功')
+                return True
+    except Exception as exception: # 登录失败的错误处理。
+        delete_cache()  # 清理缓存数据
+        sex = str(exception)
+        if sex == "'User'":
+            print('此微信号不能登录网页版微信，不能运行此项目。没有任何其它解决办法！可以换个号再试试。')
         else:
-            # 命令行显示登录二维码。
-            itchat.auto_login(enableCmdQR=2, hotReload=hotReload, loginCallback=loginCallback,
-                              exitCallback=exitCallback)
-            itchat.run(blockThread=True)
-        if _online():
-            print('登录成功')
-            return True
+            print(sex)
 
     print('登录失败。')
     return False
+
+
+def delete_cache():
+    """ 清除缓存数据，避免下次切换账号时出现 """
+    file_names = ('QR.png', 'itchat.pkl')
+    for file_name in file_names:
+        if os.path.exists(file_name):
+            os.remove(file_name)
 
 
 def init_data():
@@ -151,6 +169,7 @@ def send_alarm_msg(key):
 def text_reply(msg):
     """ 监听用户消息，用于自动回复 """
     handle_friend(msg)
+    # import json
     # print(json.dumps(msg, ensure_ascii=False))
 
 

@@ -23,11 +23,16 @@ __all__ = ['handle_friend']
 def handle_friend(msg):
     """ 处理好友信息 """
     try:
+
+        # 自己通过手机微信发送给别人的消息(文件传输助手除外)不作处理。
+        if msg['FromUserName'] == config.get('wechat_uuid') and  msg['ToUserName'] != FILEHELPER:
+            return
+
         conf = config.get('auto_reply_info')
         if not conf.get('is_auto_reply'):
             return
         # 获取发送者的用户id
-        uuid = FILEHELPER if msg['ToUserName'] == FILEHELPER else msg.fromUserName
+        uuid = FILEHELPER if msg['ToUserName'] == FILEHELPER else msg['FromUserName']
         is_all = conf.get('is_auto_reply_all')
         auto_uuids = conf.get('auto_reply_black_uuids') if is_all else conf.get('auto_reply_white_uuids')
         # 开启回复所有人，当用户是黑名单，不回复消息

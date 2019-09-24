@@ -30,6 +30,13 @@ def init_wechat_config():
     # 从config copy ，用于保存新的接口内容。
     myset = config.copy()
     print('=' * 80)
+
+    base_wechat_info = itchat.search_friends() # 获取此微信号的基础信息
+    wechat_nick_name = base_wechat_info['NickName']  # 获取此微信号的昵称
+    wechat_uuid = base_wechat_info['UserName']  # 获取此微信号的uuid
+    myset['wechat_nick_name'] = wechat_nick_name
+    myset['wechat_uuid'] = wechat_uuid
+
     # start---------------------------处理自动回复好友---------------------------start
     reply = myset.get('auto_reply_info')
     if reply.get('is_auto_reply'):

@@ -91,10 +91,11 @@ def handle_group_helper(msg):
     :param msg:
     :return:
     """
+
     conf = config.get('group_helper_conf')
     if not conf.get('is_open'):
         return
-    text = msg['Text']
+    text = msg['Text'] # 群里消息。
 
     # 如果开启了 『艾特才回复』，而群用户又没有艾特你。不处理消息
     if conf.get('is_at') and not msg.isAt:
