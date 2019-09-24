@@ -89,13 +89,13 @@ def is_online(auto_login=False):
                 print('登录成功')
                 return True
     except Exception as exception: # 登录失败的错误处理。
-        delete_cache()  # 清理缓存数据
         sex = str(exception)
         if sex == "'User'":
             print('此微信号不能登录网页版微信，不能运行此项目。没有任何其它解决办法！可以换个号再试试。')
         else:
             print(sex)
 
+    delete_cache()  # 清理缓存数据
     print('登录失败。')
     return False
 
@@ -169,6 +169,8 @@ def send_alarm_msg(key):
 def text_reply(msg):
     """ 监听用户消息，用于自动回复 """
     handle_friend(msg)
+    # 下面这段代码，可以很直观打印出返回的消息的数据结构。
+    # 把打印的数据复制到  https://www.json.cn/ 可查看详细的内容。群消息同理
     # import json
     # print(json.dumps(msg, ensure_ascii=False))
 

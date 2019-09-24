@@ -91,19 +91,22 @@ def handle_group_helper(msg):
     :param msg:
     :return:
     """
+    uuid = msg.fromUserName  # 群 uid
+    ated_uuid = msg.actualUserName  # 艾特你的用户的uuid
+    ated_name = msg.actualNickName  # 艾特你的人的群里的名称
+    text = msg['Text']  # 发送到群里的消息。
+
+    # 自己通过手机端微信发出的消息不作处理
+    if ated_uuid == config.get('wechat_uuid'):
+        return
 
     conf = config.get('group_helper_conf')
     if not conf.get('is_open'):
         return
-    text = msg['Text'] # 群里消息。
 
     # 如果开启了 『艾特才回复』，而群用户又没有艾特你。不处理消息
     if conf.get('is_at') and not msg.isAt:
         return
-
-    uuid = msg.fromUserName  # 群 uid
-    ated_uuid = msg.actualUserName  # 艾特你的用户的uuid
-    ated_name = msg.actualNickName  # 艾特你的人的群里的名称
 
     is_all = conf.get('is_all', False)
     user_uuids = conf.get('group_black_uuids') if is_all else conf.get('group_white_uuids')
@@ -117,7 +120,7 @@ def handle_group_helper(msg):
     # 去掉 at 标记
     text = re.sub(at_compile, '', text)
 
-    # 如果是帮助
+    # 如果是帮助设置
     helps = re.findall(help_complie, text, re.I)
     if helps:
         retext = help_group_content.format(ated_name=ated_name)

@@ -28,6 +28,6 @@ def get_caihongpi_info():
 get_one_words = get_caihongpi_info
 
 if __name__ == '__main__':
-    # ow = get_one_words()
-    # print(ow)
+    ow = get_one_words()
+    print(ow)
     pass
