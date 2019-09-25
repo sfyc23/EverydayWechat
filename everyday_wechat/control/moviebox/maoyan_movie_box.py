@@ -4,17 +4,19 @@ Project: EverydayWechat-Github
 Creator: DoubleThunder
 Create time: 2019-08-30 12:22
 Introduction: 猫眼实时票房 地址：https://piaofang.maoyan.com/dashboard
-接口地址：https://box.maoyan.com/promovie/api/box/second.json?beginDate=20190830
+接口地址：https://piaofang.maoyan.com/second-box?beginDate=20190924
+
 """
 import requests
 
 from datetime import datetime
+from everyday_wechat.utils.common import SPIDER_HEADERS
 
 
 def get_maoyan_movie_box(date='', is_expired=False):
     """
      获取特定日期的实时票房日期
-     https://box.maoyan.com/promovie/api/box/second.json?beginDate=20190830#指定日期的节假日及万年历信息
+     https://piaofang.maoyan.com/second-box?beginDate=20190830#指定日期的节假日及万年历信息
     :param date: str 日期 格式 yyyyMMdd
     :param is_expired
     :rtype str
@@ -23,7 +25,9 @@ def get_maoyan_movie_box(date='', is_expired=False):
 
     print('获取 {} 的票房数据...'.format(date_))
     # try:
-    resp = requests.get('https://box.maoyan.com/promovie/api/box/second.json?beginDate={}'.format(date_))
+    url = 'https://piaofang.maoyan.com/second-box?beginDate={}'.format(date_)
+    resp = requests.get(url, headers=SPIDER_HEADERS)
+    # print(resp)
     if resp.status_code == 200:
         # print(resp.text)
         content_dict = resp.json()
@@ -59,6 +63,6 @@ def get_maoyan_movie_box(date='', is_expired=False):
     return None
 
 
-# __date = '20190831'
-# dd = get_maoyan_movice_box(__date, is_expired=False)
-# print(dd)
+__date = '20190925'
+dd = get_maoyan_movie_box(__date, is_expired=False)
+print(dd)

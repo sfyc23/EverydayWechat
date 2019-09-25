@@ -190,6 +190,20 @@ def get_friend(wechat_name, update=False):
     return friends[0]
 
 
+def get_mps(mp_name, update=False):
+    """
+    根据公众号的名称获取用户数据
+    :param mp_name: str 用户名
+    :param update: bool 强制更新用户数据
+    :return: obj 单个公众号信息
+    """
+    if update: itchat.get_mps(update=True)
+    if not mp_name: return None
+    mps = itchat.search_mps(name=mp_name)
+    if not mps: return None
+    # mpuuid = mps[0]['UserName'] 公众号的uuid
+    return mps[0]
+
 # import pysnooper
 # @pysnooper.snoop()
 def log_all_config():
