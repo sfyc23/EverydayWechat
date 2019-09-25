@@ -25,7 +25,7 @@ def handle_friend(msg):
     try:
 
         # 自己通过手机微信发送给别人的消息(文件传输助手除外)不作处理。
-        if msg['FromUserName'] == config.get('wechat_uuid') and  msg['ToUserName'] != FILEHELPER:
+        if msg['FromUserName'] == config.get('wechat_uuid') and msg['ToUserName'] != FILEHELPER:
             return
 
         conf = config.get('auto_reply_info')
@@ -50,7 +50,15 @@ def handle_friend(msg):
         reply_text = get_bot_info(receive_text, uuid)  # 获取自动回复
         if reply_text:  # 如内容不为空，回复消息
             time.sleep(random.randint(1, 2))  # 休眠一秒，保安全。想更快的，可以直接注释。
-            reply_text = reply_text if not uuid == FILEHELPER else '机器人回复：' + reply_text
+
+            prefix = conf.get('auto_reply_prefix', '')  # 前缀
+            if prefix:
+                reply_text = '{}{}'.format(prefix, reply_text)
+
+            suffix = conf.get('auto_reply_suffix', '')  # 后缀
+            if suffix:
+                reply_text = '{}{}'.format(reply_text, suffix)
+
             itchat.send(reply_text, toUserName=uuid)
             print('回复{}：{}'.format(nick_name, reply_text))
         else:

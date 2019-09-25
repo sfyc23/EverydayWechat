@@ -13,6 +13,11 @@ auto_reply_info:
   # 是否自动回复所有好友(慎重启动！),开启后，仅仅有黑名单的成员才不会自动回复
   is_auto_reply_all: False
 
+  # 自动回复消息前缀（不需要则设置为空）
+  auto_reply_prefix: ''
+  # 自动回复消息后缀（不需要则设置为空）
+  auto_reply_suffix: '--自动回复'
+
   # 白名单，is_auto_reply_all: False 生效。此名单的用户才可自动回复。（填：文件传输助手，可回复自己，测试效果）
   auto_reply_white_list:
     - '诗风'
