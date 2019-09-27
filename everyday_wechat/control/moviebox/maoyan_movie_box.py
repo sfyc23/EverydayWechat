@@ -63,6 +63,6 @@ def get_maoyan_movie_box(date='', is_expired=False):
     return None
 
 
-__date = '20190925'
-dd = get_maoyan_movie_box(__date, is_expired=False)
-print(dd)
+# __date = '20190925'
+# dd = get_maoyan_movie_box(__date, is_expired=False)
+# print(dd)
