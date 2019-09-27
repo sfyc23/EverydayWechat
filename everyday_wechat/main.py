@@ -71,7 +71,8 @@ def is_online(auto_login=False):
         print('微信已离线..')
         return False
 
-    hotReload = not config.get('is_forced_switch', False)  # 切换微信号，重新扫码。
+    # hotReload = not config.get('is_forced_switch', False)  # 切换微信号，重新扫码。
+    hotReload = False # 2019年9月27日15:31:22 最近保存最近登录状态出错，所以先设置每次都得扫码登录
     loginCallback = init_data
     exitCallback = exit_msg
     try:

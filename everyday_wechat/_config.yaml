@@ -2,7 +2,7 @@
 #  https://ansible-tran.readthedocs.io/en/latest/docs/YAMLSyntax.html
 #  http://einverne.github.io/post/2015/08/yaml.html
 
-# 是否强制切换微信号
+# 是否强制切换微信号 （2019年9月27日15:31:22 最近保存最近登录状态出错，所以此设置无效，每次登录得重新扫码。）
 is_forced_switch: False
 
 #---------------------------------------自动回复功能设置--------------------------------------start
