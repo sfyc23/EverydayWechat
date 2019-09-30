@@ -15,7 +15,7 @@ __all__ = [
     'is_open_db', 'udpate_weather', 'udpate_user_city', 'find_user_city',
     'find_weather', 'update_perpetual_calendar', 'find_perpetual_calendar',
     'find_rubbish', 'update_rubbish', 'find_movie_box', 'update_movie_box',
-    'find_express', 'update_express',
+    'find_express', 'update_express', 'find_air_quality', 'udpate_air_quality'
 ]
 
 cache_valid_time = 4 * 60 * 60  # 天气缓存有效时间
@@ -36,7 +36,8 @@ if db_config and db_config.get('is_open_db') and db_config.get('mongodb_conf'):
         perpetual_calendar_db = wechat_helper_db['perpetual_calendar']
         rubbish_db = wechat_helper_db['rubbish_assort']
         movie_box_db = wechat_helper_db['movie_box']  # 电影票房
-        express_db = wechat_helper_db['express']  # 电影票房
+        express_db = wechat_helper_db['express']  # 快递票房
+        air_quality_db = wechat_helper_db['air_quality']  # 空气质量票房
 
     except pymongo.errors.ServerSelectionTimeoutError as err:
         # print(str(err))
@@ -45,8 +46,10 @@ if db_config and db_config.get('is_open_db') and db_config.get('mongodb_conf'):
 else:
     is_open_db = False
 
+
 def db_flag():
     """ 用于数据库操作的 flag 没开启就不进行数据库操作"""
+
     def _db_flag(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
@@ -54,7 +57,9 @@ def db_flag():
                 return func(*args, **kwargs)
             else:
                 return None
+
         return wrapper
+
     return _db_flag
 
 
@@ -172,10 +177,12 @@ def update_rubbish(data):
 @db_flag()
 def find_movie_box(date):
     """
-    根据日期与城市名获取天气信息，天气信息有效期为 5 小时
-    :param date: 日期(yyyy-mm-dd)
-    :param cityname: 城市名
-    :return: 天气信息
+    查询电脑票房，
+    如果是历史票房，则直接返回数据
+    如果不是，保存时间在5分钟内，则直接返回数据。
+    其他情况，返回为空
+    :param date: 查询时间
+    :return:
     """
     key = {'_date': date}
     data = movie_box_db.find_one(key)
@@ -243,17 +250,48 @@ def find_express(express_code='', uuid=''):
         return None
     data = express_db.find_one(key)
     if data:
-        data['is_forced_update'] = False # 是否需要强制更新
+        data['is_forced_update'] = False  # 是否需要强制更新
         state = data['state']
-        if state: # 订单是否已完成所有流程
+        if state:  # 订单是否已完成所有流程
             return data
         diff_second = (datetime.now() - data['last_time']).seconds
-        if diff_second <= 5 * 60: # 有效缓存期 5分钟
+        if diff_second <= 5 * 60:  # 有效缓存期 5分钟
             return data
         else:
             data['is_forced_update'] = True
             return data
     return None
+
+@db_flag()
+def find_air_quality(city):
+    """
+    根据日期与城市名获取空气信息，pm2.5 记录有效期为 1 小时
+    :param city: 城市名
+    :return: 空气信息
+    """
+    key = {'city': city}
+    data = air_quality_db.find_one(key)
+    if data:
+        diff_second = (datetime.now() - data['last_time']).seconds
+        if diff_second <= 1 * 60 * 60:
+            return data['info']
+    return None
+
+@db_flag()
+def udpate_air_quality(city, info):
+    """
+    :param city: 城市名
+    :param info: 空气情况
+    :return:
+    """
+    key = {'city': city}
+    data = {
+        'city': city,
+        'info': info,
+        'last_time': datetime.now()
+    }
+    air_quality_db.update_one(key, {"$set": data}, upsert=True)
+
 
 # if __name__ == '__main__':
 #     uuid = '123uuid'

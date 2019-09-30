@@ -77,11 +77,13 @@ alarm_info:
         - '萌萌哒'
         - '蕉群'
       alarm_timed:
-        - "21:32"
-        - "21:33"
+        - "00:32"
+        - "00:33"
       is_tomorrow: True # 是否发送明日信息（如天气，星座，万年历）
       #女友所在城市，用于发送天气。（可空）
       city_name: '桂林'
+      # 此城市的 pm2.5 值。
+      air_quality_city: '桂林'
       # 格言渠道（1 : ONE●一个，2 : 词霸（每日英语，双语）3: 土味情话 4 : 一言，5：笑话，6 民国情书,7彩虹屁)(可空)
       dictum_channel: 7
       # 从哪天开始勾搭的（可空），配合 start_date_msg 使用。
@@ -111,13 +113,14 @@ alarm_info:
 #---------------------------------------定时提醒功能设置--------------------------------------end
 
 
-#---------------------------群聊助手设置--------------------------start
+##---------------------------群聊助手设置--------------------------start
 group_helper_conf:
   is_open: True # 开启群助手
   is_all: False # 是否对所有群开启。当开启时，只有黑名单的名单才不受影响（慎重开启！）
 
   # 白名单用户。当 is_all：Fase。只处理这个群里的消息
   group_name_white_list:
+    - '蕉群'
     - '群机器人测试群'
     - '小号测试群'
     - 'EverydayWechat 交流1群'
@@ -134,6 +137,7 @@ group_helper_conf:
   is_calendar: True # 是否开启万历年查询
   is_rubbish: True  # 是否开启垃圾查询
   is_moviebox: True # 是否开启电影票房
+  is_air_quality: True # 是否开启快递查询。
   is_express: True # 是否开启快递查询
   express_info: # 快递鸟（http://www.kdniao.com/）
     app_id: '你申请的api_id'

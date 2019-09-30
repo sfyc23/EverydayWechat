@@ -39,7 +39,7 @@ def init_wechat_config():
 
     # start---------------------------处理自动回复好友---------------------------start
     reply = myset.get('auto_reply_info')
-    if reply.get('is_auto_reply'):
+    if reply is not None and reply.get('is_auto_reply'):
         if reply.get('is_auto_reply_all'):
             auto_reply_list_key = 'auto_reply_black_list'
             auto_reply_list_uuid_name = 'auto_reply_black_uuids'
@@ -66,7 +66,7 @@ def init_wechat_config():
 
     # start ----------------------------------- 群功能初始化 ----------------------------------- start
     helper = myset.get('group_helper_conf')
-    if helper.get('is_open'):
+    if helper is not None and helper.get('is_open'):
         if helper.get('is_all', False):
             group_list_key = 'group_name_black_list'
             group_list_uuid_name = 'group_black_uuids'
@@ -88,7 +88,7 @@ def init_wechat_config():
 
     alarm = myset.get('alarm_info')
     alarm_dict = {}
-    if alarm.get('is_alarm'):
+    if alarm is not None and alarm.get('is_alarm'):
         for gi in alarm.get('girlfriend_infos'):
             ats = gi.get('alarm_timed')
             if not ats:
@@ -287,6 +287,8 @@ def log_all_config():
                 print('已开启垃圾分类查询功能，具体使用方法请输入：“help” 查看。')
             if helper.get('is_moviebox'):
                 print('已开启票房查询功能，具体使用方法请输入：“help” 查看。')
+            if helper.get('is_air_quality'):
+                print('已开启空气质量查询功能，具体使用方法请输入：“help” 查看。')
 
     print('=' * 80)
 

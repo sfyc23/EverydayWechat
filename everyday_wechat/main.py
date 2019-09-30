@@ -23,6 +23,9 @@ from everyday_wechat.utils.data_collection import (
     get_calendar_info,
     get_constellation_info
 )
+from everyday_wechat.control.airquality.air_quality_aqicn import (
+    get_air_quality
+)
 from everyday_wechat.utils import config
 from everyday_wechat.utils.itchat_helper import (
     init_wechat_config,
@@ -72,7 +75,7 @@ def is_online(auto_login=False):
         return False
 
     # hotReload = not config.get('is_forced_switch', False)  # 切换微信号，重新扫码。
-    hotReload = False # 2019年9月27日15:31:22 最近保存最近登录状态出错，所以先设置每次都得扫码登录
+    hotReload = False  # 2019年9月27日15:31:22 最近保存最近登录状态出错，所以先设置每次都得扫码登录
     loginCallback = init_data
     exitCallback = exit_msg
     try:
@@ -89,7 +92,7 @@ def is_online(auto_login=False):
             if _online():
                 print('登录成功')
                 return True
-    except Exception as exception: # 登录失败的错误处理。
+    except Exception as exception:  # 登录失败的错误处理。
         sex = str(exception)
         if sex == "'User'":
             print('此微信号不能登录网页版微信，不能运行此项目。没有任何其它解决办法！可以换个号再试试。')
@@ -153,9 +156,11 @@ def send_alarm_msg(key):
     horoscope = get_constellation_info(gf.get("horescope"), is_tomorrow)
     dictum = get_dictum_info(gf.get('dictum_channel'))
     diff_time = get_diff_time(gf.get('start_date'), gf.get('start_date_msg'))
+    air_quality = get_air_quality(gf.get('air_quality_city'))
+
     sweet_words = gf.get('sweet_words')
     send_msg = '\n'.join(
-        x for x in [calendar_info, weather, horoscope, dictum, diff_time, sweet_words] if x)
+        x for x in [calendar_info, weather, air_quality, horoscope, dictum, diff_time, sweet_words] if x)
     # print('\n' + send_msg + '\n')
     if not send_msg or not is_online(): return
     uuid_list = gf.get('uuid_list')

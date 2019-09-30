@@ -26,6 +26,9 @@ from everyday_wechat.control.moviebox.maoyan_movie_box import (
 from everyday_wechat.control.express.kdniao_express import (
     get_express_info
 )
+from everyday_wechat.control.airquality.air_quality_aqicn import (
+    get_air_quality
+)
 
 from everyday_wechat.utils.db_helper import (
     find_perpetual_calendar,
@@ -40,6 +43,8 @@ from everyday_wechat.utils.db_helper import (
     update_movie_box,
     find_express,
     update_express,
+    find_air_quality,
+    udpate_air_quality
 )
 
 __all__ = ['handle_group_helper']
@@ -58,6 +63,9 @@ rubbish_complie = r'^\s*(?:3|垃圾|rubbish)(?!\d)'
 moviebox_complie = r'^\s*(?:4|票房|moviebox)(?=19|2[01]\d{2}|\s|$)'
 express_complie = r'^\s*(?:5|快递[单号]?|express)\s*([0-9a-zA-Z]+)'
 
+air_compile = r'^(?:\s*(?:6|空气|pm\s?2\.?5)(?!\d).*?|.*?(?:空气|pm\s?2\.?5)\s*)$'
+air_clean_compile = air_clean_compile = r'6|空气(?:质量)?|pm\s?2\.?5|\s'
+
 common_msg = '@{ated_name}\u2005\n{text}'
 weather_error_msg = '@{ated_name}\u2005\n未找到『{city}』城市的天气信息'
 weather_null_msg = '@{ated_name}\u2005\n 请输入城市名'
@@ -72,6 +80,9 @@ rubbish_null_msg = '@{ated_name}\u2005 请输入垃圾名称'
 
 moiebox_no_result_msg = '@{ated_name}\u2005未找到{_date}的票房数据'
 
+air_city_null_msg = '@{ated_name}\u2005\n 请输入城市名'
+air_error_msg = '@{ated_name}\u2005\n未找到『{city}』城市的空气质量信息'
+
 help_group_content = """@{ated_name}
 群助手功能：
 1.输入：天气(weather)+城市名（可空）。例如：天气北京
@@ -79,6 +90,7 @@ help_group_content = """@{ated_name}
 3.输入：垃圾(rubbish)+名称。例如：3猫粮
 4.输入：票房(moviebox)+日期。例如：票房
 5.输入：快递(express)+ 快递订单号。例如: 快递 1231231231 
+6.输入：空气(pm25)+城市名。例如：pm2.5 北京
 更多功能：请输入 0|help|帮助，查看。
 """
 
@@ -321,6 +333,43 @@ def handle_group_helper(msg):
                 print('未查询到此订单号的快递物流轨迹。')
                 return
 
+    # 处理空气质量查询号
+    if conf.get('is_air_quality'):
+        if re.findall(air_compile, htext, re.I):
+            city = re.sub(air_clean_compile, '', text, flags=re.IGNORECASE).strip()
+            if not city:  # 如果只是输入城市名
+                # 从缓存数据库找最后一次查询的城市名
+                city = find_user_city(ated_uuid)
+            if not city:  # 缓存数据库没有保存，通过用户的资料查城市
+                city = get_city_by_uuid(ated_uuid)
+            if not city:
+                retext = air_city_null_msg.format(ated_name=ated_name)
+                itchat.send(retext, uuid)
+                return
+
+            info = find_air_quality(city)
+            if info:
+                retext = common_msg.format(ated_name=ated_name, text=info)
+                itchat.send(retext, uuid)
+                return
+            info = get_air_quality(city)
+            if info:
+                retext = common_msg.format(ated_name=ated_name, text=info)
+                itchat.send(retext, uuid)
+
+                udpate_air_quality(city, info)
+                data2 = {
+                    'userid': ated_uuid,
+                    'city_name': city,
+                    'last_time': datetime.now()
+                }
+                udpate_user_city(data2)
+                return
+            else:
+                retext = air_error_msg.format(ated_name=ated_name, city=city)
+                itchat.send(retext, uuid)
+                return
+            return
 
     # 其他结果都没有匹配到，走自动回复的路
     if conf.get('is_auto_reply'):
