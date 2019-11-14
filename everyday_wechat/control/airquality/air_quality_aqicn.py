@@ -36,6 +36,7 @@ def get_air_quality(city):
         return
     print('获取 {} 的空气质量...'.format(city))
     try:
+
         url = 'http://api.waqi.info/feed/{city}/?token={token}'.format(city=city, token=AQICN_TOKEN)
         resp = requests.get(url)
         if resp.status_code == 200:
@@ -62,6 +63,6 @@ def get_air_quality(city):
 
 
 if __name__ == '__main__':
-    city = 'ccc'
+    city = '长沙'
     dd = get_air_quality(city)
     print(dd)

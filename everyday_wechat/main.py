@@ -137,8 +137,9 @@ def init_alarm(alarm_dict):
     scheduler = BackgroundScheduler()
     for key, value in alarm_dict.items():
         scheduler.add_job(send_alarm_msg, 'cron', [key], hour=value['hour'],
-                          minute=value['minute'], id=key, misfire_grace_time=600)
+                          minute=value['minute'], id=key, misfire_grace_time=600, jitter=value.get("alarm_jitter",0))
     scheduler.start()
+
     # print('已开启定时发送提醒功能...')
     # print(scheduler.get_jobs())
 
@@ -149,7 +150,7 @@ def send_alarm_msg(key):
     conf = config.get('alarm_info').get('alarm_dict')
 
     gf = conf.get(key)
-    # print(gf)
+    # print(gf)air_quality_city
     is_tomorrow = gf.get('is_tomorrow', False)
     calendar_info = get_calendar_info(gf.get('calendar'), is_tomorrow)
     weather = get_weather_info(gf.get('city_name'), is_tomorrow)

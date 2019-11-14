@@ -8,6 +8,8 @@ Introduction:
 
 import itchat
 import re
+from datetime import datetime
+from datetime import timedelta
 from importlib import import_module
 from everyday_wechat.utils import config
 from everyday_wechat.utils.common import (
@@ -31,7 +33,7 @@ def init_wechat_config():
     myset = config.copy()
     print('=' * 80)
 
-    base_wechat_info = itchat.search_friends() # 获取此微信号的基础信息
+    base_wechat_info = itchat.search_friends()  # 获取此微信号的基础信息
     wechat_nick_name = base_wechat_info['NickName']  # 获取此微信号的昵称
     wechat_uuid = base_wechat_info['UserName']  # 获取此微信号的uuid
     myset['wechat_nick_name'] = wechat_nick_name
@@ -129,6 +131,7 @@ def init_wechat_config():
             # end---------------------------群组处理---------------------------end
 
             # start---------------------------定时处理---------------------------start
+
             if isinstance(ats, str):
                 ats = [ats]
             if isinstance(ats, list):
@@ -162,16 +165,16 @@ def set_system_notice(text):
         itchat.send(text, toUserName=FILEHELPER)
 
 
-def get_group(gruop_name, update=False):
+def get_group(group_name, update=False):
     """
     根据群组名获取群组数据
-    :param wechat_name:str, 群组名
+    :param group_name:str, 群组名
     :param update: bool 强制更新群组数据
     :return: obj 单个群组信息
     """
     if update: itchat.get_chatrooms(update=True)
-    if not gruop_name: return None
-    groups = itchat.search_chatrooms(name=gruop_name)
+    if not group_name: return None
+    groups = itchat.search_chatrooms(name=group_name)
     if not groups: return None
     return groups[0]
 
@@ -204,6 +207,7 @@ def get_mps(mp_name, update=False):
     # mpuuid = mps[0]['UserName'] 公众号的uuid
     return mps[0]
 
+
 # import pysnooper
 # @pysnooper.snoop()
 def log_all_config():
@@ -219,7 +223,7 @@ def log_all_config():
     print('自动回复机器人渠道：{}'.format(bot_name))
 
     # start ----------------------------------- 微信好友自动回复的功能日志 ----------------------------------- start
-    reply = config.get('auto_reply_info',None)
+    reply = config.get('auto_reply_info', None)
     if not reply or not reply.get('is_auto_reply'):
         print('未开启微信好友自动回复。')
     else:
@@ -305,6 +309,17 @@ def log_all_config():
             # temp_dict = {'hour': hour, 'minute': minute, 'uuid_list': uuid_list, 'nickname_list': nickname_list}
             hour = value.get('hour')
             minute = value.get('minute')
-            print('定时：{hour}:{minute}，给：{nicknames}，发送提醒内容。'.format(hour=hour, minute=minute, nicknames=nns))
+            alarm_time = "{hour:0>2d}:{minute:0>2d}".format(hour=hour, minute=minute)
+
+            # 计算在哪个区间给朋友发送信息
+            jitter = value.get("alarm_jitter", 0)
+            if jitter != 0:
+                set_time = datetime.strptime(alarm_time, '%H:%M')
+                jitter_time = timedelta(seconds=jitter)
+                start_time = (set_time - jitter_time).strftime("%H:%M")
+                end_time = (set_time + jitter_time).strftime("%H:%M")
+                alarm_time = "{start_time}——{end_time} 期间".format(start_time=start_time, end_time=end_time)
+
+            print('定时：{alarm_time}，给：{nicknames}，发送提醒内容一次。'.format(alarm_time=alarm_time, nicknames=nns))
 
     print('=' * 80)

@@ -6,5 +6,5 @@
 script_name = 'EverydayWechat'
 __author__ = 'sfyc23'
 __license__ = 'MIT'
-__version__ = '0.3.26'
+__version__ = '0.3.27'
 
