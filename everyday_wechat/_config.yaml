@@ -1,0 +1,159 @@
+# 配置文件请严格遵循 yaml 语法格式，yaml 学习地址:
+#  https://ansible-tran.readthedocs.io/en/latest/docs/YAMLSyntax.html
+#  http://einverne.github.io/post/2015/08/yaml.html
+
+# 是否强制切换微信号 （2019年9月27日15:31:22 最近保存最近登录状态出错，所以此设置无效，每次登录得重新扫码。）
+is_forced_switch: False
+
+#---------------------------------------自动回复功能设置--------------------------------------start
+auto_reply_info:
+  # 是否开启自动回复
+  is_auto_reply: True
+
+  # 是否自动回复所有好友(慎重启动！),开启后，仅仅有黑名单的成员才不会自动回复
+  is_auto_reply_all: False
+
+  # 自动回复消息前缀（不需要则设置为空）
+  auto_reply_prefix: ''
+  # 自动回复消息后缀（不需要则设置为空）
+  auto_reply_suffix: '--自动回复'
+
+  # 白名单，is_auto_reply_all: False 生效。此名单的用户才可自动回复。（填：文件传输助手，可回复自己，测试效果）
+  auto_reply_white_list:
+    - '诗风'
+    - '文件传输助手'
+
+  # 黑名单，is_auto_reply_all:True 生效。此名单不会自动回复。
+  auto_reply_black_list:
+    - '贴心小秘书'
+
+  # 机器人渠道（1: 图灵机器人，2: 一个AI ,3 : 青云客，4 腾讯智能闲聊，5:天行机器人,6：海知智能，7：思知机器人)
+  bot_channel: 7
+
+  #图灵机器人(http://www.tuling123.com/) 实名后的用户每天免费可用 100 条。
+  turing_conf:
+    apiKey: '你申请的apikey'
+
+    # 天行机器人 ( https://www.tianapi.com/apiview/47 )。做完任务大概能免费用7万条，收费：1万条/1块钱
+  txapi_conf:
+    app_key: '个人中心中的key'
+    reply_name: '宝宝' # 回复的人的名字(可空)（也可在个人中心->机器人管理 修改）
+    bot_name: '老公' # 机器人的名字（可空）
+
+  # 智能闲聊（腾讯）https://ai.qq.com/product/nlpchat.shtml。免费且无限量
+  qqnlpchat_conf:
+    app_id: '你申请的api_id'
+    app_key: '你申请的app_key'
+
+  # 海知智能 <https://ruyi.ai/> 功能很强大，不仅仅用于聊天。需申请 key，免费
+  ruyi_conf:
+    app_key: '你申请的key'
+
+  # 思知机器人 <https://www.ownthink.com/> 免费，如果只是简单使用 app_key 可不申请。
+  ownthink_conf:
+    app_key: ''
+
+  # 一个 Al (http://www.yige.ai/)（已长时间无人维护）
+  yigeai_conf:
+    client_token: '你申请的token'
+
+
+#---------------------------------------自动回复功能设置--------------------------------------end
+
+
+
+#---------------------------------------定时提醒功能设置--------------------------------------start
+alarm_info:
+  #True 开启定时提醒，False 关闭
+  is_alarm: True
+
+  girlfriend_infos:
+    #女友微信昵称或者备注名，不能输入微信号。（如填：文件传输助手，发消息到文件传输助手，测试效果）
+    - wechat_name:
+        - '文件传输助手'
+        - '诗风'
+      # 注意：必须要把需要的群聊保存到通讯录
+      group_name: # 群聊的名称
+        - '萌萌哒'
+        - '蕉群'
+      alarm_timed: # 定时发送的时间
+        - "13:25"
+        - "00:33"
+      alarm_jitter: 300 # 给定时时间加一个随机抖动 300 秒。定时时间【-5，+5】分钟范围内发送。（不然每天固定在同个时间段有点尴尬）（可空）
+      is_tomorrow: True # 是否发送明日信息（如天气，星座，万年历）
+      #女友所在城市，用于发送天气。（可空）
+      city_name: '桂林'
+      # 此城市的 pm2.5 值。
+      air_quality_city: '桂林'
+      # 格言渠道（1 : ONE●一个，2 : 词霸（每日英语，双语）3: 土味情话 4 : 一言，5：笑话，6 民国情书,7彩虹屁)(可空)
+      dictum_channel: 1
+      # 从哪天开始勾搭的（可空），配合 start_date_msg 使用。
+      start_date: '2017-10-10'
+      # 自定义方案（可空）， {}表示用于占位，代表天数，与 start_date 一起使用。单填无意义
+      #  默认为：『宝贝这是我们在一起的第{}天』,参考：爱你的第{}天
+      start_date_msg: '宝贝这是我们在一起的第{}天'
+      # 万历年（可空），（中老年最爱）
+      calendar: True
+      # 星座运势（可空）填生日日期："1980-06-15" or "06-15" or "白羊座"
+      horescope: "处女座"
+      # 落款（可空），落款参考：['厌物', '你脚下的蚂蚁', '专说骗人的诳话者', '黄天霸', 'cxk', '魔鬼的叔父', '哺乳类脊椎动物之一', '名字写在水上的人', 'BIG BAD WOLF', '你的兄弟']
+      sweet_words: '你脚下的蚂蚁'
+
+
+    #  如果你需要另一套方案，如下面复制即可
+    #  如不需要，则删除或注解下面所有的数据
+    - group_name: 'EverydayWechat 交流1群'
+      wechat_name: '贴心小秘书'
+      city_name: '漳州'
+      start_date: '2011-11-11'
+      start_date_msg: '分手后的第{}天'
+      dictum_channel: 4
+      sweet_words: '名字写在水上的人'
+      alarm_timed: "23:02"
+      is_tomorrow: True
+#---------------------------------------定时提醒功能设置--------------------------------------end
+
+
+
+##---------------------------群聊助手设置--------------------------start
+group_helper_conf:
+  is_open: True # 开启群助手
+  is_all: False # 是否对所有群开启。当开启时，只有黑名单的名单才不受影响（慎重开启！）
+
+  # 白名单用户。当 is_all：Fase。只处理这个群里的消息
+  group_name_white_list:
+    - '蕉群'
+    - '群机器人测试群'
+    - '小号测试群'
+    - 'EverydayWechat 交流1群'
+    - 'EverydayWechat 交流2群'
+
+  # 黑名单用户。当 is_all ：True 。这个群里的用户不受影响。
+  group_name_black_list:
+    - 'EverydayWechat 交流1群'
+    - 'EverydayWechat 交流2群'
+
+  is_at: True # 艾特标记。只有当别人艾特机器人，才会处理消息（慎重关闭！）
+  is_auto_reply: True # 开启群自动回复（慎重开启！）
+  is_weather: True # 是否开启天气查询
+  is_calendar: True # 是否开启万历年查询
+  is_rubbish: True  # 是否开启垃圾查询
+  is_moviebox: True # 是否开启电影票房
+  is_air_quality: True # 是否开启快递查询。
+  is_express: True # 是否开启快递查询
+  express_info: # 快递鸟（http://www.kdniao.com/）
+    app_id: '你申请的api_id'
+    app_key: '你申请的app_key'
+
+
+#--------------------------- 群聊助手设置 --------------------------end
+
+
+# start ----------------------------------- 数据库设置 ----------------------------------- start
+# 可不安装与设置数据库内容，数据库主要用于群助手功能中，查询数据的缓存。
+db_config: # 请安装 mongodb 数据库
+  is_open_db: True # 是否开启数据库功能
+  mongodb_conf:
+    'host': 'localhost'
+    'port': 27017
+#   end ----------------------------------- 数据库设置 ----------------------------------- end

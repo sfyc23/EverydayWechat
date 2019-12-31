@@ -1,0 +1,11 @@
+# Git
+.git
+.gitignore
+
+# PyCharm
+.idea
+
+# Virtual environment
+.env/
+.venv/
+venv/
