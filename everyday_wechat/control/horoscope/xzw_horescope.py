@@ -48,17 +48,12 @@ def get_xzw_horoscope(name, is_tomorrow=False):
         resp = requests.get(req_url, headers=SPIDER_HEADERS)
         if resp.status_code == 200:
             html = resp.text
-            lucky_num = re.findall(r'<label>幸运数字：</label>(.*?)</li>', html)[0]
-            lucky_color = re.findall(r'<label>幸运颜色：</label>(.*?)</li>', html)[0]
             detail_horoscope = re.findall(r'<p><strong class="p1">.*?</strong><span>(.*?)</span></p>', html)[0]
             if is_tomorrow:
                 detail_horoscope = detail_horoscope.replace('今天', '明天')
 
-            return_text = '{name}{_date}运势\n【幸运颜色】{color}\n【幸运数字】{num}\n【综合运势】{horoscope}'.format(
-                _date='明日' if is_tomorrow else '今日',
+            return_text = '【{name}综合运势】{horoscope}'.format(
                 name=name,
-                color=lucky_color,
-                num=lucky_num,
                 horoscope=detail_horoscope
             )
             return return_text

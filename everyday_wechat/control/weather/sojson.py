@@ -31,7 +31,7 @@ def get_sojson_weather(city_name, is_tomorrow=False):
         return None
     print('获取天气信息...')
 
-    weather_url = 'http://t.weather.sojson.com/api/weather/city/{}'.format(city_code)
+    weather_url = 'http://t.weather.itboy.net/api/weather/city/{}'.format(city_code)
     try:
         resp = requests.get(url=weather_url)
         if resp.status_code == 200:
