@@ -1,4 +1,4 @@
-itchat==1.3.10
+itchat-uos==1.4.0
 requests
 beautifulsoup4
 apscheduler
